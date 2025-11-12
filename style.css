@@ -874,6 +874,104 @@ html {
     .thanks-card li { padding: 10px; }
 }
 
+/* Guide Page Plugin Styles */
+.plugin-category {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--card-border-color);
+}
+
+.plugin-category:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.plugin-category h3 {
+    font-size: 1.4rem;
+    color: var(--header-text-color);
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.plugin-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plugin-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.plugin-item h4 {
+    font-size: 1.1rem;
+    color: var(--header-text-color);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.plugin-item code {
+    background: rgba(167, 209, 255, 0.15);
+    color: #a7d1ff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-right: 8px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.plugin-item p {
+    margin: 8px 0 0 0;
+    color: #cfe6ff;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.image-link {
+    display: inline-block;
+    background: linear-gradient(135deg, #8fc8ff, #6faee6);
+    color: #08131a;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 8px;
+}
+
+.image-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 158, 205, 0.3);
+    color: #08131a;
+}
+
+/* Responsive adjustments for guide page */
+@media (max-width: 768px) {
+    .plugin-category h3 {
+        font-size: 1.2rem;
+    }
+    
+    .plugin-item {
+        padding: 12px;
+    }
+    
+    .plugin-item h4 {
+        font-size: 1rem;
+    }
+    
+    .plugin-item code {
+        font-size: 0.85rem;
+        padding: 3px 6px;
+    }
+}
+
 /* Added Mobile Navigation Styles */
 body.nav-open {
     overflow: hidden;
