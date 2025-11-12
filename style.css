@@ -1,0 +1,960 @@
+/* 服务条例美化 */
+.tos-list {
+    list-style: none;
+    padding: 0;
+    margin: 18px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+.tos-list li {
+    font-size: 1.04rem;
+    color: var(--text-color);
+    background: rgba(167,209,255,0.08);
+    border-radius: 7px;
+    padding: 10px 16px 10px 12px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 6px rgba(167,209,255,0.04);
+}
+.tos-icon {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+.tos-warning {
+    background: rgba(255, 80, 80, 0.13);
+    color: #ffb3b3;
+    border-left: 4px solid #ff4d4f;
+    font-weight: bold;
+}
+.tos-tip {
+    margin-top: 18px;
+    background: rgba(167,209,255,0.13);
+    color: #a7d1ff;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 0.99rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 6px rgba(167,209,255,0.07);
+}
+.tos-tip-icon {
+    margin-right: 7px;
+    font-size: 1.1em;
+}
+/* 小秋 Bot 娱乐机器人说明美化 */
+.bot-desc-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin: 10px 0 0 0;
+}
+.bot-desc-icon {
+    font-size: 2.5rem;
+    margin-top: 2px;
+    filter: drop-shadow(0 2px 6px rgba(167,209,255,0.18));
+}
+.bot-desc-content {
+    flex: 1;
+}
+.bot-desc-main {
+    font-size: 1.08rem;
+    margin-bottom: 7px;
+    color: #a7d1ff;
+}
+.bot-desc-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+.bot-desc-list li {
+    margin-bottom: 3px;
+    font-size: 0.98rem;
+    color: var(--text-color);
+}
+.desc-tag {
+    background: rgba(167,209,255,0.13);
+    color: #a7d1ff;
+    border-radius: 5px;
+    padding: 1px 7px;
+    font-size: 0.93em;
+    margin-left: 3px;
+}
+
+/* 联系方式美化 */
+.contact-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 10px;
+}
+.contact-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.contact-label {
+    font-size: 1.1rem;
+    color: #a7d1ff;
+    font-weight: bold;
+}
+.contact-desc {
+    font-size: 0.98rem;
+    color: #8aafde;
+}
+.contact-qr {
+    width: 120px;
+    height: 120px;
+    margin: 0;
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 2px 10px rgba(167,209,255,0.10);
+}
+
+/* 价目表提示美化 */
+.pricing-tip-box {
+    background: rgba(167,209,255,0.10);
+    border-radius: 7px;
+    padding: 7px 13px;
+    margin-bottom: 12px;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    font-size: 0.99rem;
+    box-shadow: 0 1px 6px rgba(167,209,255,0.07);
+}
+.tip-icon {
+    margin-right: 7px;
+    font-size: 1.1em;
+}
+.tip-highlight {
+    color: #ffd700;
+    font-weight: bold;
+    margin: 0 2px;
+}
+
+/* Ensure the discount highlight doesn't break into multiple lines */
+.tip-highlight {
+    display: inline-block;
+    white-space: nowrap;
+}
+/* 价目表美化 */
+.pricing-table-wrapper {
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(167,209,255,0.08);
+}
+.pricing-table td:first-child, .pricing-table th:first-child {
+    text-align: left;
+    padding-left: 20px;
+}
+.pricing-table td, .pricing-table th {
+    vertical-align: middle;
+}
+.pricing-table th, .pricing-table td {
+    padding: 14px 18px;
+    text-align: center;
+    border-bottom: 1px solid var(--card-border-color);
+    color: var(--text-color);
+}
+.pricing-table th {
+    background: rgba(167,209,255,0.13);
+    font-size: 1.1rem;
+    color: #a7d1ff;
+    font-weight: 700;
+}
+.pricing-table tr:last-child td {
+    border-bottom: none;
+}
+.pricing-table td {
+    font-size: 1.05rem;
+}
+.pricing-tip {
+    color: #8aafde;
+    font-size: 0.98rem;
+    margin-bottom: 10px;
+    margin-top: 2px;
+}
+
+/* note for custom AI persona requests below the pricing tip */
+.pricing-custom-note {
+    margin-top: 8px;
+    color: #ffd; /* light off-white */
+    background: rgba(255,215,0,0.07);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    display: inline-block;
+    color: #fff7d6;
+}
+
+.pricing-details {
+    margin-top: 10px;
+    color: #cfe6ff;
+    font-size: 0.95rem;
+}
+.pricing-details ul {
+    margin: 6px 0 0 18px;
+}
+.pricing-details li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+:root {
+    --background-url: url('353a76cf461a6d04d4c741b7227488db_2_0_art.jpeg');
+    --card-bg-color: rgba(0, 0, 0, 0.4);
+    --card-border-color: rgba(255, 255, 255, 0.2);
+    --text-color: #f0f0f0;
+    --header-text-color: #ffffff;
+    --link-color: #a7d1ff;
+    --link-hover-color: #ffffff;
+    --card-radius: 15px;
+    --card-min-height: 420px; /* unified min height for hero and highlights on desktop */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--background-url) no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    /* soften global text shadow so overlays don't appear overly dark */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.18);
+}
+
+header {
+    width: 100%;
+    padding: 1rem 1.25rem; /* reduced height */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--card-border-color);
+}
+
+header h1 {
+    font-size: 2rem;
+    color: var(--header-text-color);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.mc-link {
+    background: rgba(167,209,255,0.08);
+    color: #a7d1ff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.brand-home {
+    color: var(--header-text-color);
+    text-decoration: none;
+}
+.brand-home:hover { color: var(--link-hover-color); }
+
+/* make action links stay to the right on wide screens */
+@media (min-width: 769px) {
+    .nav-links {
+        margin-left: auto;
+        gap: 18px;
+    }
+}
+.mc-link:hover { background: rgba(167,209,255,0.14); color: #fff; }
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+header nav a {
+    color: var(--link-color);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+header nav a:hover {
+    color: var(--link-hover-color);
+}
+
+#status-indicator {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+#status-indicator span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.status-online span {
+    background-color: #4caf50; /* Green */
+    box-shadow: 0 0 5px #4caf50;
+}
+
+main {
+    width: 100%;
+    max-width: 900px;
+    padding: 230px 20px 40px 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+#pricing-contact {
+    display: flex;
+    gap: 30px;
+    padding: 25px;
+}
+
+.sub-card-content {
+    flex: 1;
+}
+
+/* Grid layout for wider screens */
+@media (min-width: 769px) {
+    main {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #features, #features-link, #pricing-contact {
+        grid-column: 1 / -1;
+    }
+}
+
+.card {
+    background: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 15px;
+    padding: 25px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    /* softer, layered shadow: subtle bluish ambient + low-contrast dark base */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(167,209,255,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+a.card {
+    display: block;
+}
+
+.cta-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: var(--link-color);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+/* Disclaimer enhancements */
+.card#disclaimer {
+    position: relative;
+    padding: 22px 25px 22px 20px;
+    background: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(167,209,255,0.03);
+    border-left: 6px solid rgba(255, 215, 0, 0.08); /* softer accent */
+}
+.card#disclaimer h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.card#disclaimer ul {
+    margin-top: 12px;
+    margin-left: 18px;
+}
+.card#disclaimer ul li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    padding-left: 8px;
+    position: relative;
+}
+.card#disclaimer ul li::before {
+    content: "•";
+    position: absolute;
+    left: -18px;
+    color: #ffd700;
+    font-weight: 700;
+}
+.disclaimer-note {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #dfeaff;
+    background: rgba(0,0,0,0.06);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.disclaimer-foot {
+    margin-top: 12px;
+    font-size: 0.98rem;
+    color: var(--text-color);
+}
+
+
+.cta-button:hover {
+    background-color: var(--link-hover-color);
+    transform: scale(1.02);
+}
+
+.qr-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto 0;
+    color: #333;
+    font-weight: bold;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    /* reduce intense glow and prefer subtle cool ambient highlight */
+    box-shadow: 0 0 12px rgba(167, 209, 255, 0.08), 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--header-text-color);
+    border-bottom: 1px solid var(--card-border-color);
+    padding-bottom: 10px;
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--card-border-color);
+}
+
+/* Scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--card-bg-color);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid var(--card-border-color);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--link-hover-color);
+}
+
+/* Mobile Responsiveness */
+.nav-toggle {
+    display: none;
+}
+
+/* Hero and Highlights styles */
+.hero {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 36px 0; /* more vertical breathing room */
+    /* transparent - hero-inner carries the visual card so the page art isn't blocked */
+    background: transparent;
+    color: #fff;
+}
+.hero-inner {
+    width: 100%;
+    max-width: 720px; /* slightly narrower for better balance */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* keep centered on all screen sizes */
+    text-align: center;
+    /* match the card tone but slightly lighter so hero stands out a bit */
+    background: rgba(0,0,0,0.44);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 18px 20px; /* reduced padding to remove excess bottom space */
+    border-radius: calc(var(--card-radius) - 2px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    /* subtle sheen + low-contrast shadow for consistent card look */
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 26px rgba(0,0,0,0.14), 0 2px 6px rgba(167,209,255,0.03);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    color: var(--text-color);
+    gap: 6px; /* slightly smaller gap */
+    justify-content: center; /* vertically center content to avoid empty feeling */
+}
+.hero h2 {
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: 0.6px;
+    color: var(--header-text-color);
+    text-shadow: none;
+    line-height: 1.05;
+}
+.hero p {
+    margin: 0;
+    color: #cfe6ff;
+    font-size: 1.02rem;
+    text-shadow: none;
+    max-width: 680px;
+}
+.hero-cta {
+    display: inline-block;
+    padding: 12px 18px;
+    margin-top: 18px; /* space above button - moved down slightly */
+    background: linear-gradient(180deg,#8fc8ff,#6faee6);
+    color: #08131a;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    box-shadow: 0 8px 22px rgba(107,158,205,0.14);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.hero-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(107,158,205,0.22);
+}
+
+/* On larger screens, left-align text within the hero for better hierarchy */
+@media (min-width: 769px) {
+    /* Keep hero centered on large screens as requested */
+    .hero-inner {
+        padding: 20px 24px; /* modestly increase horizontal padding, keep vertical tight */
+    }
+    .hero h2 { font-size: 2.4rem; }
+    .hero p { font-size: 1.03rem; }
+    /* Arrange tags in 2 rows x 3 cols on desktop */
+    .hero-tags { display: grid; grid-template-columns: repeat(3, auto); gap: 10px 14px; justify-content: center; }
+    .hero-tags span { padding: 6px 12px; }
+    /* Move CTA further down on desktop */
+    .hero-cta { margin-top: 36px; }
+    /* Extra padding bottom so hero content doesn't feel cramped */
+    .hero-inner { padding-bottom: 28px; }
+    /* Ensure hero and highlights share a consistent min-height so cards align */
+    .hero-inner { min-height: var(--card-min-height); }
+    .highlight { display: flex; flex-direction: column; justify-content: center; }
+}
+
+/* Small tag list inside hero to reduce empty space and show core features */
+.hero-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
+.hero-tags span { background: rgba(167,209,255,0.08); color: #a7d1ff; padding: 6px 10px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; box-shadow: 0 2px 8px rgba(167,209,255,0.04); }
+
+/* Header CTA (desktop only) */
+.header-cta { display: inline-block; margin-left: 8px; padding: 8px 12px; background: rgba(167,209,255,0.12); color: #a7d1ff; border-radius: 8px; text-decoration: none; font-weight: 700; }
+.header-cta:hover { background: rgba(167,209,255,0.2); color: #fff; }
+
+.highlights {
+    width: 100%;
+    /* default to flex for small screens */
+    display: flex;
+    flex-wrap: wrap; /* allow wrapping into multiple rows */
+    justify-content: center;
+    gap: 18px;
+    padding: 12px 0;
+    background: transparent;
+}
+.highlight {
+    background: var(--card-bg-color);
+    padding: 14px 16px;
+    border-radius: var(--card-radius);
+    /* default flex sizing for small screens */
+    flex: 0 1 calc(33.333% - 24px);
+    max-width: 320px;
+    box-sizing: border-box;
+    text-align: center;
+    color: var(--text-color);
+    border: 1px solid var(--card-border-color);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 6px 20px rgba(0,0,0,0.12), 0 2px 6px rgba(167,209,255,0.02);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition: transform 0.26s ease, box-shadow 0.26s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertically center card content */
+}
+.highlight h3 { margin: 0; font-size: 1rem; color: var(--header-text-color); }
+.highlight .small { margin: 6px 0 0 0; color: #bfdcff; font-size: 0.95rem; }
+
+/* hover interactions to match .card */
+.hero-inner:hover, .highlight:hover {
+    transform: translateY(-4px);
+    /* gentler hover: smaller, softer shadow */
+    box-shadow: 0 8px 28px rgba(0,0,0,0.16), 0 0 10px rgba(167,209,255,0.06);
+}
+
+@media (min-width: 769px) {
+    /* Keep hero centered on large screens as requested */
+    .hero-inner {
+        padding: 20px 28px; /* modest horizontal padding, keep vertical tight */
+        min-height: var(--card-min-height);
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* vertical centering */
+    }
+    .hero h2 { font-size: 2.4rem; }
+    .hero p { font-size: 1.03rem; }
+
+    /* Use CSS grid for highlights on larger screens for consistent rows/cols */
+    .highlights {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 1fr;
+        gap: 20px;
+        align-items: stretch;
+        justify-items: stretch;
+    }
+
+    .highlight {
+        min-height: calc(var(--card-min-height) / 2);
+        max-width: none;
+        padding: 18px 16px;
+        text-align: left;
+    }
+
+    /* make the hero occupy the left column and span two rows so heights align */
+    .hero { grid-column: 1 / 2; grid-row: 1 / span 2; }
+
+    .highlight h3 { margin-top: 0; }
+    .highlight .small { color: #bfdcff; }
+
+    /* Slightly bring hero into visual balance with highlights */
+    .hero { align-self: stretch; }
+}
+
+    .hamburger {
+        display: block;
+        position: relative;
+        width: 2em;
+        height: 3px;
+        background: white;
+        transition: transform 0.3s ease;
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: white;
+        transition: transform 0.3s ease, top 0.3s ease;
+    }
+
+    .hamburger::before { top: -8px; }
+    .hamburger::after { top: 8px; }
+
+    .nav-open .hamburger {
+        transform: rotate(0.625turn);
+    }
+    .nav-open .hamburger::before {
+        top: 0;
+        transform: rotate(90deg);
+    }
+    .nav-open .hamburger::after {
+        opacity: 0;
+    }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.9);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .nav-open .nav-links {
+            transform: translateX(0);
+        }
+
+        .nav-links a {
+            font-size: 1.5rem;
+        }
+
+        /* Reposition status indicator inside the full-screen nav */
+        .nav-links #status-indicator {
+            position: absolute;
+            bottom: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    main {
+        padding-top: 100px; /* Adjust for smaller header */
+        padding-left: 15px;
+        padding-right: 15px;
+        grid-template-columns: 1fr; /* Ensure single column on mobile */
+    }
+
+    #pricing-contact {
+        flex-direction: column;
+    }
+
+    .card h2 {
+        font-size: 1.5rem;
+    }
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+    
+    main {
+        padding-top: 240px; /* Adjust for even taller header */
+    }
+
+    .card {
+        padding: 20px;
+    }
+}
+
+/* Thanks card styles */
+.thanks-card {
+    background: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(167,209,255,0.03);
+}
+.thanks-card h2 { margin-top: 0; margin-bottom: 10px; color: var(--header-text-color); }
+.thanks-card p { color: #cfe6ff; margin-bottom: 14px; }
+.thanks-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.thanks-card li {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 12px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.thanks-card li::before {
+    content: '🔗';
+    display: inline-block;
+    font-size: 1.05rem;
+    opacity: 0.95;
+}
+.thanks-card li a { color: var(--link-color); text-decoration: none; font-weight: 700; }
+.thanks-card li small { color: #9fbddf; margin-left: 6px; }
+.thanks-card li:hover { transform: translateY(-4px); box-shadow: 0 8px 22px rgba(0,0,0,0.16); }
+
+@media (max-width: 1024px) {
+    .thanks-card ul { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .thanks-card ul { grid-template-columns: 1fr; }
+    .thanks-card { padding: 16px; }
+    .thanks-card li { padding: 10px; }
+}
+
+/* Added Mobile Navigation Styles */
+body.nav-open {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1.5rem;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+        
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+
+        transform: translateY(-100%);
+        transition: transform 350ms ease-out;
+        z-index: 999;
+    }
+
+    .nav-open .nav-links {
+        transform: translateY(0);
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
+    .nav-toggle {
+        display: block;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        padding: 0.5em;
+        z-index: 1001;
+    }
+
+    .hamburger {
+        display: block;
+        position: relative;
+        width: 1.5em;
+        height: 2px;
+        background: white;
+        transition: transform 350ms ease-out, background-color 350ms ease-out;
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: white;
+        transition: transform 350ms ease-out, top 350ms ease-out;
+    }
+
+    .hamburger::before { top: -6px; }
+    .hamburger::after { top: 6px; }
+
+    .nav-open .hamburger {
+        background-color: transparent;
+    }
+
+    .nav-open .hamburger::before {
+        top: 0;
+        transform: rotate(45deg);
+    }
+
+    .nav-open .hamburger::after {
+        top: 0;
+        transform: rotate(-45deg);
+    }
+}

@@ -1,0 +1,415 @@
+/* 成员页面英雄区样式 */
+.members-hero {
+    text-align: center;
+    padding: 100px 0 50px;
+    background: var(--primary-color);
+}
+
+.members-hero h1 {
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 16px;
+}
+
+.members-hero p {
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+/* 筛选区域样式 */
+.members-filters {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.filter-tags {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-tag {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.filter-tag:hover,
+.filter-tag.active {
+    background: var(--hover-color);
+    color: white;
+}
+
+/* 成员网格布局 */
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 成员卡片样式 */
+.member-card {
+    background: var(--card-background);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.member-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--hover-color);
+}
+
+.role-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    border: 2px solid var(--card-background);
+}
+
+.role-badge.admin {
+    background: #ffd700;
+}
+
+.role-badge.builder {
+    background: #3498db;
+}
+
+.member-info h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.member-title {
+    color: var(--text-secondary);
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.member-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.tag {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    margin: 2px;
+    display: inline-block;
+}
+
+.tag.admin {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+}
+
+.member-social {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.member-social a {
+    color: var(--text-secondary);
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.member-social a:hover {
+    color: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+/* 搜索框样式 */
+.members-filters .search-box {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.members-filters .search-box input {
+    width: 100%;
+    padding: 12px 20px;
+    padding-right: 40px;
+    border: none;
+    border-radius: 24px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    font-size: 16px;
+}
+
+.members-filters .search-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .members-hero h1 {
+        font-size: 36px;
+    }
+
+    .members-hero p {
+        font-size: 18px;
+    }
+
+    .members-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 0 16px;
+    }
+
+    .member-card {
+        padding: 20px;
+    }
+}
+
+/* 深色模式适配 */
+:root[data-theme="dark"] .member-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="dark"] .member-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.member-card {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+/* 成员日期信息样式 */
+.member-dates {
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.member-dates p {
+    margin: 8px 0;
+}
+
+.member-dates i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+    color: var(--hover-color);
+}
+
+.first-seen span,
+.last-seen span {
+    color: var(--text-primary);
+}
+
+.last-seen-time {
+    color: var(--text-muted);
+    font-size: 0.85em;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* 服务器列表样式 */
+.server-playing {
+    margin: 12px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.server-list {
+    margin-top: 4px;
+    padding-left: 24px;
+}
+
+.server-list .highlight {
+    display: inline-block;
+    margin: 2px 4px;
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.server-playing .highlight {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* 在线状态徽章 */
+.status-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--card-background);
+}
+
+.status-badge.online {
+    background-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.status-badge.offline {
+    background-color: #9e9e9e;
+}
+
+/* 暗色主题适配 */
+[data-theme="dark"] .server-playing .highlight,
+[data-theme="dark"] .server-list .highlight {
+    color: var(--accent-color-dark);
+}
+
+[data-theme="dark"] .first-seen span,
+[data-theme="dark"] .last-seen span {
+    color: var(--text-primary-dark);
+}
+
+[data-theme="dark"] .last-seen-time {
+    color: var(--text-muted-dark);
+}
+
+[data-theme="dark"] .member-dates i {
+    color: var(--hover-color-dark);
+}
+
+/* 动画效果 */
+.server-list .highlight {
+    transition: all 0.3s ease;
+}
+
+.server-list .highlight:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 玩家角色徽章样式 */
+.role-badge.player {
+    background: #4CAF50;
+}
+
+/* 服务器标签样式 */
+.tag {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+    margin: 2px;
+    display: inline-block;
+}
+
+.server-playing,
+.server-last-played {
+    margin: 8px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.server-playing .highlight {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.server-last-played span {
+    color: var(--text-primary);
+}
+
+.last-seen {
+    color: var(--text-muted);
+    font-size: 0.85em;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.status-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--background);
+}
+
+.status-badge.online {
+    background-color: #4CAF50;
+}
+
+.status-badge.offline {
+    background-color: #9e9e9e;
+}
+
+/* 暗色主题适配 */
+[data-theme="dark"] .server-playing .highlight {
+    color: var(--accent-color-dark);
+}
+
+[data-theme="dark"] .server-last-played span {
+    color: var(--text-primary-dark);
+}
+
+[data-theme="dark"] .last-seen {
+    color: var(--text-muted-dark);
+} 

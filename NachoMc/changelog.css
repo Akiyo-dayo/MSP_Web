@@ -1,0 +1,338 @@
+/* 更新日志页面全局样式 */
+.changelog-section {
+    background: var(--primary-color);
+    min-height: calc(100vh - 200px); /* 减去header和footer的高度 */
+}
+
+/* 页面标题样式 */
+.changelog-hero {
+    background: var(--primary-color);
+    padding: 130px 0 50px;
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.changelog-hero h2 {
+    font-size: 56px;
+    line-height: 1.07143;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    color: var(--text-color);
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.changelog-hero p {
+    font-size: 21px;
+    line-height: 1.381;
+    font-weight: 400;
+    letter-spacing: .011em;
+    color: var(--text-secondary);
+    margin-top: 20px;
+}
+
+/* 更新日志容器 */
+.changelog-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 更新条目样式 */
+.changelog-item {
+    margin: 0 auto 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.41, 0.094, 0.54, 0.07);
+}
+
+/* 日期标签 */
+.changelog-date {
+    font-size: 17px;
+    line-height: 1.47059;
+    font-weight: 600;
+    letter-spacing: -.022em;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.changelog-date::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #06c;
+    border-radius: 50%;
+}
+
+/* 更新内容卡片 */
+.changelog-content {
+    background: var(--secondary-color);
+    border-radius: 18px;
+    padding: 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.changelog-content:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+/* 更新标 */
+.changelog-content h3 {
+    font-size: 40px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+/* 更新列表 */
+.changelog-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.changelog-content li {
+    font-size: 19px;
+    line-height: 1.4211;
+    font-weight: 400;
+    letter-spacing: .012em;
+    padding: 16px 0;
+    border-bottom: 1px solid #f5f5f7;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    color: var(--text-color);
+}
+
+.changelog-content li:last-child {
+    border-bottom: none;
+}
+
+/* 图标样式 */
+.changelog-content li i {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-size: 14px;
+}
+
+/* 不同类型的图标样式 */
+.changelog-content li i.fa-plus {
+    background: #e8f5e9;
+    color: #4caf50;
+}
+
+.changelog-content li i.fa-minus {
+    background: #ffebee;
+    color: #f44336;
+}
+
+.changelog-content li i.fa-wrench {
+    background: #fff3e0;
+    color: #ff9800;
+}
+
+.changelog-content li i.fa-bug {
+    background: #fce4ec;
+    color: #e91e63;
+}
+
+.changelog-content li i.fa-info-circle {
+    background: #e3f2fd;
+    color: #2196f3;
+}
+
+/* 注意事项样式 */
+.changelog-note {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--primary-color);
+    border-radius: 12px;
+}
+
+.changelog-note p {
+    font-size: 17px;
+    line-height: 1.47059;
+    margin: 8px 0;
+    color: var(--text-color);
+}
+
+.changelog-note code {
+    display: block;
+    padding: 16px;
+    background: var(--secondary-color);
+    border-radius: 8px;
+    font-family: "SF Mono", monospace;
+    font-size: 14px;
+    color: var(--text-color);
+    margin: 12px 0;
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.changelog-item.visible {
+    animation: fadeInUp 0.8s cubic-bezier(0.41, 0.094, 0.54, 0.07) forwards;
+}
+
+/* 高对比度模式支持 */
+@media (forced-colors: active) {
+    .changelog-content {
+        forced-color-adjust: none;
+        background-color: Canvas;
+        border: 1px solid CanvasText;
+    }
+    
+    .changelog-content h3 {
+        forced-color-adjust: none;
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: CanvasText;
+    }
+    
+    .changelog-note {
+        forced-color-adjust: none;
+        background-color: Canvas;
+        border: 1px solid CanvasText;
+    }
+    
+    .changelog-content li i {
+        forced-color-adjust: none;
+        background-color: ButtonFace;
+        color: ButtonText;
+    }
+}
+
+/* 侧边栏和搜索框样式 */
+.sidebar {
+    position: fixed;
+    top: 130px;
+    right: calc((100% - 1200px) / 2 + 20px);
+    width: 300px;
+    background: transparent;
+    border: none;
+    padding: 1rem;
+    z-index: 100;
+}
+
+.search-box {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 统一的响应式设计 */
+@media only screen and (max-width: 1268px) {
+    .sidebar {
+        right: 20px;
+    }
+}
+
+@media only screen and (max-width: 1068px) {
+    .changelog-hero h2 {
+        font-size: 48px;
+    }
+    
+    .changelog-hero p {
+        font-size: 19px;
+    }
+    
+    .changelog-container {
+        max-width: 692px;
+    }
+    
+    .changelog-content h3 {
+        font-size: 32px;
+    }
+    
+    .changelog-content li {
+        font-size: 17px;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 734px) {
+    .changelog-hero {
+        padding: 80px 0 40px;
+    }
+    
+    .changelog-hero h2 {
+        font-size: 40px;
+    }
+    
+    .changelog-hero p {
+        font-size: 17px;
+    }
+    
+    .changelog-container {
+        padding: 0 16px;
+    }
+    
+    .changelog-content {
+        padding: 24px;
+    }
+    
+    .changelog-content h3 {
+        font-size: 28px;
+        margin-bottom: 24px;
+    }
+    
+    .changelog-note {
+        padding: 20px;
+    }
+}
+
+/* 深色模式下调整阴影效果 */
+@media (prefers-color-scheme: dark) {
+    .changelog-content {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+}
+
+/* 为手动深色模式添加相同的阴影效果 */
+:root[data-theme="dark"] .changelog-content {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+} 

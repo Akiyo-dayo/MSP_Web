@@ -1,0 +1,30 @@
+[
+  {
+    "name": "1.20.1 机械动力-月亮工厂",
+    "address": "create.akiyo.fun:18004",
+    "status": "offline",
+    "error": "[Errno 11001] getaddrinfo failed",
+    "timestamp": "2025-10-29 23:23:01"
+  },
+  {
+    "name": "1.20.1空岛",
+    "address": "akiyo.fun:18003",
+    "status": "offline",
+    "error": "[WinError 10061] 由于目标计算机积极拒绝，无法连接。",
+    "timestamp": "2025-10-29 23:23:01"
+  },
+  {
+    "name": "1.21生电服",
+    "address": "f1ycar.fun:21009",
+    "status": "offline",
+    "error": "timed out",
+    "timestamp": "2025-10-29 23:23:01"
+  },
+  {
+    "name": "1.21.4FB原版",
+    "address": "f1ycar.fun:15597",
+    "status": "offline",
+    "error": "timed out",
+    "timestamp": "2025-10-29 23:23:01"
+  }
+]

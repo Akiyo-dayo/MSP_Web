@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成员列表 - NachoNeko Server</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="members.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="image/logo.png" alt="NachoNeko的小窝">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="rules.html" aria-label="游玩须知"><i class="fas fa-book"></i></a></li>
+                <li><a href="changelog.html" aria-label="更新日志"><i class="fas fa-history"></i></a></li>
+                <li><a href="members.html" aria-label="成员列表"><i class="fas fa-users"></i></a></li>
+                <li><a href="donate.html" aria-label="赞赏支持"><i class="fas fa-heart"></i></a></li>
+                <li>
+                    <button class="theme-toggle" aria-label="切换主题">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="members-hero">
+            <h1>服务器成员</h1>
+            <p>我们出色的玩家们</p>
+        </section>
+
+        <div class="members-filters">
+            <div class="search-box">
+                <input type="text" placeholder="搜索成员...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filter-tags">
+                <button class="filter-tag active" data-filter="all">全部</button>
+                <button class="filter-tag" data-filter="服主">服主</button>
+                <button class="filter-tag" data-filter="管理员">管理员</button>
+                <button class="filter-tag" data-filter="赞助者">赞助者</button>
+            </div>
+        </div>
+
+        <section class="members-grid">
+            <!-- 成员卡片将在这里动态生成 -->
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="index.html" aria-label="主页"><i class="fas fa-home"></i></a></li>
+                    <li><a href="rules.html" aria-label="游玩须知"><i class="fas fa-book"></i></a></li>
+                    <li><a href="changelog.html" aria-label="更新日志"><i class="fas fa-history"></i></a></li>
+                    <li><a href="members.html" aria-label="成员列表"><i class="fas fa-users"></i></a></li>
+                    <li><a href="donate.html" aria-label="赞赏支持"><i class="fas fa-heart"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 F1y/Car. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <script src="theme.js"></script>
+    <script src="members.js"></script>
+</body>
+</html> 

@@ -1,0 +1,113 @@
+/* 赞赏页面样式 */
+.donate-hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--secondary-color);
+    margin-bottom: 40px;
+}
+
+.donate-hero h1 {
+    font-size: 48px;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.donate-hero p {
+    font-size: 20px;
+    color: var(--text-secondary);
+    animation: fadeInUp 0.6s ease-out 0.2s;
+    animation-fill-mode: both;
+}
+
+.donate-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.donate-card {
+    background: var(--primary-color);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out 0.4s;
+    animation-fill-mode: both;
+}
+
+.donate-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code {
+    width: 300px;
+}
+
+.qr-code img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.qr-code h3 {
+    font-size: 20px;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.donate-note {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background: var(--primary-color);
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.6s ease-out 0.6s;
+    animation-fill-mode: both;
+}
+
+.donate-note p {
+    margin: 10px 0;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.donate-note i {
+    color: #e74c3c;
+    margin-right: 8px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .donate-hero h1 {
+        font-size: 36px;
+    }
+    
+    .donate-hero p {
+        font-size: 18px;
+    }
+    
+    .qr-code {
+        width: 250px;
+    }
+} 

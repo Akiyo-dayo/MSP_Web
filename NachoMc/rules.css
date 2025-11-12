@@ -1,0 +1,167 @@
+:root {
+    --primary-color: #ffffff;
+    --secondary-color: #f0f4f8;
+    --text-color: #2d3748;
+    --text-secondary: #4a5568;
+    --accent-color: #2b6cb0;
+    --border-color: #63b3ed;
+    --hover-color: #4299e1;
+}
+
+/* 规则页面主体部分 */
+.rule-section {
+    background-color: var(--primary-color);
+    padding: 30px;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.rule-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--border-color);
+}
+
+/* 规则头部样式 */
+.rule-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.avatar-container {
+    margin-right: 20px;
+}
+
+.rule-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.rule-avatar:hover {
+    transform: scale(1.1);
+}
+
+.rule-title {
+    color: var(--accent-color);
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    transition: font-size 0.2s ease;
+}
+
+.rule-title:hover {
+    font-size: 26px;
+}
+
+/* 规则列表样式 */
+.rule-list {
+    list-style-type: decimal;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.rule-list li {
+    margin: 12px 0;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    transition: transform 0.2s ease, color 0.2s ease, font-size 0.2s ease;
+    cursor: pointer;
+}
+
+.rule-list li:hover {
+    transform: translateX(5px);
+    color: var(--text-color);
+    font-size: 1.1em;
+}
+
+/* 页面标题样式 */
+h1 {
+    text-align: center;
+    color: var(--accent-color);
+    font-size: 48px;
+    font-weight: 600;
+    margin: 40px 0;
+}
+
+/* 提示框样式 */
+.note {
+    background-color: var(--primary-color);
+    padding: 20px;
+    border-radius: 18px;
+    margin: 30px auto;
+    max-width: 800px;
+    text-align: center;
+    font-size: 1.2em;
+    color: var(--accent-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), font-size 0.2s ease;
+    transform: translateY(0);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.note:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--border-color);
+    font-size: 1.3em;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .rule-section,
+    .note {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 36px;
+        margin: 30px 0;
+    }
+
+    .rule-title {
+        font-size: 20px;
+    }
+}
+
+/* 添加页面加载动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.rule-section {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.rule-section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.rule-section:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.note {
+    animation: fadeInUp 0.6s ease-out 0.3s;
+    animation-fill-mode: both;
+} 
