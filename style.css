@@ -42,7 +42,7 @@
     margin-right: 7px;
     font-size: 1.1em;
 }
-/* 小秋 Bot 娱乐机器人说明美化 */
+/* 小千 Bot 娱乐机器人说明美化 */
 .bot-desc-wrapper {
     display: flex;
     align-items: flex-start;
@@ -154,13 +154,17 @@
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(167,209,255,0.08);
+    table-layout: fixed; /* Ensure table doesn't overflow container */
 }
 .pricing-table td:first-child, .pricing-table th:first-child {
     text-align: left;
     padding-left: 20px;
+    width: 25%; /* Give first column specific width */
 }
 .pricing-table td, .pricing-table th {
     vertical-align: middle;
+    word-wrap: break-word; /* Prevent text overflow */
+    overflow-wrap: break-word;
 }
 .pricing-table th, .pricing-table td {
     padding: 14px 18px;
@@ -211,18 +215,63 @@
     margin-bottom: 6px;
     line-height: 1.4;
 }
+
+/* 体验版群聊要求样式 */
+.trial-requirements {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 8px;
+}
+
+.trial-requirements h3 {
+    color: #e74c3c;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.requirement-section {
+    margin-bottom: 15px;
+    color: #cfe6ff;
+}
+
+.requirement-section p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.requirement-important ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.requirement-important li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #cfe6ff;
+}
+
+.text-highlight {
+    color: #ffd700;
+    font-weight: bold;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap');
 
 :root {
-    --background-url: url('353a76cf461a6d04d4c741b7227488db_2_0_art.jpeg');
-    --card-bg-color: rgba(0, 0, 0, 0.4);
-    --card-border-color: rgba(255, 255, 255, 0.2);
+    --background-url: url('imgs/353a76cf461a6d04d4c741b7227488db_2_0_art.jpeg');
+    /* 增强毛玻璃对比度，减小透明度以提高文字可读性 */
+    --card-bg-color: rgba(0, 0, 0, 0.68);
+    --card-border-color: rgba(255, 255, 255, 0.22);
     --text-color: #f0f0f0;
     --header-text-color: #ffffff;
     --link-color: #a7d1ff;
     --link-hover-color: #ffffff;
     --card-radius: 15px;
     --card-min-height: 420px; /* unified min height for hero and highlights on desktop */
+    /* default header height; updated dynamically via JS on load/resize */
+    --header-height: 72px;
 }
 
 * {
@@ -238,6 +287,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
+    overflow-y: scroll; /* 强制显示滚动条，避免左右不对称 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -255,9 +305,10 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.2);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    /* 提高 header 的遮挡深度，减少与背景的混淆，增加可读性 */
+    background: rgba(0, 0, 0, 0.56);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     z-index: 1000;
     border-bottom: 1px solid var(--card-border-color);
 }
@@ -315,6 +366,132 @@ header nav a:hover {
     color: var(--link-hover-color);
 }
 
+/* Ensure in-page anchors (cards/sections) are scrolled into view with offset for fixed header */
+.card, section {
+    scroll-margin-top: calc(var(--header-height) + 8px);
+}
+
+/* Back-to-top floating button */
+#back-to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    cursor: pointer;
+    z-index: 1500;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#back-to-top:hover {
+    background: rgba(167,209,255,0.12);
+    color: #a7d1ff;
+}
+
+/* Image overlay (lightbox) */
+#image-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+#image-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+#image-overlay .overlay-inner {
+    max-width: 90vw;
+    max-height: 85vh;
+    background: rgba(0,0,0,0.6);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+#image-overlay.visible .overlay-inner {
+    transform: scale(1);
+}
+
+#image-overlay img {
+    max-width: 100%;
+    max-height: 82vh; /* Ensure image fits within viewport height leaving space for padding */
+    border-radius: 6px;
+    object-fit: contain;
+    display: block;
+}
+
+#image-overlay .overlay-close {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.easyhelp-row { margin-top: 8px; }
+.show-image-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8fc8ff, #6faee6);
+    border: none;
+    color: #08131a;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 2px 6px rgba(111, 174, 230, 0.2);
+}
+.show-image-btn::before {
+    content: '🖼️';
+    font-size: 1.1em;
+}
+.show-image-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(111, 174, 230, 0.4);
+    filter: brightness(1.05);
+}
+.show-image-btn:active {
+    transform: translateY(0);
+}
 #status-indicator {
     display: flex;
     align-items: center;
@@ -326,32 +503,149 @@ header nav a:hover {
     color: var(--text-color);
 }
 
-#status-indicator span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 8px;
-    display: inline-block;
+/* 状态指示器样式 - 重新设计 */
+#status-indicator {
+    position: relative;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
-.status-online span {
-    background-color: #4caf50; /* Green */
-    box-shadow: 0 0 5px #4caf50;
+#status-indicator:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 状态文字 */
+#status-text {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* 不同状态的颜色 */
+.status-checking #status-text {
+    color: #ffa726;
+}
+
+.status-online #status-text {
+    color: #66bb6a;
+}
+
+.status-offline #status-text {
+    color: #ef5350;
+}
+
+/* 访问统计提示框 - 全新卡片式设计 */
+.stats-tooltip {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+#status-indicator:hover .stats-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 提示框标题 */
+.stats-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #a7d1ff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* 内容区域 */
+.stats-content {
+    padding: 12px 16px;
+}
+
+/* 统计项目 */
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.stats-item:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stats-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.stats-value {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* 加载状态动画 */
+.stats-value.loading {
+    color: #999;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 main {
     width: 100%;
-    max-width: 900px;
-    padding: 230px 20px 40px 20px;
+    max-width: 1000px;
+    padding-top: 230px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 #pricing-contact {
     display: flex;
     gap: 30px;
     padding: 25px;
+    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
 }
 
 .sub-card-content {
@@ -360,11 +654,69 @@ main {
 
 /* Grid layout for wider screens */
 @media (min-width: 769px) {
-    main {
-        grid-template-columns: repeat(2, 1fr);
+    /* main grid kept as 1 column to ensure vertical stacking */
+    /* main { grid-template-columns: repeat(2, 1fr); } - Removed to fix layout shift */
+    /* #features, #features-link, #pricing-contact { grid-column: 1 / -1; } - No longer needed */
+}
+
+/* Mobile Responsiveness Fixes */
+@media (max-width: 768px) {
+    /* Fix contact section overflow */
+    .contact-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
     }
-    #features, #features-link, #pricing-contact {
-        grid-column: 1 / -1;
+    
+    .contact-qr {
+        margin-top: 10px;
+        align-self: center; /* Center QR code on mobile */
+    }
+
+    /* Fix pricing table overflow */
+    .pricing-table-wrapper {
+        width: 100%;
+        display: block;
+    }
+    
+    .pricing-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .pricing-table th, .pricing-table td {
+        padding: 8px 4px; /* Further reduce padding */
+        font-size: 0.85rem; /* Further reduce font size */
+        white-space: normal; /* Allow text wrapping */
+        word-break: break-word; /* Ensure long words break */
+    }
+
+    /* Ensure images don't overflow */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Adjust main padding to prevent content being hidden behind header or too much gap */
+    main {
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+        overflow-x: hidden; /* Prevent main container from causing scroll */
+    }
+    
+    /* Ensure cards don't overflow */
+    .card {
+        width: 100%;
+        overflow: hidden; /* Contain children */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Adjust padding for smaller screens if needed, but 240px might be too much if header isn't that big */
+    /* Let's reduce it slightly or ensure it matches actual header height */
+    main {
+        padding-top: 120px; /* More reasonable value than 240px unless header is huge */
     }
 }
 
@@ -380,6 +732,8 @@ main {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     color: var(--text-color);
     text-decoration: none;
+    max-width: 100%; /* Prevent overflow */
+    box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 a.card {
@@ -435,6 +789,33 @@ a.card {
     color: #ffd700;
     font-weight: 700;
 }
+
+/* 重要声明高亮区域 */
+.disclaimer-highlight {
+    margin: 20px 0;
+    padding: 16px 20px;
+    background: rgba(255, 152, 0, 0.1);
+    border-left: 4px solid #ff9800;
+    border-radius: 8px;
+}
+
+.disclaimer-highlight p {
+    margin: 0 0 12px 0;
+    color: #ffa726;
+    font-weight: 600;
+}
+
+.disclaimer-highlight ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.disclaimer-highlight li {
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
 .disclaimer-note {
     margin-top: 12px;
     font-size: 0.95rem;
@@ -498,61 +879,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.modal-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background: var(--card-bg-color);
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid var(--card-border-color);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-}
-
-.modal-overlay.show .modal-content {
-    transform: scale(1);
-}
-
-.close-modal {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 2rem;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-modal:hover {
-    color: var(--link-hover-color);
-}
-
 /* Mobile Responsiveness */
 .nav-toggle {
     display: none;
@@ -563,7 +889,7 @@ html {
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 36px 0; /* more vertical breathing room */
+    padding: 36px 0; /* Vertical padding only */
     /* transparent - hero-inner carries the visual card so the page art isn't blocked */
     background: transparent;
     color: #fff;
@@ -656,7 +982,7 @@ html {
     flex-wrap: wrap; /* allow wrapping into multiple rows */
     justify-content: center;
     gap: 18px;
-    padding: 12px 0;
+    padding: 12px 0; /* Vertical padding only */
     background: transparent;
 }
 .highlight {
@@ -816,7 +1142,7 @@ html {
     }
     
     main {
-        padding-top: 240px; /* Adjust for even taller header */
+        padding-top: 120px; /* More reasonable value than 240px unless header is huge */
     }
 
     .card {
@@ -833,9 +1159,17 @@ html {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(167,209,255,0.03);
+    position: relative;
 }
 .thanks-card h2 { margin-top: 0; margin-bottom: 10px; color: var(--header-text-color); }
 .thanks-card p { color: #cfe6ff; margin-bottom: 14px; }
+
+/* Thanks list wrapper with gradient fade effect */
+.thanks-list-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
 .thanks-card ul {
     list-style: none;
     padding: 0;
@@ -843,7 +1177,35 @@ html {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Collapsed state - show only 5 rows (~165px with gap) */
+.thanks-card ul.collapsed {
+    max-height: 175px;
+    overflow: hidden;
+}
+
+/* Gradient fade overlay when collapsed */
+.thanks-list-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent 0%, var(--card-bg-color) 80%);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide gradient when expanded */
+.thanks-card ul:not(.collapsed) ~ .thanks-toggle-btn ~ .thanks-list-wrapper::after,
+.thanks-list-wrapper:has(ul:not(.collapsed))::after {
+    opacity: 0;
+}
+
 .thanks-card li {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.04);
@@ -864,17 +1226,71 @@ html {
 .thanks-card li small { color: #9fbddf; margin-left: 6px; }
 .thanks-card li:hover { transform: translateY(-4px); box-shadow: 0 8px 22px rgba(0,0,0,0.16); }
 
+/* Toggle button styles */
+.thanks-toggle-btn {
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 16px auto 0;
+    background: rgba(167, 209, 255, 0.08);
+    border: 1px solid rgba(167, 209, 255, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.thanks-toggle-btn:hover {
+    background: rgba(167, 209, 255, 0.15);
+    border-color: rgba(167, 209, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.thanks-toggle-btn .arrow-icon {
+    display: block;
+    color: #a7d1ff;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    line-height: 48px;
+    text-align: center;
+}
+
+/* Rotate arrow when expanded */
+.thanks-toggle-btn.expanded .arrow-icon {
+    transform: rotate(180deg);
+}
+
 @media (max-width: 1024px) {
     .thanks-card ul { grid-template-columns: repeat(2, 1fr); }
+    .thanks-card ul.collapsed { max-height: 260px; } /* Adjust for 2 columns */
 }
 
 @media (max-width: 480px) {
     .thanks-card ul { grid-template-columns: 1fr; }
     .thanks-card { padding: 16px; }
     .thanks-card li { padding: 10px; }
+    .thanks-card ul.collapsed { max-height: 285px; } /* Adjust for 1 column (5 items) */
 }
 
 /* Guide Page Plugin Styles */
+/* AstrBot Section Styles */
+.astrbot-section {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 215, 0, 0.02));
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.astrbot-title {
+    color: #ffd700 !important;
+    border-color: rgba(255, 215, 0, 0.3) !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.astrbot-desc {
+    color: #ffd700;
+    font-weight: 500;
+}
+
 .plugin-category {
     margin-bottom: 30px;
     padding-bottom: 20px;
@@ -1055,4 +1471,265 @@ body.nav-open {
         top: 0;
         transform: rotate(-45deg);
     }
+
+    /* 移动端统计提示框适配 */
+    .stats-tooltip {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        min-width: 180px;
+    }
+
+    #status-indicator:hover .stats-tooltip {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .stats-header {
+        font-size: 0.8rem;
+        padding: 8px 14px;
+    }
+
+    .stats-content {
+        padding: 10px 14px;
+    }
+
+    .stats-item {
+        padding: 6px 0;
+    }
+
+    .stats-label {
+        font-size: 0.85rem;
+    }
+
+    .stats-value {
+        font-size: 1rem;
+    }
 }
+
+/* Splash Screen */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f1218; /* Dark background matching theme */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-content {
+    text-align: center;
+    color: #fff;
+}
+
+.splash-logo {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: float 2s ease-in-out infinite;
+}
+
+.splash-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out forwards 0.3s;
+    background: linear-gradient(135deg, #fff 0%, #a7d1ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.splash-subtitle {
+    font-size: 1.1rem;
+    color: #8fc8ff;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out forwards 0.6s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll Reveal Animation Classes */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    /* Removed transition from initial state to prevent "float down" glitch on load */
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+/* Staggered delay for highlights if needed, though JS observer handles natural scroll timing usually. 
+   But if multiple items appear at once, we might want CSS delays. 
+   For now, let's stick to simple scroll trigger. */
+
+/* Search Section Styles */
+.search-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(167, 209, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(167, 209, 255, 0.1);
+}
+
+.search-wrapper {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 50px 14px 20px;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(167, 209, 255, 0.3);
+    border-radius: 10px;
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(167, 209, 255, 0.5);
+}
+
+.search-input:focus {
+    border-color: #a7d1ff;
+    box-shadow: 0 0 15px rgba(167, 209, 255, 0.3);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #a7d1ff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: none;
+}
+
+.search-clear-btn:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.2);
+}
+
+.search-stats {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #a7d1ff;
+    min-height: 20px;
+}
+
+/* Search Highlight Effect */
+.plugin-item.search-highlight {
+    border-color: rgba(167, 209, 255, 0.4);
+    background: rgba(167, 209, 255, 0.08);
+    animation: highlightPulse 1s ease-in-out;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+    50% { box-shadow: 0 4px 20px rgba(167, 209, 255, 0.4); }
+}
+
+/* Plugin Header Styles */
+.plugin-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.plugin-header h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--header-text-color);
+    font-weight: 600;
+}
+
+.plugin-id {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: rgba(167, 209, 255, 0.7);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(167, 209, 255, 0.2);
+}
+
+/* Responsive Search Styles */
+@media (max-width: 768px) {
+    .search-section {
+        padding: 15px;
+    }
+    
+    .search-wrapper {
+        max-width: 100%;
+    }
+    
+    .search-input {
+        padding: 12px 45px 12px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .search-clear-btn {
+        font-size: 1.3rem;
+        right: 8px;
+    }
+    
+    .search-stats {
+        font-size: 0.9rem;
+    }
+    
+    .plugin-header {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+    }
+    
+    .plugin-header h4 {
+        font-size: 1.1rem;
+    }
+    
+    .plugin-id {
+        font-size: 0.8rem;
+        padding: 2px 8px;
+    }
+}
+
