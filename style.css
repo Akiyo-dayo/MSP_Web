@@ -62,6 +62,20 @@
     margin-bottom: 7px;
     color: #a7d1ff;
 }
+.bot-desc-notice {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    padding: 10px 15px;
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+    border-radius: 4px;
+    color: #ffc107;
+    line-height: 1.6;
+}
+.bot-desc-notice strong {
+    color: #ffdb4d;
+    font-weight: 600;
+}
 .bot-desc-list {
     list-style: none;
     padding-left: 0;
