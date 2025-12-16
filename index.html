@@ -7,33 +7,56 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">🌙</div>
+            <h1 class="splash-title">月弦阁</h1>
+            <p class="splash-subtitle">Loading...</p>
+        </div>
+    </div>
+    <script>
+        // Immediate check to prevent splash screen flash on revisit
+        if (sessionStorage.getItem('splashShown')) {
+            document.getElementById('splash-screen').style.display = 'none';
+        }
+    </script>
+
     <header>
         <div class="brand">
             <h1><a class="brand-home" href="#top">月弦阁</a></h1>
-            <a class="mc-link" href="NachoMc/index.html" target="_blank" rel="noopener">跳转至免费 MC 服</a>
+            <a class="mc-link" href="NachoMc/index.html">跳转至免费 MC 服</a>
         </div>
         <button class="nav-toggle" aria-label="toggle navigation">
             <span class="hamburger"></span>
         </button>
         <nav class="nav-links">
-            <a href="#features">功能简介</a>
+            <a href="guide.html">功能指南</a>
             <a href="#pricing-contact">价格与联系</a>
             <a href="#tos">服务条例</a>
             <a href="#disclaimer">免责声明</a>
-            <div id="status-indicator" class="status-online">
-                <span></span> 系统在线
+            <div id="status-indicator" class="status-checking">
+                <span id="status-text">检测中...</span>
+                <div id="stats-tooltip" class="stats-tooltip">
+                    <div class="stats-header">访问统计</div>
+                    <div class="stats-content">
+                        <div class="stats-item">
+                            <span class="stats-label">累计访问</span>
+                            <span id="total-visits" class="stats-value">--</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">今日访客</span>
+                            <span id="today-visits" class="stats-value">--</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">独立用户</span>
+                            <span id="total-users" class="stats-value">--</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
-
-    <!-- Announcement Modal -->
-    <div id="announcement-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>📢 最新公告</h2>
-            <p>这里是公告内容... 记得查看服务条例。</p>
-        </div>
-    </div>
 
     <main>
         <!-- Hero / Welcome area -->
@@ -84,28 +107,24 @@
         <!-- thanks-card temporarily removed from here; will be re-inserted at page bottom with search links -->
 
         <div id="features" class="card">
-                        <h2>🤖 小秋 Bot 娱乐机器人说明</h2>
+                        <h2>🤖 小千 Bot 娱乐机器人说明</h2>
                         <div class="bot-desc-wrapper">
                             <div class="bot-desc-content">
-                                <p class="bot-desc-main">本Bot基于Github开源插件进行二次整合并加以开发，并不以插件盈利</p>
+                                <p class="bot-desc-main">常态部署，会保持功能正常，群聊私聊都可以使用</p>
                                 <ul class="bot-desc-list">
                                     <li>付费原因：</li>
                                     <li>1. AI聊天语言模型 <span class="desc-tag">gemini-2.5-flash</span></li>
                                     <li>2. AI绘图模型 <span class="desc-tag">gemini-2.5-flash-image-preview</span>（Gemini 2.5 绘图模型）</li>
-                                    <li>3. AI绘图模型 <span class="desc-tag">sora_image</span>（与 ChatGPT 官网 4o 绘图一致，遵从度高但非常慢）</li>
+                                    <li>3. AI绘图模型 <span class="desc-tag">nano-banana-2-2k</span></li>
                                     <li>4. AI嵌入模型 <span class="desc-tag">gemini-2.5-pro</span></li>
-                                    <li>5. 云服务器租聘费、流量、人工维护及上述付费API费用等</li>
+                                    <li>5. 云服务器租聘、流量、人工维护及上述付费API费用等</li>
                                 </ul>
                             </div>
                         </div>
         </div>
-    <a href="guide.html" id="features-link" class="card">
-            <h2>⚡ 功能简介</h2>
-            <p>这里是功能内容介绍... <strong>点击查看详情 &rarr;</strong></p>
-        </a>
+        
 
         <section id="pricing-contact" class="card">
-            <div class="sub-card-content">
                 <h2>💰 价目表</h2>
                     <div class="pricing-table-wrapper">
                         <table class="pricing-table">
@@ -118,29 +137,76 @@
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>体验版</td>
+                                    <td>免费</td>
+                                    <td>免费</td>
+                                </tr>
+                                <tr>
                                     <td>普通版</td>
+                                    <td>15元</td>
+                                    <td>150元</td>
+                                </tr>
+                                <tr>
+                                    <td>高级版</td>
                                     <td>20元</td>
                                     <td>200元</td>
                                 </tr>
                                 <tr>
-                                    <td>高级版</td>
-                                    <td>25元</td>
-                                    <td>230元</td>
+                                    <td>定制版</td>
+                                    <td colspan="2">100元定制费+次月起20元/月</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="pricing-tip pricing-tip-box"><span class="tip-icon">💡</span>除年付外，所有版本一次性购买两个月以上享<span class="tip-highlight">9折优惠</span></div>
+                        <div class="pricing-tip pricing-tip-box"><span class="tip-icon">⚠️</span>如需使用<span class="tip-highlight">体验版</span>请先阅读下方 <span class="tip-highlight">体验版群聊要求</span></div>
                         
                         <div class="pricing-details">
                             <ul>
+                                <li><strong>体验版</strong>：提供基础功能体验，功能有限。</li>
                                 <li><strong>普通版</strong>：包含除AI生成外的所有功能。</li>
                                 <li><strong>高级版</strong>：在以上基础上增加AI对话与图像生成功能。</li>
+                                <li><strong>定制版</strong>：一次性支付100元定制费，根据需求定制专属功能，专属账号，次月起每月20元服务器维护费用。</li>
                             </ul>
                         </div>
-                        <button class="cta-button">立即支持</button>
+                        
+                        <div class="trial-requirements">
+                            <h3>📋 体验版群聊要求</h3>
+                            <div class="requirement-section">
+                                <p><strong>🔗 添加方式：</strong></p>
+                                <p>为保持联络，请加用户群</p>
+                            </div>
+                            <div class="requirement-section">
+                                <p>由于QQ单日群聊发送存在上限约<strong class="text-highlight">4000条</strong>（具体上限未知），要求群聊：</p>
+                            </div>
+                            <div class="requirement-section requirement-important">
+                                <ul>
+                                    <li><strong class="text-highlight">必须有人使用鸣潮功能！</strong>避免多鸣潮机器人共群。</li>
+                                    <li>为避免抢占友商付费用户，<strong class="text-highlight">不得终止续费其他Bot并改为使用体验版小千</strong>，且<strong class="text-highlight">不得与付费Bot共存！</strong></li>
+                                    <li>要求群活跃人数达到<strong class="text-highlight">30+</strong>或你是我的熟人，<strong class="text-highlight">群主必须知晓</strong>，机器人可能导致刷屏。</li>
+                                    <li><strong class="text-highlight">请规范使用</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button id="support-cta" class="cta-button">立即支持</button>
                     </div>
-            </div>
-            <div id="tos" class="sub-card-content">
+        </section>
+
+        <a href="guide.html" id="features-link" class="card">
+            <h2>⚡ 功能简介</h2>
+            <p>想了解机器人的功能？加入用户群后发送"<strong>帮助</strong>"即可查看完整的帮助菜单。<strong>点击查看详情 &rarr;</strong></p>
+        </a>
+
+        <section id="Contact-Information" class="card">
+            <h2>📱 联系方式</h2>
+                                <div class="contact-wrapper">
+                                    <div class="contact-info">
+                                        <div class="contact-row"><span class="contact-label">扫码加入用户群</span></div>
+                                        <div class="contact-row"><span class="contact-desc">获取最新动态与技术支持</span></div>
+                                    </div>
+                                        <div class="qr-placeholder contact-qr"><img src="imgs/GroupQRCode.jpg" alt="用户群二维码" width="100%" height="100%"></div>
+                                </div>
+        </section>
+
+    <section id="tos" class="card">
                                 <h2>⚠️ 服务条例</h2>
                                 <ul class="tos-list">
                                     <li><span class="tos-icon">📝</span>购买Bot后需联系我进行授权使用。</li>
@@ -149,75 +215,105 @@
                                     <li class="tos-warning"><span class="tos-icon">🚫</span>严禁利用AI生成色情、血腥、赌博等场景或内容，违者拉黑不退款。</li>
                                 </ul>
                                 <div class="tos-tip"><span class="tos-tip-icon">💡</span>如有疑问请及时联系管理员，遵守规则共同营造良好网络环境。</div>
-            </div>
-        </section>
-
-        <section id="Contact-Information" class="card">
-            <h2>📱 联系方式</h2>
-                                <div class="contact-wrapper">
-                                    <div class="contact-info">
-                                        <div class="contact-row"><span class="contact-label">扫码加入交流群</span></div>
-                                        <div class="contact-row"><span class="contact-desc">获取最新动态与技术支持</span></div>
-                                    </div>
-                                    <div class="qr-placeholder contact-qr"><img src="GroupQRCode.jpg" alt="交流群二维码" width="100%" height="100%"></div>
-                                </div>
         </section>
 
         <div class="card thanks-card">
             <h2>🙏 致谢（开源项目与作者）</h2>
             <p>在此向本项目所引用、整合或受到启发的诸多开源项目与其贡献者致以诚挚的感谢。开源社区的无私奉献与持续维护，为本项目的实现提供了重要支持与参考。</p>
-            <ul>
-                <li><a href="https://github.com/KimigaiiWuyi/GenshinUID" target="_blank" rel="noopener">GenshinUID</a></li>
-                <li><a href="https://github.com/baiqwerdvd/StarRailUID" target="_blank" rel="noopener">StarRailUID</a></li>
-                <li><a href="https://github.com/baiqwerdvd/ArknightsUID" target="_blank" rel="noopener">ArknightsUID</a></li>
-                <li><a href="https://github.com/KimigaiiWuyi/BlueArchiveUID" target="_blank" rel="noopener">BlueArchiveUID</a></li>
-                <li><a href="https://github.com/ZZZure/ZZZeroUID" target="_blank" rel="noopener">ZZZeroUID</a></li>
-                <li><a href="https://github.com/tyql688/WutheringWavesUID" target="_blank" rel="noopener">WutheringWavesUID</a></li>
-                <li><a href="https://github.com/Agnes4m/DeltaUID" target="_blank" rel="noopener">DeltaUID</a></li>
-                <li><a href="https://github.com/KomoriDev/nonebot-plugin-deepseek" target="_blank" rel="noopener">nonebot_plugin_deepseek</a></li>
-                <li><a href="https://github.com/kexue-z/nonebot-plugin-setu-now" target="_blank" rel="noopener">nonebot_plugin_setu_now</a></li>
-                <li><a href="https://github.com/noneplugin/nonebot-plugin-withdraw" target="_blank" rel="noopener">nonebot_plugin_withdraw</a></li>
-                <li><a href="https://github.com/skiesworld/nonebot-plugin-mcping" target="_blank" rel="noopener">nonebot_plugin_mcping</a></li>
-                <li><a href="https://github.com/captain-wangrun-cn/nonebot-plugin-bafortune" target="_blank" rel="noopener">nonebot_plugin_bafortune</a></li>
-                <li><a href="https://github.com/Misty02600/nonebot-plugin-jmdownloader" target="_blank" rel="noopener">nonebot_plugin_jmdownloader</a></li>
-                <li><a href="https://github.com/hakunomiko/nonebot-plugin-add-friends" target="_blank" rel="noopener">nonebot_plugin_add_friends</a></li>
-                <li><a href="https://github.com/MountainDash/nonebot-bison" target="_blank" rel="noopener">nonebot_bison</a></li>
-                <li><a href="https://github.com/fllesser/nonebot-plugin-parser/tree/master" target="_blank" rel="noopener">nonebot_plugin_resolver2</a></li>
-                <li><a href="https://github.com/SamuNatsu/nonebot-plugin-deer-pipe" target="_blank" rel="noopener">nonebot_plugin_deer_pipe</a></li>
-                <li><a href="https://github.com/ArcletProject/nonebot-plugin-alconna" target="_blank" rel="noopener">nonebot_plugin_alconna</a></li>
-                <li><a href="https://github.com/orchiddream/nonebot-plugin-nmcweather" target="_blank" rel="noopener">nonebot_plugin_nmcweather</a></li>
-                <li><a href="https://github.com/cpuopt/nonebot_plugin_imgexploration" target="_blank" rel="noopener">nonebot_plugin_imgexploration</a></li>
-                <li><a href="https://github.com/noneplugin/nonebot-plugin-emojimix" target="_blank" rel="noopener">nonebot_plugin_emojimix</a></li>
-                <li><a href="https://github.com/nek0us/nonebot_plugin_steam_game_status" target="_blank" rel="noopener">nonebot_plugin_steam_game_status</a></li>
-                <li><a href="https://github.com/sp2dev/nonebot-plugin-xibao" target="_blank" rel="noopener">nonebot_plugin_xibao</a></li>
-                <li><a href="https://github.com/padoru233/nonebot-plugin-templates-draw" target="_blank" rel="noopener">nonebot_plugin_figurine</a></li>
-                <li><a href="https://github.com/zhaomaoniu/nonebot-plugin-steam-info" target="_blank" rel="noopener">nonebot_plugin_steam_info</a></li>
-                <li><a href="https://github.com/Cvandia/nonebot-plugin-fakemsg" target="_blank" rel="noopener">nonebot_plugin_fakemsg</a></li>
-            </ul>
+            <div class="thanks-list-wrapper">
+                <ul id="thanks-list" class="collapsed">
+                    <li><a href="https://github.com/KimigaiiWuyi/GenshinUID" target="_blank" rel="noopener">GenshinUID</a></li>
+                    <li><a href="https://github.com/baiqwerdvd/StarRailUID" target="_blank" rel="noopener">StarRailUID</a></li>
+                    <li><a href="https://github.com/baiqwerdvd/ArknightsUID" target="_blank" rel="noopener">ArknightsUID</a></li>
+                    <li><a href="https://github.com/KimigaiiWuyi/BlueArchiveUID" target="_blank" rel="noopener">BlueArchiveUID</a></li>
+                    <li><a href="https://github.com/ZZZure/ZZZeroUID" target="_blank" rel="noopener">ZZZeroUID</a></li>
+                    <li><a href="https://github.com/tyql688/WutheringWavesUID" target="_blank" rel="noopener">WutheringWavesUID</a></li>
+                    <li><a href="https://github.com/Agnes4m/DeltaUID" target="_blank" rel="noopener">DeltaUID</a></li>
+                    <li><a href="https://github.com/KomoriDev/nonebot-plugin-deepseek" target="_blank" rel="noopener">nonebot_plugin_deepseek</a></li>
+                    <li><a href="https://github.com/kexue-z/nonebot-plugin-setu-now" target="_blank" rel="noopener">nonebot_plugin_setu_now</a></li>
+                    <li><a href="https://github.com/noneplugin/nonebot-plugin-withdraw" target="_blank" rel="noopener">nonebot_plugin_withdraw</a></li>
+                    <li><a href="https://github.com/skiesworld/nonebot-plugin-mcping" target="_blank" rel="noopener">nonebot_plugin_mcping</a></li>
+                    <li><a href="https://github.com/captain-wangrun-cn/nonebot-plugin-bafortune" target="_blank" rel="noopener">nonebot_plugin_bafortune</a></li>
+                    <li><a href="https://github.com/Misty02600/nonebot-plugin-jmdownloader" target="_blank" rel="noopener">nonebot_plugin_jmdownloader</a></li>
+                    <li><a href="https://github.com/hakunomiko/nonebot-plugin-add-friends" target="_blank" rel="noopener">nonebot_plugin_add_friends</a></li>
+                    <li><a href="https://github.com/MountainDash/nonebot-bison" target="_blank" rel="noopener">nonebot_bison</a></li>
+                    <li><a href="https://github.com/fllesser/nonebot-plugin-parser" target="_blank" rel="noopener">nonebot_plugin_parser</a></li>
+                    <li><a href="https://github.com/SamuNatsu/nonebot-plugin-deer-pipe" target="_blank" rel="noopener">nonebot_plugin_deer_pipe</a></li>
+                    <li><a href="https://github.com/ArcletProject/nonebot-plugin-alconna" target="_blank" rel="noopener">nonebot_plugin_alconna</a></li>
+                    <li><a href="https://github.com/orchiddream/nonebot-plugin-nmcweather" target="_blank" rel="noopener">nonebot_plugin_nmcweather</a></li>
+                    <li><a href="https://github.com/cpuopt/nonebot_plugin_imgexploration" target="_blank" rel="noopener">nonebot_plugin_imgexploration</a></li>
+                    <li><a href="https://github.com/noneplugin/nonebot-plugin-emojimix" target="_blank" rel="noopener">nonebot_plugin_emojimix</a></li>
+                    <li><a href="https://github.com/nek0us/nonebot_plugin_steam_game_status" target="_blank" rel="noopener">nonebot_plugin_steam_game_status</a></li>
+                    <li><a href="https://github.com/sp2dev/nonebot-plugin-xibao" target="_blank" rel="noopener">nonebot_plugin_xibao</a></li>
+                    <li><a href="https://github.com/padoru233/nonebot-plugin-templates-draw" target="_blank" rel="noopener">nonebot_plugin_figurine</a></li>
+                    <li><a href="https://github.com/zhaomaoniu/nonebot-plugin-steam-info" target="_blank" rel="noopener">nonebot_plugin_steam_info</a></li>
+                    <li><a href="https://github.com/Cvandia/nonebot-plugin-fakemsg" target="_blank" rel="noopener">nonebot_plugin_fakemsg</a></li>
+                    <li><a href="https://github.com/nuomicici/astrbot-plugin-choulaopo" target="_blank" rel="noopener">astrbot_plugin_choulaopo</a></li>
+                    <li><a href="https://github.com/anka-afk/astrbot_plugin_daily_news" target="_blank" rel="noopener">astrbot_plugin_daily_news</a></li>
+                    <li><a href="https://github.com/xxlemon-io/astrbot_plugin_fishing" target="_blank" rel="noopener">astrbot_plugin_fishing</a></li>
+                    <li><a href="https://github.com/xiaoxi68/astrbot_plugin_group_notice_manager" target="_blank" rel="noopener">astrbot_plugin_group_notice_manager</a></li>
+                    <li><a href="https://github.com/tinkerbellqwq/astrbot_plugin_help" target="_blank" rel="noopener">astrbot_plugin_help</a></li>
+                    <li><a href="https://github.com/Akiyo-dayo/astrbot_plugin_mcqq" target="_blank" rel="noopener">astrbot_plugin_mcqq</a></li>
+                    <li><a href="https://github.com/Zhalslar/astrbot_plugin_memelite" target="_blank" rel="noopener">astrbot_plugin_memelite</a></li>
+                    <li><a href="https://github.com/Rinyin/astrbot_plugin_nachoneko" target="_blank" rel="noopener">astrbot_plugin_nachoneko</a></li>
+                    <li><a href="https://github.com/railgun19457/astrbot_plugin_persona_plus" target="_blank" rel="noopener">astrbot_plugin_persona_plus</a></li>
+                    <li><a href="https://github.com/Zhalslar/astrbot_plugin_portrayal" target="_blank" rel="noopener">astrbot_plugin_portrayal</a></li>
+                    <li><a href="https://github.com/Zhalslar/astrbot_plugin_qqadmin" target="_blank" rel="noopener">astrbot_plugin_qqadmin</a></li>
+                    <li><a href="https://github.com/Zhalslar/astrbot_plugin_restart" target="_blank" rel="noopener">astrbot_plugin_restart</a></li>
+                    <li><a href="https://github.com/shskjw/astrbot_plugin_shoubanhua" target="_blank" rel="noopener">astrbot_plugin_shoubanhua</a></li>
+                    <li><a href="https://github.com/KONpiGG/astrbot_plugin_soupai" target="_blank" rel="noopener">astrbot_plugin_soupai</a></li>
+                    <li><a href="https://github.com/oyxning/astrbot_plugin_textadventure" target="_blank" rel="noopener">astrbot_plugin_textadventure</a></li>
+                    <li><a href="https://github.com/sa1guu/astrbot_plugin_touchi" target="_blank" rel="noopener">astrbot_plugin_touchi</a></li>
+                    <li><a href="https://github.com/oldPeter616/astrbot_plugin_xiuxian" target="_blank" rel="noopener">astrbot_plugin_xiuxian</a></li>
+                    <li><a href="https://github.com/SXP-Simon/astrbot-qq-group-daily-analysis" target="_blank" rel="noopener">astrbot_qq_group_daily_analysis</a></li>
+                    <li><a href="https://github.com/xiaoxi68/astrbot_zssm_explain" target="_blank" rel="noopener">astrbot_zssm_explain</a></li>
+                    <li><a href="https://github.com/ttq7/meanig" target="_blank" rel="noopener">meanig</a></li>
+                    <li><a href="https://github.com/Zhalslar/astrbot_plugin_box" target="_blank" rel="noopener">astrbot_plugin_box</a></li>
+                    <li><a href="https://github.com/Futureppo/astrbot_plugin_zanwo" target="_blank" rel="noopener">astrbot_plugin_zanwo</a></li>
+                </ul>
+            </div>
+            <button id="thanks-toggle" class="thanks-toggle-btn" aria-label="展开/收起插件列表">
+                <span class="arrow-icon">▼</span>
+            </button>
         </div>
 
         <section id="disclaimer" class="card">
             <h2>📋 免责声明</h2>
-            <p>本服务为基于第三方模型与开源插件构建的娱乐型 AI 助手，旨在为用户提供便捷的对话与辅助功能。使用本服务前，请务必阅读并理解以下免责声明条款：</p>
+            <p>本机器人为基于第三方模型与开源插件构建的娱乐型 AI 助手，旨在为用户提供便捷的对话与辅助功能。使用本机器人前，请务必阅读并理解以下免责声明条款：</p>
+            
+            <div class="disclaimer-highlight">
+                <p><strong>⚠️ 重要声明：</strong></p>
+                <ul>
+                    <li>本机器人为个人开发项目，仅用于技术演示与娱乐用途，不代表任何官方立场！</li>
+                    <li>本机器人收集的验证码仅用于库街区的登录验证，登录时请注意验证码短信内容，以防登录地址被劫持！</li>
+                    <li>与机器人对话时，应了解机器人需要读取和收集对话上下文以进行回应！</li>
+                    <li>机器人回复内容均由大模型智能体生成，不代表作者立场。根据搜索结果，智能体可能发送互联网链接，请自行判断链接的安全性！</li>
+                    <li>本机器人参考的开源插件均已列出，其余功能为私有实现。</li>
+                </ul>
+            </div>
+
             <ul>
-                <li><strong>AI 生成内容仅供参考：</strong>本服务生成的文本、图片或其他内容基于模型推断，可能存在不准确、片面或过时的信息。用户应对内容的真实性自行判断并承担相应后果。</li>
-                <li><strong>资源与著作权说明：</strong>本项目页面中展示或引用的游戏人物形象、插图、素材、人设、商标等视觉与文字资源，若来自第三方（例如游戏公司、官方素材库或其他创作者），其著作权和相关权利归原始权利人所有。本页面仅为展示、说明或集成用途，未对这些第三方资源取得独占性权利或进行商业授权。如需商业使用相关素材，请与原权利人联系并获取正式授权。</li>
-                <li><strong>法律与合规责任：</strong>严禁利用本服务制作、传播或协助违法违规内容（包括但不限于诈骗、煽动暴力、涉政敏感、色情、赌博等）。若因用户违反法律法规导致的任何法律责任、经济损失或其他后果，责任由用户自行承担；平台有权在必要时暂停或终止该用户的服务并不予退款。</li>
-                <li><strong>第三方服务与链接：</strong>本项目可能集成或引用第三方模型、插件及外部链接。对于第三方提供内容的准确性、可用性或安全性，平台不作保证；因此产生的任何问题或损失应由第三方或使用方承担。</li>
-                <li><strong>隐私与数据处理：</strong>为提供与改善服务，平台可能在合理范围内收集和存储对话记录、使用日志及非敏感性元数据。请勿在对话或上传内容中提供敏感个人信息（例如身份证号、银行卡号、账号密码等）。如需删除相关数据或了解更多隐私事宜，请通过页面联系方式与管理员联系。</li>
-                <li><strong>服务变更与免责：</strong>平台保留在法律允许范围内调整、暂停或终止全部或部分服务的权利。对于因不可抗力、网络故障、第三方服务中断或平台维护等原因导致的服务中断、数据丢失或其他损失，平台在法律允许的范围内免责。</li>
+                <li><strong>AI 生成内容仅供参考：</strong>本机器人生成的文本、图片或其他内容基于模型推断，可能存在不准确、片面或过时的信息。用户应对内容的真实性自行判断并承担相应后果。</li>
+                <li><strong>资源与著作权说明：</strong>本机器人页面中展示或引用的游戏人物形象、插图、素材、人设、商标等视觉与文字资源，若来自第三方（例如游戏公司、官方素材库或其他创作者），其著作权和相关权利归原始权利人所有。本页面仅为展示、说明或集成用途，未对这些第三方资源取得独占性权利或进行商业授权。如需商业使用相关素材，请与原权利人联系并获取正式授权。</li>
+                <li><strong>法律与合规责任：</strong>严禁利用本机器人制作、传播或协助违法违规内容（包括但不限于诈骗、煽动暴力、涉政敏感、色情、赌博等）。若因用户违反法律法规导致的任何法律责任、经济损失或其他后果，责任由用户自行承担；我们有权在必要时暂停或终止该用户的服务并不予退款。</li>
+                <li><strong>第三方服务与链接：</strong>本机器人可能集成或引用第三方模型、插件及外部链接。对于第三方提供内容的准确性、可用性或安全性，我们不作保证；因此产生的任何问题或损失应由第三方或使用方承担。</li>
+                <li><strong>隐私与数据处理：</strong>为提供与改善服务，我们可能在合理范围内收集和存储对话记录、使用日志及非敏感性元数据。请勿在对话或上传内容中提供敏感个人信息（例如身份证号、银行卡号、账号密码等）。如需删除相关数据或了解更多隐私事宜，请通过页面联系方式与管理员联系。</li>
+                <li><strong>服务变更与免责：</strong>我们保留在法律允许范围内调整、暂停或终止全部或部分服务的权利。对于因不可抗力、网络故障、第三方服务中断或维护等原因导致的服务中断、数据丢失或其他损失，我们在法律允许的范围内免责。</li>
                 <li><strong>争议与联系：</strong>如对免责声明内容或服务使用有疑问，请通过页面提供的联系方式与我们沟通。我们将尽力解释并处理相关问题。</li>
             </ul>
             <div class="disclaimer-note">
                 <strong>关于素材使用的温馨提示：</strong>
                 <p>若您认为本页面或项目展示的某些素材存在版权问题或需要下架、署名修正等，请通过页面联系方式告知我们，我们会在核实后及时处理或移除相关内容。</p>
             </div>
-            <p class="disclaimer-foot">使用本服务即视为您已阅读并接受上述免责声明条款。</p>
+            <p class="disclaimer-foot">使用本机器人即视为您已阅读并接受上述免责声明条款。</p>
         </section>
     </main>
 
+        <!-- Floating back-to-top button -->
+        <button id="back-to-top" aria-label="返回顶部">↑</button>
+
     <footer>
-        <p>&copy; 2025 F1y/Car & 柒い. All Rights Reserved.</p>
+        <p>&copy; 2025 秋音Akiyo & F1y/Car All Rights Reserved.</p>
     </footer>
 
     <script src="script.js"></script>

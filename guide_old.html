@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用指南 - F1y/Car & 柒い</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1><a class="brand-home" href="index.html">月弦阁</a></h1>
+        <button class="nav-toggle" aria-label="toggle navigation">
+            <span class="hamburger"></span>
+        </button>
+        <nav class="nav-links">
+            <a href="index.html">🏠 返回主页</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 简易菜单（默认不显示图片，点击可放大查看） -->
+        <section class="card content-card">
+            <h2>📚 快速功能总览</h2>
+            <p>点击下方按钮查看简易菜单预览。</p>
+            <div class="easyhelp-row">
+                <button class="show-image-btn" data-img="imgs/EasyHelp.jpg">查看简易菜单</button>
+            </div>
+        </section>
+        <section class="card content-card">
+            <h2>📖 使用方法</h2>
+            <p>以下是所有插件的详细使用方法，请根据需求选择相应的命令：</p>
+        </section>
+            
+        <section class="card content-card plugin-category">
+            <h3>🤖 AI功能</h3>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_deepseek</h4>DeepSeek AI对话
+                <code>/ds 内容</code>
+                <p>使用DeepSeek AI进行对话</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_persona_plus</h4>AI人设管理
+                <code>/pp 人格ID</code>
+                <p>切换AI人设</p>
+                <code>/pp list</code>
+                <p>查看人设列表</p>
+                <code>/reset</code>
+                <p>清除记忆</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_qq_group_daily_analysis</h4> 群聊数据分析
+                <code>/群分析 [天数]</code>
+                <p>分析群聊近期获得，天数可选默认1天</p>
+                <code>/分析设置 [enable/disable/status]</code>
+                <p>顾名思义启用或者禁用分析功能，或查看当前状态</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_textadventure</h4>文字冒险游戏
+                <code>/开始冒险</code>
+                <p>由AI主持的文字冒险幻想游戏</p>
+                <code>/结束冒险</code>
+                <p>结束当前游戏。会在当前AI回合结束后停止。</p>
+                <code>/冒险帮助</code>
+                <p>帮助手册</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_portrayal</h4>性格画像分析
+                <code>/画像 @群友</code>
+                <p>分析群友的性格画像，如果不指定，则分析消息发送者</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_figurine</h4>手办化
+                <code>手办化</code>
+                <p>顾名思义，需要回复一张图片</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot-plugin-templates-draw</h4>画图插件
+                <code>画图</code>
+                <p>需要带图或回复图片或@某人</p>
+                <code>查看模板</code>
+                <p>查看可用模板</p>
+                <code>@bot 添加/删除模板 <标识> <提示词></code>
+                <p>管理自定义模板（需要管理员权限）</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_shoubanhua</h4>AI绘图
+                <code>/bnn [提示词]</code>
+                <p>使用自定义提示词生成</p>
+                <code>/lm帮助</code>
+                <p>绘图帮助</p>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🖼️ 图片类</h3>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_setu_now</h4>色图插件
+                <code>setu [-r|--r18] [-t|--tag 标签] [--switch] [数量] [关键词]</code>
+                <p>随机获取图片，支持R18模式和标签筛选</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_imgexploration</h4>图片搜索
+                <code>搜图</code>
+                <p>搜索图片来源</p>
+            </div>
+            
+            <div class="plugin-item">
+                <h4>nonebot_plugin_jmdownloader</h4>禁漫搜索
+                <button class="show-image-btn" data-img="imgs/jmdownloader/jmdownloader.png">查看使用方法图片（弹出）</button>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🎮 游戏查询类</h3>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_mcping</h4>Minecraft服务器状态查询
+                <code>jes mc.server.com(java)</code>
+                <p>查询Java版Minecraft服务器状态</p>
+                <code>bes mc.server.com(Bedrock)</code>
+                <p>查询基岩版Minecraft服务器状态</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_steam_game_status</h4>Steam游戏状态查询
+                <button class="show-image-btn" data-img="imgs/steam_info/steam-info.png">查看使用方法图片（弹出）</button>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_steam_info</h4>Steam信息查询
+                <button class="show-image-btn" data-img="imgs/steam_info/steam-info.png">查看使用方法图片（弹出）</button>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🛠️ 工具类</h3>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_withdraw</h4>消息撤回
+                <code>@bot 撤回</code><code>@bot 撤回 1</code>
+                <p>撤回指定条数的消息</p>
+                <code>引用消息 撤回</code>
+                <p>撤回引用的消息</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_bafortune</h4>今日运势
+                <code>今日运势</code>
+                <p>获取今日运势</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_bison</h4>B站直播间订阅
+                <code>@bot 查询订阅</code>
+                <p>查询当前订阅</p>
+                <code>@bot 添加订阅(仅管理员和群主)</code>
+                <p>添加新的订阅</p>
+                <code>@bot删除订阅(仅管理员和群主)</code>
+                <p>删除现有订阅</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_parser</h4>视频链接解析
+                <p>自动解析各视频链接</p>
+                <code>@bot 开启解析</code>
+                <p>启用解析（仅群主或管理员）</p>
+                <code>@bot 关闭解析</code>
+                <p>关闭解析（仅群主或管理员）</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_nmcweather</h4>天气查询
+                <code>天气 市级</code>
+                <p>查询指定城市的天气信息</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_add_friends</h4>好友管理
+                <p>仅Bot管理员私聊</p>
+                <code>查看申请</code>
+                <p>查看待处理的好友申请和群邀请</p>
+                <code>同意申请 [QQ号/群号]</code>
+                <p>同意指定的好友申请或群邀请</p>
+                <code>拒绝申请 [QQ号/群号]</code>
+                <p>拒绝指定的好友申请或群邀请</p>
+                <code>同意全部申请</code>
+                <p>同意所有待处理的申请</p>
+                <code>拒绝全部申请</code>
+                <p>拒绝所有待处理的申请</p>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🎉 娱乐类</h3>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_deer_pipe</h4>鹿管插件
+                <code>🦌帮助</code>
+                <code>鹿帮助</code>
+                <p>获取鹿管插件帮助</p>
+                <code>🦌</code><code>鹿</code>
+                <p>签到</p>
+            </div>
+            
+            <div class="plugin-item">
+                <h4>nonebot_plugin_emojimix</h4>emoji混合
+                <code>emoji+emoji</code>
+                <p>混合两个emoji表情</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_xibao</h4>喜/悲报生成
+                <code>喜报内容</code>
+                <p>生成喜报</p>
+                <code>悲报内容</code>
+                <p>生成悲报</p>
+            </div>
+            <div class="plugin-item">
+                <h4>nonebot_plugin_fakemsg</h4>虚假消息生成
+                <code>qq号说[内容]|qq号说[内容]</code>
+                <code>@群友1 说[内容] | @群友2 说[内容]</code>
+                <p>生成虚假消息</p>
+            </div>
+        </section>
+
+
+        <section class="card content-card plugin-category">
+            <h3>🎮 游戏娱乐</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_fishing</h4>钓鱼小游戏
+                <code>/钓鱼帮助</code>
+                <p>钓鱼小游戏帮助菜单</p>
+                <code>/注册</code>
+                <p>注册新用户</p>
+                <code>/签到</code>
+                <p>每日签到</p>
+                <code>/状态</code>
+                <p>查看个人详细状态</p>
+            </div>
+            
+            <div class="plugin-item">
+                <h4>astrbot_plugin_xiuxian</h4>修仙游戏
+                <code>/修仙帮助</code>
+                <p>查看修仙游戏帮助</p>
+                <code>/我要修仙</code>
+                <p>开启仙途</p>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🎲 趣味互动</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_choulaopo</h4>抽老婆
+                <code>/抽老婆</code><code>/今日老婆</code>
+                <p>随机抽取老婆</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_soupai</h4>海龟汤游戏
+                <code>/汤</code>
+                <p>由AI主持一场海龟汤游戏</p>
+                <code>/查看</code>
+                <p>查看当前已提问的问题及回答</p>
+                <code>/汤难度 [简单/普通/困难/666开挂了]</code>
+                <p>设置游戏难度（默认普通）</p>
+                <code>/汤状态</code>
+                <p>查看当前游戏状态</p>
+                <code>/备用状态</code>
+                <p>查看备用故事存储库状态</p>
+                <code>/汤配置</code>
+                <p>查看当前插件配置</p>
+                <p>=-=-=-=-=-=-=-=</p>
+                <p>以下为管理员指令</p>
+                <code>/强制结束</code>
+                <p>查看备用故事存储库状态</p>
+                <code>/备用开始</code>
+                <p>手动开始生成备用故事</p>
+                <code>/备用结束</code>
+                <p>停止生成备用故事</p>
+                <code>/重置题库</code>
+                <p>重置网络题库和本地存储库的使用记录</p>
+                <code>/题库详情</code>
+                <p>查看题库使用情况与已用索引</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_touchi</h4>三角洲偷吃模拟器
+                <p>点击按钮查看指令详情</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_zanwo</h4>QQ名片点赞
+                <code>赞我</code>
+                <p>QQ名片点赞功能</p>
+                <code>赞@用户</code>
+                <p>给用户点赞，可以同时@多个人</p>
+                <code>/订阅点赞</code>
+                <p>bot每天为你点赞</p>
+                <code>/取消订阅点赞</code>
+                <p>取消该每日点赞</p>
+            </div>
+            
+            <div class="plugin-item">
+                <h4>meanig</h4>综合插件
+                <code>/meaning帮助</code>
+                <p>帮助菜单</p>
+                <code>看看妞</code><code>看看腿</code>
+                <p>获取人物美拍/腿部特写</p>
+                <code>来点cos</code>
+                <p>三次元Cosplay摄影</p>
+                <code>来点cos</code>
+                <p>三次元Cosplay摄影</p>
+                <code>每日日报</code>
+                <p>获取图文日报（热点新闻/生活建议）</p>
+                <code>点阵字 [内容] [填充符]</code>
+                <p>将文字转换为点阵字符图案</p>
+                
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>🛠️ 管理工具</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_qqadmin</h4>群管理工具
+                <code>/管理帮助</code>
+                <p>查看所有管理命令</p>
+                <code>/禁言 @用户 [时长]</code>
+                <p>禁言群成员</p>
+                <code>/踢出 @用户</code>
+                <p>踢出群成员</p>
+                
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_group_notice_manager</h4> 群公告退订
+                <p>@全员自动触发td</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_restart</h4> 重启机器人
+                <code>/重启</code>
+                <p>重启机器人（需管理员权限）</p>
+            </div>
+            
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>📰 信息查询</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_daily_news</h4>
+                <code>/get_news</code>
+                <p>获取今日新闻资讯</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_mcqq</h4>Minecraft与QQ群服互联
+                <code>/mc帮助</code>
+                <p>显示帮助菜单</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_zssm_explain</h4>知识说明
+                <code>/zssm</code>
+                <p>引用消息触发，支持视频/图片/文字/聊天记录/文件/网页</p>
+            </div>
+        </section>
+
+
+        <section class="card content-card plugin-category">
+            <h3>🎨 创意表现</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_memelite</h4>趣味表情包
+                <code>/meme帮助	</code>
+                <p>查看所有能触发meme合成的关键词</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_nachoneko</h4>NachoNeko
+                <code>/neko</code>
+                <p>在线获取可爱Nacho插画</p>
+            </div>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_box</h4>开盒！
+                <code>/盒@用户</code>
+                <p>开盒别人！</p>
+            </div>
+        </section>
+
+        <section class="card content-card plugin-category">
+            <h3>ℹ️ 帮助系统</h3>
+            <div class="plugin-item">
+                <h4>astrbot_plugin_help</h4>
+                <code>/help</code><code>/功能</code><code>/菜单</code>
+                <p>查看可用命令详情</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 秋音Akiyo & F1y/Car  All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
