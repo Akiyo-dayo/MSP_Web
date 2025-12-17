@@ -9,12 +9,38 @@
 </head>
 <body>
     <header>
-        <h1><a class="brand-home" href="index.html">月弦阁</a></h1>
+        <div class="brand">
+            <h1><a class="brand-home" href="index.html">月弦阁</a></h1>
+            <a class="mc-link" href="NachoMc/index.html">跳转至免费 MC 服</a>
+        </div>
         <button class="nav-toggle" aria-label="toggle navigation">
             <span class="hamburger"></span>
         </button>
         <nav class="nav-links">
-            <a href="index.html">🏠 返回主页</a>
+            <a href="guide.html">功能指南</a>
+            <a href="index.html#pricing-contact">价格与联系</a>
+            <a href="index.html#tos">服务条例</a>
+            <a href="index.html#disclaimer">免责声明</a>
+            <div id="status-indicator" class="status-checking">
+                <span id="status-text">检测中...</span>
+                <div id="stats-tooltip" class="stats-tooltip">
+                    <div class="stats-header">访问统计</div>
+                    <div class="stats-content">
+                        <div class="stats-item">
+                            <span class="stats-label">累计访问</span>
+                            <span id="total-visits" class="stats-value">--</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">今日访客</span>
+                            <span id="today-visits" class="stats-value">--</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">独立用户</span>
+                            <span id="total-users" class="stats-value">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
