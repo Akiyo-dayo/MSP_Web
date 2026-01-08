@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot 实时状态 - 月弦阁</title>
+    <link rel="stylesheet" href="bot_style.css">
+</head>
+<body>
+    <header>
+        <div class="brand"><h1><a href="index.html">月弦阁</a></h1></div>
+        <nav class="nav-links"><a href="index.html">🏠 返回主页</a></nav>
+    </header>
+
+    <main>
+        <div class="hero-box">
+            <h2>📡 看看你的bot还活着吗</h2>
+            <p>实时监控所有机器人账号的存活状态</p>
+            <div id="network-status">正在连接...</div>
+        </div>
+
+        <div id="container" class="status-grid">
+            <div style="text-align:center;width:100%;color:#888">正在加载数据...</div>
+        </div>
+    </main>
+
+    <script>
+        let API_BASE = '';
+        if (window.location.hostname.includes('akiyo.fun')) {
+            API_BASE = '/api/bot';
+            document.getElementById('network-status').innerText = 'Mode: Online';
+        } else {
+            API_BASE = 'http://127.0.0.1:5001';
+            document.getElementById('network-status').innerText = 'Mode: Local Debug';
+        }
+
+        const API_URL = API_BASE + '/accounts';
+
+        fetch(API_URL)
+            .then(r => r.json())
+            .then(data => {
+                const box = document.getElementById('container');
+                box.innerHTML = '';
+                if(!data.length) { 
+                    box.innerHTML='<div style="text-align:center;width:100%; color:#aaa;">暂无账号数据</div>'; 
+                    return; 
+                }
+                
+                data.forEach(item => {
+                    let badge = '';
+                    let detailHtml = '';
+                    
+                    // 备注标签样式
+                    const noteHtml = item.note 
+                        ? `<span style="font-size:0.8rem; background:rgba(255, 215, 0, 0.15); color:#ffd700; padding:2px 6px; border-radius:4px; border:1px solid rgba(255, 215, 0, 0.3); vertical-align:middle; margin-left:8px;">${item.note}</span>` 
+                        : '';
+
+                    if(item.status === 'ok') {
+                        badge = '<span class="badge bg-green">✅ 运行正常</span>';
+                    } else if(item.status === 'temp') {
+                        badge = '<span class="badge bg-yellow">⏳ 临时冻结</span>';
+                        detailHtml = `<div class="detail">📅 预计解封: <span style="color:#fff;font-weight:bold;">${item.unban_date}</span></div>`;
+                    } else {
+                        badge = '<span class="badge bg-red">🚫 永久封禁</span>';
+                        detailHtml = `<div class="detail">此账号已被永久停用</div>`;
+                    }
+
+                    box.innerHTML += `
+                        <div class="bot-card">
+                            <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk=${item.qq}&s=100" onerror="this.src='imgs/Helper.jpg'">
+                            <div class="info">
+                                <div class="name">
+                                    ${item.name}
+                                    ${noteHtml}
+                                </div>
+                                <span class="qq">${item.qq}</span>
+                                ${badge}
+                                ${detailHtml}
+                            </div>
+                        </div>`;
+                });
+            })
+            .catch(err => {
+                document.getElementById('container').innerHTML = `<div style="text-align:center;color:#ef5350">连接失败</div>`;
+            });
+    </script>
+</body>
+</html>

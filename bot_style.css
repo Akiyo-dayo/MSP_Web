@@ -1,0 +1,370 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+    /* --- 核心变量 (同步 style.css) --- */
+    --background-url: url('imgs/353a76cf461a6d04d4c741b7227488db_2_0_art.jpeg');
+    
+    /* 配色 */
+    --card-bg-color: rgba(0, 0, 0, 0.68);
+    --card-border-color: rgba(255, 255, 255, 0.22);
+    --text-color: #f0f0f0;
+    --text-highlight: #a7d1ff;
+    --header-text-color: #ffffff;
+    --link-hover-color: #ffffff;
+    
+    /* 状态颜色 */
+    --status-green-bg: rgba(102, 187, 106, 0.2);
+    --status-green-text: #66bb6a;
+    --status-yellow-bg: rgba(255, 167, 38, 0.2);
+    --status-yellow-text: #ffa726;
+    --status-red-bg: rgba(239, 83, 80, 0.2);
+    --status-red-text: #ef5350;
+
+    --card-radius: 15px;
+    --header-height: 72px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--background-url) no-repeat center center fixed;
+    background-size: cover;
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.18);
+}
+
+/* =========================================
+   1. 导航栏 Header (完全照搬 style.css)
+   ========================================= */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: var(--header-height);
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 1000;
+    transition: background 0.3s ease;
+}
+
+/* 品牌区域 */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: var(--header-text-color);
+}
+
+.brand h1 {
+    margin: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* 🟢 关键修复：强制链接字体为 1.5rem，与 index 保持一致 */
+.brand h1 a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem; 
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 导航链接 */
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-highlight);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem; /* 这里不需要改，默认就是 1rem */
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--text-highlight);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* =========================================
+   2. 主容器与通用布局
+   ========================================= */
+main {
+    width: 100%;
+    max-width: 1100px;
+    padding-top: 120px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* 标题卡片 */
+.hero-box {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    text-align: center;
+    background: rgba(0,0,0,0.50);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 25px;
+    border-radius: calc(var(--card-radius) - 2px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.20);
+}
+.hero-box h2 { 
+    font-size: 2.2rem; 
+    color: var(--header-text-color); 
+    margin-bottom: 8px; 
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.hero-box p { color: #d4e8ff; font-size: 1.05rem; }
+
+/* 调试标签 */
+#network-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    background: rgba(167,209,255,0.12);
+    color: var(--text-highlight);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(167,209,255,0.15);
+}
+
+/* =========================================
+   3. Bot 状态页 (Status Page)
+   ========================================= */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 25px;
+}
+
+.bot-card {
+    background: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    padding: 25px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+}
+
+.bot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 15px rgba(167,209,255,0.1);
+    border-color: rgba(167, 209, 255, 0.4);
+}
+
+.avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.info { flex: 1; }
+.name { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.qq { font-family: 'Consolas', monospace; color: var(--text-highlight); font-size: 0.95rem; margin-bottom: 12px; display: block;}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+}
+.bg-green { background: var(--status-green-bg); color: var(--status-green-text); border: 1px solid var(--status-green-text); }
+.bg-yellow { background: var(--status-yellow-bg); color: var(--status-yellow-text); border: 1px solid var(--status-yellow-text); }
+.bg-red { background: var(--status-red-bg); color: var(--status-red-text); border: 1px solid var(--status-red-text); }
+
+.detail {
+    margin-top: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+/* =========================================
+   4. 管理后台 (Admin Page)
+   ========================================= */
+.login-card {
+    max-width: 500px;
+    margin: 0 auto 40px;
+    padding: 30px;
+    background: var(--card-bg-color);
+    border: 1px solid var(--text-highlight);
+    border-radius: var(--card-radius);
+    text-align: center;
+    box-shadow: 0 0 20px rgba(167, 209, 255, 0.15);
+}
+
+.admin-list-container {
+    background: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.list-header {
+    display: grid;
+    gap: 15px;
+    padding: 0 15px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: var(--text-highlight);
+    font-size: 1rem;
+}
+
+.admin-item {
+    display: grid;
+    gap: 15px;
+    align-items: start;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
+    transition: background 0.2s;
+}
+
+.admin-item:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(167,209,255,0.2);
+}
+
+.admin-input, .admin-select {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(167, 209, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.admin-input:focus, .admin-select:focus {
+    border-color: var(--text-highlight);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(167, 209, 255, 0.1);
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-add {
+    width: 100%;
+    padding: 15px;
+    background: rgba(167, 209, 255, 0.1);
+    border: 1px dashed var(--text-highlight);
+    color: var(--text-highlight);
+    margin-top: 10px;
+}
+.btn-add:hover { background: rgba(167, 209, 255, 0.2); }
+
+.btn-save {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #8fc8ff, #6faee6);
+    color: #08131a;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    box-shadow: 0 8px 22px rgba(107,158,205,0.3);
+    z-index: 999;
+}
+.btn-save:hover { transform: translateY(-3px); filter: brightness(1.05); }
+
+.btn-del {
+    background: rgba(239, 83, 80, 0.15);
+    color: #ef5350;
+    padding: 8px;
+    width: 100%;
+}
+.btn-del:hover { background: rgba(239, 83, 80, 0.3); }
+
+/* --- 移动端适配 --- */
+@media (max-width: 768px) {
+    header { padding: 0 1rem; }
+    .list-header { display: none; }
+    .admin-item {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+    }
+    .btn-save {
+        width: 90%;
+        left: 5%;
+        right: auto;
+        bottom: 20px;
+        text-align: center;
+    }
+    main { padding-bottom: 100px; }
+}
