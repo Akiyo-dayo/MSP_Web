@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot 管理后台</title>
+    <link rel="stylesheet" href="bot_style.css">
+    <style>
+        .col-layout { grid-template-columns: 1.5fr 1.2fr 1.8fr 1.8fr 3.2fr 0.8fr; } /* 调整列宽给时间框腾位置 */
+        
+        /* 时间输入框组样式 */
+        .time-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .time-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        .time-input {
+            width: 100%;
+            padding: 8px 4px 8px 8px; /* 右边留少点，放单位 */
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(167, 209, 255, 0.2);
+            border-radius: 6px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            text-align: center;
+        }
+        .time-unit {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
+        .time-input:focus {
+            border-color: var(--text-highlight);
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand"><h1>🔧 管理后台</h1></div>
+        <nav class="nav-links"><a href="status.html" target="_blank">查看前台 ↗</a></nav>
+    </header>
+
+    <main>
+        <div class="hero-box" style="padding: 15px; margin-bottom: 20px;">
+            <div id="network-status">正在检测网络...</div>
+            <p style="margin-top: 5px; font-size: 0.9rem;">
+                又有bot被封？何意味
+            </p>
+        </div>
+
+        <div class="login-card">
+            <h3 style="color:var(--text-highlight); margin-bottom:15px;">🔐 管理员验证</h3>
+            <input type="password" id="key" class="admin-input" placeholder="输入密钥 (默认123456)" style="text-align:center; font-size:1.1rem;">
+        </div>
+
+        <div class="admin-list-container">
+            <div class="list-header col-layout">
+                <div>🤖 名称</div>
+                <div>🏷️ 备注</div>
+                <div>🔢 QQ 号码</div>
+                <div>📡 运行状态</div>
+                <div>⏱️ 封禁时长</div>
+                <div>操作</div>
+            </div>
+
+            <div id="list-box"></div>
+            <button class="btn btn-add" onclick="add()">+ 添加一个新 Bot 账号</button>
+        </div>
+
+        <button class="btn btn-save" onclick="save()">💾 保存所有更改</button>
+    </main>
+
+    <script>
+        let API_BASE = '';
+        if (window.location.hostname.includes('akiyo.fun')) {
+            API_BASE = '/api/bot';
+            document.getElementById('network-status').innerText = '当前环境: 线上服务器 (Nginx)';
+        } else {
+            API_BASE = 'http://127.0.0.1:5001';
+            document.getElementById('network-status').innerText = '当前环境: 本地调试 (Port 5001)';
+        }
+
+        const GET_API = API_BASE + '/accounts';
+        const POST_API = API_BASE + '/admin/update';
+
+        let list = [];
+
+        fetch(GET_API)
+            .then(r => r.json())
+            .then(data => { list = data; render(); })
+            .catch(() => alert('连接失败，请确认后端 bot_server.py 是否启动！'));
+
+        function render() {
+            const box = document.getElementById('list-box');
+            box.innerHTML = '';
+            
+            list.forEach((item, i) => {
+                const isTemp = item.status === 'temp';
+                const showDuration = isTemp ? 'flex' : 'none';
+                
+                // 计算剩余时间，拆分为 天/时/分
+                let d=0, h=0, m=0;
+                if(isTemp && item.unban_date) {
+                    const mins = getMinutesFromNow(item.unban_date);
+                    if(mins > 0) {
+                        d = Math.floor(mins / 1440);
+                        h = Math.floor((mins % 1440) / 60);
+                        m = mins % 60;
+                    }
+                }
+
+                box.innerHTML += `
+                <div class="admin-item col-layout">
+                    <div>
+                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">名称</label>
+                        <input class="admin-input" value="${item.name}" placeholder="Bot名称" oninput="edit(${i}, 'name', this.value)">
+                    </div>
+
+                    <div>
+                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">备注</label>
+                        <input class="admin-input" value="${item.note || ''}" placeholder="如: 1号机" oninput="edit(${i}, 'note', this.value)" style="color:#ffd700;">
+                    </div>
+                    
+                    <div>
+                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">QQ</label>
+                        <input class="admin-input" type="number" value="${item.qq}" placeholder="QQ号" oninput="edit(${i}, 'qq', this.value)">
+                    </div>
+
+                    <div>
+                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">状态</label>
+                        <select class="admin-select" onchange="edit(${i}, 'status', this.value)" style="background:${getStatusColor(item.status)}">
+                            <option value="ok" ${item.status=='ok'?'selected':''}>✅ 正常运行</option>
+                            <option value="temp" ${item.status=='temp'?'selected':''}>⏳ 临时冻结</option>
+                            <option value="ban" ${item.status=='ban'?'selected':''}>🚫 永久封禁</option>
+                        </select>
+                    </div>
+
+                    <div style="display:${showDuration}; align-items:flex-start; gap:8px; flex-direction:column;">
+                        <div class="time-group" style="width:100%;">
+                            <div class="time-input-wrapper">
+                                <input id="d-${i}" class="time-input" type="number" min="0" value="${d}" oninput="updateDate(${i})">
+                                <span class="time-unit">天</span>
+                            </div>
+                            <div class="time-input-wrapper">
+                                <input id="h-${i}" class="time-input" type="number" min="0" max="23" value="${h}" oninput="updateDate(${i})">
+                                <span class="time-unit">时</span>
+                            </div>
+                            <div class="time-input-wrapper">
+                                <input id="m-${i}" class="time-input" type="number" min="0" max="59" value="${m}" oninput="updateDate(${i})">
+                                <span class="time-unit">分</span>
+                            </div>
+                        </div>
+
+                        <div style="font-size:0.8rem; color:#888; white-space:nowrap;">
+                            解封: <span id="date-display-${i}" style="color:var(--text-highlight); font-weight:bold; font-family:monospace;">${item.unban_date || '未设置'}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display:${!isTemp?'flex':'none'}; align-items:center; height:100%; color:#666; font-size:0.8rem;">
+                        (无需设置)
+                    </div>
+
+                    <div>
+                        <button class="btn btn-del" onclick="del(${i})">🗑️</button>
+                    </div>
+                </div>`;
+            });
+            
+            if(window.innerWidth <= 768) {
+                document.querySelectorAll('.mobile-label').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.admin-item').forEach(el => {
+                    el.style.display = 'flex';
+                    el.style.flexDirection = 'column';
+                });
+            }
+        }
+
+        // --- 核心逻辑：读取三个框 -> 算出总分钟 -> 更新日期 ---
+        function updateDate(index) {
+            // 获取三个框的值，为空则默认为0
+            const d = parseInt(document.getElementById(`d-${index}`).value) || 0;
+            const h = parseInt(document.getElementById(`h-${index}`).value) || 0;
+            const m = parseInt(document.getElementById(`m-${index}`).value) || 0;
+
+            if(d === 0 && h === 0 && m === 0) {
+                list[index].unban_date = '';
+                document.getElementById(`date-display-${index}`).innerText = '未设置';
+                return;
+            }
+
+            const totalMinutes = (d * 1440) + (h * 60) + m;
+            
+            const date = new Date();
+            date.setMinutes(date.getMinutes() + totalMinutes); // 当前时间 + 总分钟
+            
+            const timeString = formatTime(date);
+            list[index].unban_date = timeString;
+            
+            // 更新文字显示
+            document.getElementById(`date-display-${index}`).innerText = timeString;
+        }
+
+        // --- 辅助：格式化时间 YYYY-MM-DD HH:mm ---
+        function formatTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hour}:${minute}`;
+        }
+
+        // --- 辅助：算出剩余分钟数 (用于初始化回显) ---
+        function getMinutesFromNow(dateStr) {
+            if (!dateStr || !dateStr.includes(':')) return 0; 
+            const target = new Date(dateStr);
+            const now = new Date();
+            const diffMs = target - now;
+            const diffMins = Math.ceil(diffMs / 60000); 
+            return diffMins > 0 ? diffMins : 0;
+        }
+
+        function getStatusColor(status) {
+            if(status === 'ok') return 'rgba(102, 187, 106, 0.2)';
+            if(status === 'temp') return 'rgba(255, 167, 38, 0.2)';
+            return 'rgba(239, 83, 80, 0.2)';
+        }
+
+        function edit(i, k, v) { list[i][k] = v; if(k==='status') render(); }
+        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', unban_date:''}); render(); }
+        function del(i) { if(confirm('删除此账号？')) { list.splice(i, 1); render(); } }
+
+        function save() {
+            const k = document.getElementById('key').value;
+            if(!k) return alert('请输入密钥');
+            const btn = document.querySelector('.btn-save');
+            const oldText = btn.innerText;
+            btn.innerText = '保存中...';
+            fetch(POST_API, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: k, accounts: list })
+            }).then(r=>r.json()).then(d => {
+                alert(d.message); btn.innerText = oldText;
+            }).catch(()=> { alert("保存失败"); btn.innerText = oldText; });
+        }
+    </script>
+</body>
+</html>
