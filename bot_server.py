@@ -37,6 +37,7 @@ def check_expiry(accounts):
                 if now >= unban_time:
                     print(f"[{now}] 账号 {acc['qq']} 封禁期满，自动解封。")
                     acc['status'] = 'ok'
+                    acc['last_unban_date'] = acc['unban_date'] # 记录最后解封时间
                     acc['unban_date'] = ''
                     is_modified = True
             except ValueError:
@@ -45,6 +46,7 @@ def check_expiry(accounts):
                     unban_date = datetime.strptime(acc['unban_date'], '%Y-%m-%d').date()
                     if now.date() >= unban_date:
                         acc['status'] = 'ok'
+                        acc['last_unban_date'] = acc['unban_date'] # 兼容旧数据的记录
                         acc['unban_date'] = ''
                         is_modified = True
                 except:

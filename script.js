@@ -38,7 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 访问统计功能 ---
-    const API_BASE_URL = 'http://localhost:5000/api';
+    let API_BASE_URL = '';
+
+    // 1. 判断当前是在 线上域名 还是 本地开发
+    if (window.location.hostname.includes('akiyo.fun')) {
+        // 线上环境：使用相对路径，让 Nginx 处理 /api/
+        API_BASE_URL = '/api'; 
+        console.log('Mode: Production (Nginx)');
+    } else {
+        // 本地环境：强制连本地 Python (端口 5000)
+        API_BASE_URL = 'http://127.0.0.1:5000/api';
+        console.log('Mode: Local Debug (Port 5000)');
+    }
     
     // 更新系统状态显示
     function updateSystemStatus(status) {
