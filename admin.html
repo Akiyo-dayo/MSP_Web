@@ -238,7 +238,7 @@
         }
 
         function edit(i, k, v) { list[i][k] = v; if(k==='status') render(); }
-        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', unban_date:''}); render(); }
+        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', unban_date:'', last_unban_date: ''}); render(); }
         function del(i) { if(confirm('删除此账号？')) { list.splice(i, 1); render(); } }
 
         function save() {
