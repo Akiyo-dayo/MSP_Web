@@ -185,9 +185,9 @@ def update_accounts():
 
 if __name__ == '__main__':
     # 挂载后台遥测进程
-    print("✅ 启动状态遥测线程，轮询间隔: 5 分钟...")
+    print("[OK] 启动状态遥测线程，轮询间隔: 5 分钟...")
     sync_thread = threading.Thread(target=fetch_and_sync_status, daemon=True)
     sync_thread.start()
     
-    print(f"✅ Bot Server 正在运行: http://127.0.0.1:{PORT}")
+    print(f"[OK] Bot Server 正在运行: http://127.0.0.1:{PORT}")
     app.run(host='0.0.0.0', port=PORT)
