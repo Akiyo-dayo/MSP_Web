@@ -89,5 +89,5 @@ def delete_message():
     return jsonify({'success': False, 'message': '找不到该留言'}), 404
 
 if __name__ == '__main__':
-    print(f"✅ Community Server 正在运行: http://127.0.0.1:{PORT}")
+    print(f"[OK] Community Server 正在运行: http://127.0.0.1:{PORT}")
     app.run(host='0.0.0.0', port=PORT)
