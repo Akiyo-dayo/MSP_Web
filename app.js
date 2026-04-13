@@ -353,7 +353,13 @@
     if (openSideBtnMobile) openSideBtnMobile.addEventListener('click', openDrawer);
     if (openHeroBtn) openHeroBtn.addEventListener('click', openDrawer);
     const heroStatusWidget = document.getElementById('hero-status-widget');
-    if (heroStatusWidget) heroStatusWidget.addEventListener('click', openDrawer);
+    if (heroStatusWidget) {
+      heroStatusWidget.style.cursor = 'pointer';
+      heroStatusWidget.addEventListener('click', (e) => {
+        if (e.target.closest('#open-drawer-status')) return;
+        window.location.href = './status.html';
+      });
+    }
     if (openStatusBtn) openStatusBtn.addEventListener('click', openDrawer);
     closeBtn.addEventListener('click', closeDrawer);
     backdrop.addEventListener('click', closeDrawer);
