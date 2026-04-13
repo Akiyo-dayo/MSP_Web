@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>月弦阁 · 留言板</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            line-height: 1.7;
+        }
+
+        .board-page {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 110px 0 72px;
+        }
+
+        .board-shell {
+            border-radius: 24px;
+            padding: 10px 0 8px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            animation: floatIn 0.72s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        .board-hero {
+            margin-bottom: 16px;
+        }
+
+        .board-title {
+            margin: 0;
+            font-size: clamp(22px, 3vw, 28px);
+            font-weight: 700;
+            color: #f8fbff;
+            letter-spacing: 0.01em;
+        }
+
+        .board-subtitle {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: rgba(229, 231, 235, 0.72);
+        }
+
+        .composer-bar {
+            background: rgba(24, 24, 28, 0.65);
+            -webkit-backdrop-filter: blur(24px) saturate(1.5);
+            backdrop-filter: blur(24px) saturate(1.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: none;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            animation: floatIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        .composer-bar:hover {
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .composer-login-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .composer-post {
+            display: grid;
+            gap: 12px;
+        }
+
+        .composer-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 2px;
+        }
+
+        .board-input,
+        .board-textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 16px;
+            border: 0.5px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.03);
+            color: #f9fbff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .board-input {
+            padding: 12px 14px;
+        }
+
+        .board-textarea {
+            padding: 13px 14px;
+            min-height: 92px;
+            resize: vertical;
+            line-height: 1.75;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .board-input:focus,
+        .board-textarea:focus {
+            border-color: rgba(143, 209, 255, 0.85);
+            box-shadow: 0 0 0 2px rgba(143, 209, 255, 0.16);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-qq {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            margin-left: auto;
+            padding: 6px 12px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+        }
+
+        #post-box .btn-primary {
+            transition: transform 0.22s ease, opacity 0.22s ease;
+        }
+
+        #post-box .btn-primary.is-loading {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .stream-zone {
+            margin-top: 18px;
+        }
+
+        #messages-container {
+            position: relative;
+            padding: 2px 0 8px;
+            animation: floatIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        .msg-item {
+            display: flex;
+            gap: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            background: rgba(24, 24, 28, 0.6);
+            -webkit-backdrop-filter: blur(24px) saturate(1.5);
+            backdrop-filter: blur(24px) saturate(1.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            animation: floatIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .msg-item:hover {
+            transform: translateY(-3px) scale(1.005);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.18);
+            background: rgba(30, 30, 35, 0.75);
+        }
+
+        .msg-avatar {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 0.5px solid rgba(255, 255, 255, 0.24);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+        }
+
+        .msg-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .msg-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .msg-qq {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.01em;
+        }
+
+        .msg-time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+            white-space: nowrap;
+        }
+
+        .msg-content {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            color: rgba(255, 255, 255, 0.92);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .reply-box {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 3px solid #22c55e;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .reply-title {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(34, 197, 94, 0.92);
+        }
+
+        .loading-text,
+        .error-text,
+        .empty-state-card {
+            text-align: center;
+            color: rgba(229, 231, 235, 0.7);
+            padding: 24px 10px;
+            animation: floatIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+
+        .empty-state-card .empty-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+            opacity: 0.86;
+        }
+
+        .empty-state-card .empty-title {
+            font-size: 14px;
+            color: #f8fbff;
+            font-weight: 600;
+        }
+
+        .empty-state-card .empty-sub {
+            font-size: 12px;
+            color: rgba(229, 231, 235, 0.56);
+        }
+
+        .drawer-quick-actions {
+            margin-bottom: 24px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .drawer-nav-link {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .footer p {
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+        }
+
+        body.theme-light .board-shell {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+
+        body.theme-light .board-title {
+            color: #183153;
+        }
+
+        body.theme-light .board-subtitle {
+            color: rgba(30, 41, 59, 0.62);
+        }
+
+        body.theme-light .composer-bar {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(15, 23, 42, 0.1);
+            box-shadow: none;
+        }
+
+        body.theme-light .msg-item {
+            background: rgba(255, 255, 255, 0.55);
+            border-color: rgba(15, 23, 42, 0.09);
+        }
+
+        body.theme-light .msg-item:hover {
+            transform: translateY(-3px) scale(1.005);
+            box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14), 0 4px 8px rgba(15, 23, 42, 0.08);
+            border-color: rgba(15, 23, 42, 0.2);
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        body.theme-light .board-input,
+        body.theme-light .board-textarea {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(15, 23, 42, 0.15);
+            color: #0f172a;
+        }
+
+        body.theme-light .user-qq,
+        body.theme-light .msg-qq,
+        body.theme-light .empty-state-card .empty-title {
+            color: #0f172a;
+        }
+
+        body.theme-light .msg-time {
+            color: rgba(15, 23, 42, 0.42);
+        }
+
+        body.theme-light .msg-content,
+        body.theme-light .reply-box {
+            color: #334155;
+        }
+
+        body.theme-light .reply-box {
+            background: rgba(15, 23, 42, 0.06);
+            border-left-color: rgba(22, 163, 74, 0.75);
+        }
+
+        body.theme-light .loading-text,
+        body.theme-light .error-text,
+        body.theme-light .empty-state-card,
+        body.theme-light .empty-state-card .empty-sub {
+            color: rgba(15, 23, 42, 0.6);
+        }
+
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(24, 24, 27, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            color: #e4e4e7;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            font-size: 13px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+
+        .cookie-btn {
+            background: #e4e4e7;
+            color: #18181b;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cookie-btn:hover {
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .board-page {
+                width: calc(100% - 24px);
+                padding-top: 100px;
+            }
+
+            .board-shell {
+                padding: 6px 0;
+                border-radius: 0;
+            }
+
+            .composer-login-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stream-zone {
+                margin-top: 14px;
+            }
+
+            .msg-item {
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .composer-bar {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .msg-avatar {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+    <header class="topbar ios-nav glass topbar-minimal" data-animated="false">
+        <div class="topbar-left">
+            <a href="./index.html" class="brand nav-item" aria-label="月弦阁首页">月弦阁</a>
+        </div>
+        <div class="topbar-actions nav-item topbar-actions-minimal nav-actions">
+            <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
+            <a href="./index.html" class="btn btn-ghost" id="back-button" aria-label="返回首页">返回</a>
+            <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+        </div>
+    </header>
+
+    <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-desktop" id="side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+
+    <main class="board-page">
+        <section class="board-shell reveal visible">
+            <header class="board-hero">
+                <h2 class="board-title">💬 社区留言板</h2>
+                <p class="board-subtitle">有什么想对我们说的吗？</p>
+            </header>
+
+            <section class="composer-bar" aria-label="留言发布区">
+                <div id="login-box">
+                    <div class="composer-login-row">
+                        <input type="text" id="qq-input" class="board-input" placeholder="输入你的QQ号进行登录..." />
+                        <button class="btn btn-primary" id="login-button" type="button" onclick="login()">进入社区</button>
+                    </div>
+                </div>
+
+                <div id="post-box" class="composer-post" hidden>
+                    <div class="user-profile">
+                        <img id="my-avatar" class="msg-avatar" src="" alt="我的头像" />
+                        <span id="my-qq-display" class="user-qq"></span>
+                        <button class="btn btn-ghost logout-btn" type="button" onclick="logout()">退出</button>
+                    </div>
+                    <textarea id="content-input" class="board-textarea" rows="3" placeholder="说点什么吧..."></textarea>
+                    <div class="composer-actions">
+                        <button class="btn btn-primary" type="button" onclick="submitMessage()">发送留言</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="stream-zone" aria-label="留言列表区">
+                <div id="messages-container">
+                    <div class="loading-text">加载中...</div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 秋音Akiyo&F1y/Car · 月弦阁</p>
+    </footer>
+
+    <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="drawer" id="site-drawer" aria-hidden="true">
+        <header class="drawer-head">
+            <h3>🧭 快速导航</h3>
+            <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
+        </header>
+        <div class="drawer-quick-actions">
+            <a class="btn btn-ghost drawer-nav-link" href="./index.html">🏠 返回首页</a>
+            <a class="btn btn-ghost drawer-nav-link" href="./guide.html">📖 功能指南</a>
+            <a class="btn btn-ghost drawer-nav-link" href="./status.html">🖥️ 状态页</a>
+            <a class="btn btn-ghost drawer-nav-link" href="./index.html#pricing">💳 价格方案</a>
+        </div>
+    </aside>
+
+    <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">↑</button>
+
+    <div id="cookie-banner" class="cookie-banner">
+        <div><span>🍪 <b>Cookie 提示</b>：本社区使用基本 Cookie 以记住您的登录状态并提供顺畅的体验。继续浏览即表示您同意我们的使用规则。</span></div>
+        <button class="cookie-btn" type="button" onclick="acceptCookies()">我知道了</button>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = 'expires=' + d.toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)};${expires};path=/`;
+        }
+
+        function getCookie(name) {
+            const target = name + '=';
+            const parts = document.cookie.split(';');
+            for (let i = 0; i < parts.length; i++) {
+                const c = parts[i].trim();
+                if (c.indexOf(target) === 0) return decodeURIComponent(c.substring(target.length));
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        }
+
+        const API_URL = window.location.hostname.includes('akiyo.fun')
+            ? '/api/community/messages'
+            : 'http://127.0.0.1:5002/api/messages';
+
+        let currentQQ = getCookie('community_qq') || '';
+
+        function showComposerByState() {
+            const loginBox = document.getElementById('login-box');
+            const postBox = document.getElementById('post-box');
+            if (currentQQ) {
+                loginBox.hidden = true;
+                postBox.hidden = false;
+                document.getElementById('my-avatar').src = `https://q1.qlogo.cn/g?b=qq&nk=${currentQQ}&s=100`;
+                document.getElementById('my-qq-display').innerText = currentQQ;
+            } else {
+                loginBox.hidden = false;
+                postBox.hidden = true;
+            }
+        }
+
+        function applyMessageStagger(container) {
+            const items = container.querySelectorAll('.msg-item');
+            items.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.05}s`;
+            });
+        }
+
+        function init() {
+            showComposerByState();
+            fetchMessages();
+            checkCookieConsent();
+        }
+
+        function login() {
+            const qq = document.getElementById('qq-input').value.trim();
+            if (!/^\d{5,12}$/.test(qq)) return alert('请输入有效的QQ号');
+            setCookie('community_qq', qq, 30);
+            currentQQ = qq;
+            showComposerByState();
+        }
+
+        function logout() {
+            eraseCookie('community_qq');
+            currentQQ = '';
+            document.getElementById('qq-input').value = '';
+            showComposerByState();
+        }
+
+        async function submitMessage() {
+            const content = document.getElementById('content-input').value.trim();
+            if (!content) return alert('内容不能为空');
+
+            const btn = document.querySelector('#post-box .btn-primary');
+            const origText = btn.innerText;
+
+            try {
+                btn.innerText = '发送中...';
+                btn.disabled = true;
+                btn.classList.add('is-loading');
+
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ qq: currentQQ, content })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('content-input').value = '';
+                    fetchMessages();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('发送失败，请稍后再试');
+            } finally {
+                btn.innerText = origText;
+                btn.disabled = false;
+                btn.classList.remove('is-loading');
+            }
+        }
+
+        async function fetchMessages() {
+            const container = document.getElementById('messages-container');
+
+            try {
+                const res = await fetch(API_URL);
+                const msgs = await res.json();
+
+                if (!Array.isArray(msgs) || msgs.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state-card">
+                            <div class="empty-icon">💬</div>
+                            <div class="empty-title">暂无留言</div>
+                            <div class="empty-sub">成为第一个留下足迹的人吧</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = msgs.map((msg) => {
+                    const safeQQ = escapeHtml(msg.qq);
+                    const safeTime = escapeHtml(msg.timestamp);
+                    const safeReplyTime = escapeHtml(msg.reply_timestamp);
+                    return `
+                    <article class="msg-item">
+                        <img class="msg-avatar" src="https://q1.qlogo.cn/g?b=qq&nk=${encodeURIComponent(msg.qq)}&s=100" onerror="this.src='./imgs/avatar-placeholder.svg'" alt="用户头像" />
+                        <div class="msg-body">
+                            <div class="msg-head">
+                                <span class="msg-qq">${safeQQ}</span>
+                                <span class="msg-time">${safeTime}</span>
+                            </div>
+                            <p class="msg-content">${escapeHtml(msg.content)}</p>
+                            ${msg.reply ? `
+                                <div class="reply-box">
+                                    <span class="reply-title">RE: ${safeReplyTime}</span>
+                                    ${escapeHtml(msg.reply)}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </article>
+                `}).join('');
+
+                applyMessageStagger(container);
+            } catch (err) {
+                container.innerHTML = '<div class="error-text">无法加载留言数据</div>';
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        function checkCookieConsent() {
+            if (!getCookie('cookie_consent_accepted')) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.add('show');
+                }, 500);
+            }
+        }
+
+        function acceptCookies() {
+            setCookie('cookie_consent_accepted', 'true', 365);
+            document.getElementById('cookie-banner').classList.remove('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

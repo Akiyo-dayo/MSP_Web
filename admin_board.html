@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区后台管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        .admin-page {
+            width: min(800px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 118px 0 72px;
+            display: grid;
+            gap: 24px;
+        }
+
+        .admin-card {
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(145deg, rgba(30, 32, 40, 0.7), rgba(15, 16, 20, 0.5));
+            -webkit-backdrop-filter: blur(10px) saturate(1.06);
+            backdrop-filter: blur(10px) saturate(1.06);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .admin-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #edf4ff;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            color: #f7f8fb;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .admin-input:focus {
+            border-color: #8fd1ff;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .msg-item {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg-item:last-child {
+            border-bottom: none;
+        }
+
+        .msg-meta {
+            font-size: 13px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .msg-qq {
+            color: #8fd1ff;
+            font-weight: 600;
+        }
+
+        .msg-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #edf4ff;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .reply-box {
+            padding: 10px 14px;
+            background: rgba(89, 211, 138, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid rgba(89, 211, 138, 0.6);
+            font-size: 14px;
+            color: #a7eebf;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .actions .btn {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #fee2e2;
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-success:hover {
+            background: rgba(34, 197, 94, 0.25);
+            color: #bbf7d0;
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+        
+        .loading-text {
+            text-align: center;
+            color: var(--muted);
+            padding: 40px 0;
+        }
+        
+        /* Light Theme Overrides */
+        body.theme-light .admin-card {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+            -webkit-backdrop-filter: blur(35px) saturate(1.1);
+            backdrop-filter: blur(35px) saturate(1.1);
+        }
+        
+        body.theme-light .admin-title { color: #1a2b4c; }
+        body.theme-light .msg-content { color: #1d1d1f; }
+        body.theme-light .msg-qq { color: #0066cc; }
+        body.theme-light .msg-item { border-bottom-color: rgba(0, 0, 0, 0.05); }
+        
+        body.theme-light .admin-input {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1d1d1f;
+        }
+        
+        body.theme-light .admin-input:focus {
+            border-color: #0066cc;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        body.theme-light .reply-box {
+            background: rgba(34, 197, 94, 0.08);
+            border-left-color: #22c55e;
+            color: #166534;
+        }
+        
+        body.theme-light .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #b91c1c;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        body.theme-light .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #991b1b;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        body.theme-light .btn-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #15803d;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+        
+        body.theme-light .btn-success:hover {
+            background: rgba(34, 197, 94, 0.2);
+            color: #166534;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+    <header class="topbar ios-nav glass topbar-minimal" data-animated="false">
+        <div class="topbar-left">
+            <a href="./index.html" class="brand nav-item" aria-label="月弦阁首页">月弦阁</a>
+        </div>
+        <div class="topbar-actions nav-item topbar-actions-minimal nav-actions">
+            <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
+            <a href="./admin.html" class="btn btn-ghost" id="back-button" aria-label="返回状态管理">返回</a>
+            <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+        </div>
+    </header>
+
+    <main class="admin-page">
+        <section class="admin-card reveal visible">
+            <h2 class="admin-title">🔧 留言板后台调度中心</h2>
+            <p style="color: var(--muted); margin-top: -8px; font-size: 14px;">审核与回复社区留言</p>
+            
+            <div>
+                <input type="password" id="admin-key" class="admin-input" placeholder="输入 Admin Key" />
+            </div>
+        </section>
+
+        <section class="admin-card reveal visible">
+            <div id="admin-messages-container">
+                <div class="loading-text">加载中...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 秋音Akiyo&F1y/Car · 月弦阁</p>
+    </footer>
+
+    <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="drawer" id="site-drawer" aria-hidden="true">
+      <header class="drawer-head">
+        <h3>🧭 快速导航</h3>
+        <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
+      </header>
+      <div class="drawer-quick-actions" style="margin-bottom: 24px; display: grid; gap: 12px;">
+        <a class="btn btn-ghost" href="./index.html" style="width: 100%; justify-content: center;">🏠 返回首页</a>
+        <a class="btn btn-ghost" href="./admin.html" style="width: 100%; justify-content: center;">🔧 状态管理</a>
+        <a class="btn btn-ghost" href="./board.html" style="width: 100%; justify-content: center;">💬 社区留言板</a>
+      </div>
+    </aside>
+
+    <script src="./app.js"></script>
+    <script>
+        const API_URL = window.location.hostname.includes('akiyo.fun')
+            ? '/api/community'
+            : 'http://127.0.0.1:5002';
+        
+        async function fetchAdminMessages() {
+            const container = document.getElementById('admin-messages-container');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/messages`);
+                const msgs = await res.json();
+                
+                if (msgs.length === 0) {
+                    container.innerHTML = '<div class="loading-text">暂无数据</div>';
+                    return;
+                }
+
+                container.innerHTML = msgs.map(msg => {
+                    const safeId = escapeHtml(msg.id);
+                    const safeQQ = escapeHtml(msg.qq);
+                    const safeTime = escapeHtml(msg.timestamp);
+                    return `
+                    <div class="msg-item">
+                        <div class="msg-meta">
+                            <span>ID: ${safeId}</span>
+                            <span style="color: rgba(255,255,255,0.2);">|</span>
+                            <span>QQ: <span class="msg-qq">${safeQQ}</span></span>
+                            <span style="color: rgba(255,255,255,0.2);">|</span>
+                            <span>${safeTime}</span>
+                        </div>
+                        
+                        <div class="msg-content">${escapeHtml(msg.content)}</div>
+                        
+                        ${msg.reply ? `
+                            <div class="reply-box">
+                                <span>↳ 已回复: ${escapeHtml(msg.reply)}</span>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="actions">
+                            <button class="btn btn-success" onclick="replyMsg('${safeId}')">${msg.reply ? '修改回复' : '回复'}</button>
+                            <button class="btn btn-danger" onclick="deleteMsg('${safeId}')">删除</button>
+                        </div>
+                    </div>
+                `}).join('');
+            } catch (err) {
+                container.innerHTML = '<div class="loading-text" style="color: #ef4444;">无法加载数据</div>';
+            }
+        }
+
+        async function replyMsg(id) {
+            const key = document.getElementById('admin-key').value;
+            if (!key) return alert('请输入 Admin Key');
+            
+            const replyContent = prompt('请输入回复内容 (留空则清空回复):');
+            if (replyContent === null) return; // 取消
+
+            try {
+                const res = await fetch(`${API_URL}/admin/messages/reply`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key, id, reply: replyContent })
+                });
+                const data = await res.json();
+                alert(data.message);
+                if (data.success) fetchAdminMessages();
+            } catch (err) {
+                alert('操作失败，请检查网络');
+            }
+        }
+
+        async function deleteMsg(id) {
+            const key = document.getElementById('admin-key').value;
+            if (!key) return alert('请输入 Admin Key');
+            
+            if (!confirm('确认删除这条留言吗？此操作不可逆。')) return;
+
+            try {
+                const res = await fetch(`${API_URL}/admin/messages/delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key, id })
+                });
+                const data = await res.json();
+                alert(data.message);
+                if (data.success) fetchAdminMessages();
+            } catch (err) {
+                alert('操作失败，请检查网络');
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag));
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', fetchAdminMessages);
+    </script>
+</body>
+</html>

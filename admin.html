@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bot 管理后台</title>
-    <link rel="stylesheet" href="bot_style.css">
+    <link rel="stylesheet" href="./bot_style.css">
     <style>
-        .col-layout { grid-template-columns: 1.5fr 1.2fr 1.8fr 1.8fr 3.2fr 0.8fr; } /* 调整列宽给时间框腾位置 */
+        .col-layout { grid-template-columns: 1.35fr 1.15fr 1.6fr 1.35fr 1.2fr 3fr 0.8fr; } /* 新增节点列 */
         
         /* 时间输入框组样式 */
         .time-group {
@@ -43,12 +43,47 @@
             border-color: var(--text-highlight);
             background: rgba(0, 0, 0, 0.5);
         }
+
+        .region-switch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid rgba(167, 209, 255, 0.2);
+            background: rgba(14, 18, 26, 0.55);
+            min-width: 118px;
+        }
+        .region-btn {
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #91a6c2;
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: color .15s ease, background .15s ease;
+        }
+        .region-btn.active {
+            background: rgba(126, 198, 255, 0.24);
+            color: #eef7ff;
+            box-shadow: inset 0 0 0 1px rgba(126, 198, 255, 0.32);
+        }
+        .region-btn:not(.active):hover {
+            color: #c8def4;
+            background: rgba(255, 255, 255, 0.04);
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="brand"><h1>🔧 管理后台</h1></div>
-        <nav class="nav-links"><a href="status.html" target="_blank">查看前台 ↗</a></nav>
+        <nav class="nav-links">
+            <a href="./admin_board.html" target="_blank">留言板管理 ↗</a>
+            <a href="./status.html" target="_blank">查看前台 ↗</a>
+        </nav>
     </header>
 
     <main>
@@ -70,6 +105,7 @@
                 <div>🏷️ 备注</div>
                 <div>🔢 QQ 号码</div>
                 <div>📡 运行状态</div>
+                <div>🌐 节点</div>
                 <div>⏱️ 封禁时长</div>
                 <div>操作</div>
             </div>
@@ -108,6 +144,8 @@
             list.forEach((item, i) => {
                 const isTemp = item.status === 'temp';
                 const showDuration = isTemp ? 'flex' : 'none';
+                const region = normalizeRegion(item.region);
+                list[i].region = region;
                 
                 // 计算剩余时间，拆分为 天/时/分
                 let d=0, h=0, m=0;
@@ -142,8 +180,17 @@
                         <select class="admin-select" onchange="edit(${i}, 'status', this.value)" style="background:${getStatusColor(item.status)}">
                             <option value="ok" ${item.status=='ok'?'selected':''}>✅ 正常运行</option>
                             <option value="temp" ${item.status=='temp'?'selected':''}>⏳ 临时冻结</option>
+                            <option value="offline" ${item.status=='offline'?'selected':''}>⚫ 离线维护</option>
                             <option value="ban" ${item.status=='ban'?'selected':''}>🚫 永久封禁</option>
                         </select>
+                    </div>
+
+                    <div>
+                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">节点</label>
+                        <div class="region-switch" role="group" aria-label="节点选择">
+                            <button type="button" class="region-btn ${region === 'NA' ? 'active' : ''}" onclick="setRegion(${i}, 'NA')">NA</button>
+                            <button type="button" class="region-btn ${region === 'Astr' ? 'active' : ''}" onclick="setRegion(${i}, 'Astr')">Astr</button>
+                        </div>
                     </div>
 
                     <div style="display:${showDuration}; align-items:flex-start; gap:8px; flex-direction:column;">
@@ -234,11 +281,18 @@
         function getStatusColor(status) {
             if(status === 'ok') return 'rgba(102, 187, 106, 0.2)';
             if(status === 'temp') return 'rgba(255, 167, 38, 0.2)';
+            if(status === 'offline') return 'rgba(130, 142, 160, 0.22)';
             return 'rgba(239, 83, 80, 0.2)';
         }
 
+        function normalizeRegion(value) {
+            const v = String(value || '').trim().toLowerCase();
+            return v === 'na' ? 'NA' : 'Astr';
+        }
+
         function edit(i, k, v) { list[i][k] = v; if(k==='status') render(); }
-        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', unban_date:'', last_unban_date: ''}); render(); }
+        function setRegion(i, region) { list[i].region = normalizeRegion(region); render(); }
+        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', region:'Astr', unban_date:'', last_unban_date: ''}); render(); }
         function del(i) { if(confirm('删除此账号？')) { list.splice(i, 1); render(); } }
 
         function save() {
