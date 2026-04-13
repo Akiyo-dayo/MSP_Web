@@ -40,7 +40,8 @@ def save_stats(stats):
 def record_visit():
     stats = load_stats()
     today = datetime.now().strftime('%Y-%m-%d')
-    client_ip = request.remote_addr
+    # 优先读取 Nginx 转发的真实 IP，如果没有则回退到 remote_addr
+    client_ip = request.headers.get('X-Real-IP', request.remote_addr)
     
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 收到访问请求，IP: {client_ip}")
 

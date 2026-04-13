@@ -1,111 +1,569 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot 实时状态 - 月弦阁</title>
-    <link rel="stylesheet" href="bot_style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>月弦阁 · Bot 状态</title>
+  <meta name="description" content="月弦阁 Bot 运行状态总览" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .status-page {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 118px 0 72px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .status-hero {
+      padding: 26px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(145deg, rgba(30, 32, 40, 0.7), rgba(15, 16, 20, 0.5));
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-hero p {
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .status-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      color: #d7e9ff;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .status-full-card {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(145deg, rgba(30, 32, 40, 0.7), rgba(15, 16, 20, 0.5));
+      -webkit-backdrop-filter: blur(10px) saturate(1.06);
+      backdrop-filter: blur(10px) saturate(1.06);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      position: relative;
+    }
+
+    .status-full-card.offline-card {
+      position: relative;
+    }
+
+    .status-full-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-head-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .status-avatar-wrap {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      border-radius: 22%;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(60, 66, 80, 0.65), rgba(36, 40, 52, 0.55));
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .status-avatar-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+
+    .status-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: inherit;
+      transform: translateZ(0);
+    }
+
+    .status-avatar.is-fallback {
+      filter: saturate(0.8) blur(0.35px);
+    }
+
+    .status-full-name {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      font-weight: 700;
+      font-size: 16px;
+      color: #edf4ff;
+    }
+
+    .status-full-qq,
+    .status-full-detail {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .region-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 6px;
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      line-height: 1.5;
+    }
+
+    .region-tag.region-astr {
+      color: #bfdbfe;
+      background: rgba(37, 99, 235, 0.2);
+    }
+
+    .region-tag.region-na {
+      color: #fed7aa;
+      background: rgba(234, 88, 12, 0.2);
+    }
+
+    .status-login-link {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      text-decoration: none;
+    }
+
+    .status-full-card.offline-card .status-full-detail {
+      padding-right: 124px;
+    }
+
+    body.theme-light .status-hero {
+      background: rgba(255, 255, 255, 0.4);
+      border-color: rgba(0, 0, 0, 0.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+      -webkit-backdrop-filter: blur(35px) saturate(1.1);
+      backdrop-filter: blur(35px) saturate(1.1);
+    }
+
+    body.theme-light .status-full-card {
+      background: rgba(255, 255, 255, 0.4);
+      border-color: rgba(0, 0, 0, 0.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+      -webkit-backdrop-filter: blur(35px) saturate(1.1);
+      backdrop-filter: blur(35px) saturate(1.1);
+    }
+
+    body.theme-light .status-full-name {
+      color: #1a2b4c;
+    }
+
+    body.theme-light .status-avatar-wrap {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(231, 237, 246, 0.75));
+      box-shadow: 0 8px 18px rgba(20, 40, 70, 0.14);
+    }
+
+    body.theme-light .status-avatar-wrap::after {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+    }
+
+    body.theme-light .meta-pill {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.2);
+      color: #1a2b4c;
+    }
+
+    body.theme-light .note-tag {
+      border-color: rgba(217, 119, 6, 0.4);
+      background: rgba(217, 119, 6, 0.15);
+      color: #a16207;
+    }
+
+    .note-tag {
+      display: inline-block;
+      margin-left: 8px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      border: 1px solid rgba(255, 214, 112, 0.35);
+      color: #ffe097;
+      background: rgba(255, 214, 112, 0.14);
+      vertical-align: middle;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-badge.ok {
+      background: rgba(67, 190, 111, 0.2);
+      border-color: rgba(67, 190, 111, 0.5);
+      color: #96f0b4;
+    }
+
+    .status-badge.temp {
+      background: rgba(236, 182, 74, 0.2);
+      border-color: rgba(236, 182, 74, 0.5);
+      color: #ffd787;
+    }
+
+    .status-badge.ban {
+      background: rgba(240, 96, 96, 0.22);
+      border-color: rgba(240, 96, 96, 0.55);
+      color: #ffadad;
+    }
+
+    .status-badge.offline {
+      background: rgba(134, 146, 164, 0.22);
+      border-color: rgba(134, 146, 164, 0.52);
+      color: #d4deed;
+    }
+
+    body.theme-light .status-badge.ok {
+      background: rgba(34, 197, 94, 0.15);
+      border-color: rgba(34, 197, 94, 0.4);
+      color: #15803d;
+    }
+
+    body.theme-light .status-badge.temp {
+      background: rgba(234, 179, 8, 0.15);
+      border-color: rgba(234, 179, 8, 0.4);
+      color: #a16207;
+    }
+
+    body.theme-light .status-badge.ban {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #b91c1c;
+    }
+
+    body.theme-light .status-badge.offline {
+      background: rgba(100, 116, 139, 0.15);
+      border-color: rgba(100, 116, 139, 0.4);
+      color: #334155;
+    }
+
+    body.theme-light .region-tag.region-astr {
+      color: #1d4ed8;
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    body.theme-light .region-tag.region-na {
+      color: #c2410c;
+      background: rgba(234, 88, 12, 0.1);
+    }
+
+    body.theme-light .status-login-link {
+      border-color: rgba(37, 99, 235, 0.24);
+      color: #1d4ed8;
+    }
+
+    .status-loading,
+    .status-empty,
+    .status-error {
+      grid-column: 1 / -1;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: #c5d4ea;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .status-error {
+      color: #ffaaaa;
+    }
+
+    body.theme-light .status-loading,
+    body.theme-light .status-empty,
+    body.theme-light .status-error {
+      color: #1a2b4c;
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    @media (max-width: 980px) {
+      .status-page {
+        width: min(1120px, calc(100% - 28px));
+        padding-top: 104px;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="brand"><h1><a href="index.html">月弦阁</a></h1></div>
-        <nav class="nav-links"><a href="index.html">🏠 返回主页</a></nav>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <header class="topbar ios-nav glass topbar-minimal" data-animated="false">
+    <div class="topbar-left">
+      <a href="./index.html" class="brand nav-item" aria-label="月弦阁首页">月弦阁</a>
+    </div>
+    <div class="topbar-actions nav-item topbar-actions-minimal nav-actions">
+      <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
+      <a href="./index.html" class="btn btn-ghost" id="back-button" aria-label="返回首页">返回</a>
+      <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+    </div>
+  </header>
+
+  <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-desktop" id="side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+
+  <main class="status-page">
+    <section class="status-hero reveal visible">
+      <h1>Bot 状态总览</h1>
+      <p>基于实时数据生成，便于快速判断可用性与异常账号。</p>
+      <div class="status-meta">
+        <span class="meta-pill" id="network-mode">正在连接...</span>
+        <span class="meta-pill" id="summary-total">总账号: --</span>
+        <span class="meta-pill" id="summary-abnormal">异常: --</span>
+      </div>
+    </section>
+
+    <section id="status-grid" class="status-grid">
+      <div class="status-loading">正在加载状态数据...</div>
+    </section>
+  </main>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">↑</button>
+
+  <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="site-drawer" aria-hidden="true">
+    <header class="drawer-head">
+      <h3>🧭 快速导航</h3>
+      <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
     </header>
+    <div class="drawer-quick-actions" style="margin-bottom: 24px; display: grid; gap: 12px;">
+      <a class="btn btn-ghost" href="./index.html" style="width: 100%; justify-content: center;">🏠 返回首页</a>
+      <a class="btn btn-ghost" href="./guide.html" style="width: 100%; justify-content: center;">📖 功能指南</a>
+      <a class="btn btn-ghost" href="./board.html" style="width: 100%; justify-content: center;">💬 社区留言板</a>
+      <a class="btn btn-ghost" href="./index.html#pricing" style="width: 100%; justify-content: center;">💳 价格方案</a>
+    </div>
+  </aside>
 
-    <main>
-        <div class="hero-box">
-            <h2>📡 看看你的bot还活着吗</h2>
-            <p>实时监控所有机器人账号的存活状态</p>
-            <div id="network-status">正在连接...</div>
-        </div>
+  <script>
+    (function () {
+      const networkModeEl = document.getElementById('network-mode');
+      const totalEl = document.getElementById('summary-total');
+      const abnormalEl = document.getElementById('summary-abnormal');
+      const statusGrid = document.getElementById('status-grid');
 
-        <div id="container" class="status-grid">
-            <div style="text-align:center;width:100%;color:#888">正在加载数据...</div>
-        </div>
-    </main>
+      let API_BASE = '';
+      if (window.location.hostname.includes('akiyo.fun')) {
+        API_BASE = '/api/bot';
+        networkModeEl.textContent = 'Mode: Online';
+      } else {
+        API_BASE = 'http://127.0.0.1:5001';
+        networkModeEl.textContent = 'Mode: Local Debug';
+      }
 
-    <script>
-        let API_BASE = '';
-        if (window.location.hostname.includes('akiyo.fun')) {
-            API_BASE = '/api/bot';
-            document.getElementById('network-status').innerText = 'Mode: Online';
-        } else {
-            API_BASE = 'http://127.0.0.1:5001';
-            document.getElementById('network-status').innerText = 'Mode: Local Debug';
-        }
+      const API_URL = `${API_BASE}/accounts`;
+      const LOCAL_AVATAR_FALLBACK = './imgs/avatar-placeholder.svg';
 
-        const API_URL = API_BASE + '/accounts';
+      function normalizeQQNumber(rawQQ) {
+        return String(rawQQ ?? '').replace(/\D/g, '');
+      }
 
-        fetch(API_URL)
-            .then(r => r.json())
-            .then(data => {
-                const box = document.getElementById('container');
-                box.innerHTML = '';
-                if(!data.length) { 
-                    box.innerHTML='<div style="text-align:center;width:100%; color:#aaa;">暂无账号数据</div>'; 
-                    return; 
-                }
-                
-                data.forEach(item => {
-                    let badge = '';
-                    let detailHtml = '';
-                    
-                    // 备注标签样式
-                    const noteHtml = item.note 
-                        ? `<span style="font-size:0.8rem; background:rgba(255, 215, 0, 0.15); color:#ffd700; padding:2px 6px; border-radius:4px; border:1px solid rgba(255, 215, 0, 0.3); vertical-align:middle; margin-left:8px;">${item.note}</span>` 
-                        : '';
+      function isValidQQNumber(qqNumber) {
+        return /^\d{5,12}$/.test(qqNumber);
+      }
 
-                    if(item.status === 'ok') {
-                        badge = '<span class="badge bg-green">✅ 运行正常</span>';
-                        if (item.last_unban_date) {
-                            // 计算稳定运行时长
-                            const stableTime = calculateStableTime(item.last_unban_date);
-                            detailHtml = `<div class="detail">🛡️ 距上次解封已稳定运行: <span style="color:#66bb6a;font-weight:bold;">${stableTime}</span></div>`;
-                        }
-                    } else if(item.status === 'temp') {
-                        badge = '<span class="badge bg-yellow">⏳ 临时冻结</span>';
-                        detailHtml = `<div class="detail">📅 预计解封: <span style="color:#fff;font-weight:bold;">${item.unban_date}</span></div>`;
-                    } else {
-                        badge = '<span class="badge bg-red">🚫 永久封禁</span>';
-                        detailHtml = `<div class="detail">此账号已被永久停用</div>`;
-                    }
+      function getQQAvatarUrl(qqNumber) {
+        return `https://q1.qlogo.cn/g?b=qq&nk=${qqNumber}&s=640`;
+      }
 
-                    box.innerHTML += `
-                        <div class="bot-card">
-                            <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk=${item.qq}&s=100" onerror="this.src='imgs/Helper.jpg'">
-                            <div class="info">
-                                <div class="name">
-                                    ${item.name}
-                                    ${noteHtml}
-                                </div>
-                                <span class="qq">${item.qq}</span>
-                                ${badge}
-                                ${detailHtml}
-                            </div>
-                        </div>`;
-                });
+      window.__statusAvatarFallback = function (img) {
+        if (!img || img.dataset.fallbackApplied === '1') return;
+        img.dataset.fallbackApplied = '1';
+        img.src = LOCAL_AVATAR_FALLBACK;
+        img.classList.add('is-fallback');
+      };
+
+      function renderAvatar(name, rawQQ) {
+        const qqNumber = normalizeQQNumber(rawQQ);
+        const canUseQQAvatar = isValidQQNumber(qqNumber);
+        const src = canUseQQAvatar ? getQQAvatarUrl(qqNumber) : LOCAL_AVATAR_FALLBACK;
+        const fallbackClass = canUseQQAvatar ? '' : ' is-fallback';
+
+        return `
+          <div class="status-avatar-wrap" aria-hidden="true">
+            <img
+              class="status-avatar${fallbackClass}"
+              src="${src}"
+              alt="${name} 头像"
+              loading="lazy"
+              decoding="async"
+              referrerpolicy="no-referrer"
+              onerror="window.__statusAvatarFallback(this)"
+            />
+          </div>
+        `;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function calculateStableTime(dateStr) {
+        if (!dateStr) return '运行中';
+        const start = new Date(dateStr);
+        const now = new Date();
+        const diffMs = now - start;
+
+        if (Number.isNaN(start.getTime()) || diffMs < 0) return '运行中';
+
+        const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+        if (days > 0) return `${days}天${hours}小时`;
+        return `${hours}小时`;
+      }
+
+      function normalizeRegion(value) {
+        const v = String(value || '').trim().toLowerCase();
+        return v === 'na' ? 'NA' : 'Astr';
+      }
+
+      fetch(API_URL)
+        .then((r) => r.json())
+        .then((data) => {
+          if (!Array.isArray(data) || data.length === 0) {
+            totalEl.textContent = '总账号: 0';
+            abnormalEl.textContent = '异常: 0';
+            statusGrid.innerHTML = '<div class="status-empty">暂无账号数据</div>';
+            return;
+          }
+
+          const abnormalCount = data.filter((item) => item.status !== 'ok').length;
+          totalEl.textContent = `总账号: ${data.length}`;
+          abnormalEl.textContent = `异常: ${abnormalCount}`;
+
+          const html = data
+            .map((item) => {
+              const safeName = escapeHtml(item.name || '未命名账号');
+              const rawQQ = item.qq_number ?? item.qq ?? '-';
+              const safeQQ = escapeHtml(rawQQ || '-');
+              const safeRegion = escapeHtml(normalizeRegion(item.region));
+              const regionClass = safeRegion === 'NA' ? 'region-na' : 'region-astr';
+              const regionHtml = `<span class="region-tag ${regionClass}">${safeRegion}</span>`;
+              const avatarHtml = renderAvatar(safeName, rawQQ);
+              const safeNote = item.note ? `<span class="note-tag">${escapeHtml(item.note)}</span>` : '';
+
+              if (item.status === 'ok') {
+                const stable = calculateStableTime(item.last_unban_date);
+                return `
+                  <article class="status-full-card">
+                    <div class="status-full-head">
+                      <div class="status-head-left">
+                        ${avatarHtml}
+                        <div class="status-full-name">${safeName}${regionHtml}${safeNote}</div>
+                      </div>
+                      <span class="status-badge ok">✅ 运行正常</span>
+                    </div>
+                    <div class="status-full-qq">QQ: ${safeQQ}</div>
+                    <div class="status-full-detail">🛡️ 稳定运行时长: ${escapeHtml(stable)}</div>
+                  </article>
+                `;
+              }
+
+              if (item.status === 'temp') {
+                return `
+                  <article class="status-full-card">
+                    <div class="status-full-head">
+                      <div class="status-head-left">
+                        ${avatarHtml}
+                        <div class="status-full-name">${safeName}${regionHtml}${safeNote}</div>
+                      </div>
+                      <span class="status-badge temp">⏳ 临时冻结</span>
+                    </div>
+                    <div class="status-full-qq">QQ: ${safeQQ}</div>
+                    <div class="status-full-detail">📅 预计解封: ${escapeHtml(item.unban_date || '待更新')}</div>
+                  </article>
+                `;
+              }
+
+              if (item.status === 'offline') {
+                return `
+                  <article class="status-full-card offline-card">
+                    <div class="status-full-head">
+                      <div class="status-head-left">
+                        ${avatarHtml}
+                        <div class="status-full-name">${safeName}${regionHtml}${safeNote}</div>
+                      </div>
+                      <span class="status-badge offline">⚫ 离线</span>
+                    </div>
+                    <div class="status-full-qq">QQ: ${safeQQ}</div>
+                    <div class="status-full-detail">当前账号处于离线维护状态</div>
+                    <a class="btn btn-ghost status-login-link" href="https://bot.akiyo.fun/login" target="_blank" rel="noopener noreferrer">扫码登陆</a>
+                  </article>
+                `;
+              }
+
+              return `
+                <article class="status-full-card">
+                  <div class="status-full-head">
+                    <div class="status-head-left">
+                      ${avatarHtml}
+                      <div class="status-full-name">${safeName}${regionHtml}${safeNote}</div>
+                    </div>
+                    <span class="status-badge ban">🚫 永久封禁</span>
+                  </div>
+                  <div class="status-full-qq">QQ: ${safeQQ}</div>
+                  <div class="status-full-detail">此账号已被永久停用</div>
+                </article>
+              `;
             })
-            .catch(err => {
-                document.getElementById('container').innerHTML = `<div style="text-align:center;color:#ef5350">连接失败</div>`;
-            });
+            .join('');
 
-        function calculateStableTime(dateStr) {
-            if (!dateStr) return '';
-            const start = new Date(dateStr);
-            const now = new Date();
-            const diffMs = now - start;
-            
-            if (diffMs < 0) return '刚刚';
-
-            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            
-            if (days > 0) {
-                return `${days}天${hours}小时`;
-            } else {
-                return `${hours}小时`;
-            }
-        }
-    </script>
+          statusGrid.innerHTML = html;
+        })
+        .catch(() => {
+          totalEl.textContent = '总账号: --';
+          abnormalEl.textContent = '异常: --';
+          statusGrid.innerHTML = '<div class="status-error">状态服务连接失败，请稍后重试</div>';
+        });
+    })();
+  </script>
+  <script src="./app.js"></script>
 </body>
 </html>

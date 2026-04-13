@@ -6,8 +6,8 @@
     --background-url: url('imgs/353a76cf461a6d04d4c741b7227488db_2_0_art.jpeg');
     
     /* 配色 */
-    --card-bg-color: rgba(0, 0, 0, 0.68);
-    --card-border-color: rgba(255, 255, 255, 0.22);
+    --card-bg-color: linear-gradient(145deg, rgba(30, 32, 40, 0.7), rgba(15, 16, 20, 0.5));
+    --card-border-color: rgba(255, 255, 255, 0.08);
     --text-color: #f0f0f0;
     --text-highlight: #a7d1ff;
     --header-text-color: #ffffff;
@@ -223,6 +223,7 @@ main {
 .bg-green { background: var(--status-green-bg); color: var(--status-green-text); border: 1px solid var(--status-green-text); }
 .bg-yellow { background: var(--status-yellow-bg); color: var(--status-yellow-text); border: 1px solid var(--status-yellow-text); }
 .bg-red { background: var(--status-red-bg); color: var(--status-red-text); border: 1px solid var(--status-red-text); }
+.bg-gray { background: rgba(130, 142, 160, 0.22); color: #c9d4e6; border: 1px solid rgba(164, 178, 200, 0.6); }
 
 .detail {
     margin-top: 12px;
