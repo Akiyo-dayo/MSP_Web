@@ -1,314 +1,484 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot 管理后台</title>
-    <link rel="stylesheet" href="./bot_style.css">
-    <style>
-        .col-layout { grid-template-columns: 1.35fr 1.15fr 1.6fr 1.35fr 1.2fr 3fr 0.8fr; } /* 新增节点列 */
-        
-        /* 时间输入框组样式 */
-        .time-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .time-input-wrapper {
-            position: relative;
-            flex: 1;
-        }
-        .time-input {
-            width: 100%;
-            padding: 8px 4px 8px 8px; /* 右边留少点，放单位 */
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(167, 209, 255, 0.2);
-            border-radius: 6px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.95rem;
-            outline: none;
-            text-align: center;
-        }
-        .time-unit {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-            font-size: 0.75rem;
-            pointer-events: none;
-        }
-        .time-input:focus {
-            border-color: var(--text-highlight);
-            background: rgba(0, 0, 0, 0.5);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理终端 · Bot 节点管理 | 深空联合</title>
+  <meta name="description" content="月弦阁 Bot 节点管理终端" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/spacetrek.css" />
+  <style>
+    /* ---------- 管理终端页 ---------- */
+    .admin-page { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: calc(var(--topbar-h) + 44px) 0 60px; display: grid; gap: 22px; }
+    .admin-hero-panel { padding: 28px 30px; }
+    .admin-hero-panel h1 { font-size: clamp(24px, 3.4vw, 32px); letter-spacing: .08em; margin: 12px 0 8px; }
+    .admin-hero-panel > p { color: var(--muted); font-size: 14px; }
+    .admin-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+    .admin-hero-actions .spacer { flex: 1; }
 
-        .region-switch {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
-            padding: 4px;
-            border-radius: 10px;
-            border: 1px solid rgba(167, 209, 255, 0.2);
-            background: rgba(14, 18, 26, 0.55);
-            min-width: 118px;
-        }
-        .region-btn {
-            border: 0;
-            border-radius: 7px;
-            background: transparent;
-            color: #91a6c2;
-            padding: 5px 10px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            cursor: pointer;
-            transition: color .15s ease, background .15s ease;
-        }
-        .region-btn.active {
-            background: rgba(126, 198, 255, 0.24);
-            color: #eef7ff;
-            box-shadow: inset 0 0 0 1px rgba(126, 198, 255, 0.32);
-        }
-        .region-btn:not(.active):hover {
-            color: #c8def4;
-            background: rgba(255, 255, 255, 0.04);
-        }
-    </style>
+    /* 鉴权门 */
+    .admin-gate {
+      position: fixed; inset: 0; z-index: 120;
+      display: grid; place-items: center; padding: 20px;
+      background: rgba(1, 4, 10, 0.82);
+      backdrop-filter: blur(14px) saturate(1.1);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1);
+      opacity: 1; transition: opacity .5s ease, visibility .5s;
+    }
+    .admin-gate.open { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-card { width: min(420px, 100%); padding: 40px 34px; text-align: center; }
+    .gate-card .eyebrow { justify-content: center; }
+    .gate-logo {
+      width: 74px; height: 74px; object-fit: contain; margin: 6px auto 4px; display: block;
+      filter: invert(1) brightness(1.05) drop-shadow(0 0 16px rgba(126, 214, 255, 0.65));
+    }
+    .gate-title { font-size: 22px; letter-spacing: .22em; text-indent: .22em; margin: 12px 0 6px; }
+    .gate-sub { font-size: 12px; color: var(--muted-2); letter-spacing: .28em; font-family: var(--font-display); margin-bottom: 22px; }
+    .gate-input {
+      width: 100%; padding: 13px 16px; text-align: center; font-size: 16px; letter-spacing: .18em;
+      background: rgba(3, 8, 16, 0.7); border: 1px solid var(--line);
+      border-radius: 8px; color: var(--text); outline: none; font-family: var(--font-body);
+      transition: all .2s;
+    }
+    .gate-input:focus { border-color: var(--ice); box-shadow: var(--glow); }
+    .gate-input::placeholder { color: var(--muted-2); letter-spacing: .08em; font-size: 13.5px; }
+    .gate-error { min-height: 20px; margin: 10px 0 14px; font-size: 12.5px; color: var(--danger); letter-spacing: .1em; }
+    .gate-card.shake { animation: gateShake .45s ease; }
+    @keyframes gateShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-9px); } 40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); } 80% { transform: translateX(4px); }
+    }
+    .gate-hint { margin-top: 16px; font-size: 11.5px; color: var(--muted-2); letter-spacing: .12em; }
+
+    /* 列表 */
+    .admin-list-panel { padding: 22px 22px 26px; }
+    .adm-cols { grid-template-columns: 1.3fr 1.05fr 1.25fr 1.2fr 1fr 2.5fr 0.65fr; }
+    .adm-head {
+      display: grid; gap: 10px; padding: 0 12px 12px; margin-bottom: 6px;
+      font-family: var(--font-display); font-size: 10.5px; letter-spacing: .18em;
+      color: var(--muted-2); border-bottom: 1px solid var(--line);
+    }
+    .adm-row {
+      display: grid; gap: 10px; align-items: center;
+      padding: 14px 12px; margin-top: 10px;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: rgba(126, 214, 255, 0.03);
+      transition: border-color .2s;
+    }
+    .adm-row:hover { border-color: var(--line-strong); }
+    .adm-cell { min-width: 0; }
+    .adm-cell::before { display: none; }
+
+    .adm-input, .adm-select {
+      width: 100%; padding: 9px 11px;
+      background: rgba(3, 8, 16, 0.7); border: 1px solid var(--line);
+      border-radius: 7px; color: var(--text); font-size: 13.5px;
+      outline: none; font-family: var(--font-body); transition: all .2s;
+    }
+    .adm-input:focus, .adm-select:focus { border-color: var(--ice); box-shadow: var(--glow); }
+    .adm-input::placeholder { color: var(--muted-2); }
+    .adm-input.note { color: var(--amber); }
+    .adm-select { cursor: pointer; appearance: none; }
+    .adm-select option { background: #0a1628; color: var(--text); }
+
+    .region-switch {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px;
+      border-radius: 9px; border: 1px solid var(--line);
+      background: rgba(3, 8, 16, 0.55);
+    }
+    .region-btn {
+      border: 0; border-radius: 6px; background: transparent; color: var(--muted);
+      padding: 5px 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+      font-family: var(--font-display); cursor: pointer; transition: all .15s;
+    }
+    .region-btn.active {
+      background: rgba(126, 214, 255, 0.22); color: #eef7ff;
+      box-shadow: inset 0 0 0 1px rgba(126, 214, 255, 0.35);
+    }
+    .region-btn.active.region-na {
+      background: rgba(255, 199, 106, 0.20); color: #fff3dd;
+      box-shadow: inset 0 0 0 1px rgba(255, 199, 106, 0.4);
+    }
+    .region-btn:not(.active):hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+
+    .time-group { display: flex; align-items: center; gap: 5px; }
+    .time-wrap { position: relative; flex: 1; }
+    .time-input { text-align: center; padding-right: 20px; }
+    .time-unit {
+      position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+      color: var(--muted-2); font-size: 10.5px; pointer-events: none;
+    }
+    .unban-display { margin-top: 6px; font-size: 11px; color: var(--muted-2); white-space: nowrap; }
+    .unban-display span { color: var(--ice); font-family: var(--font-display); }
+    .no-need { color: var(--muted-2); font-size: 11.5px; letter-spacing: .08em; }
+
+    .btn-del {
+      width: 38px; height: 38px; padding: 0; font-size: 14px;
+      background: rgba(255, 125, 125, 0.10); color: var(--danger);
+      border: 1px solid rgba(255, 125, 125, 0.35); border-radius: 8px; cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-del:hover { background: rgba(255, 125, 125, 0.22); box-shadow: 0 0 14px rgba(255, 125, 125, 0.3); }
+
+    .admin-actions-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    .admin-actions-bar .btn-save { flex: 1; min-width: 220px; }
+
+    /* 响应式：堆叠 + 字段标签 */
+    @media (max-width: 980px) {
+      .adm-head { display: none; }
+      .adm-row { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .adm-cell::before {
+        content: attr(data-label); display: block; margin-bottom: 5px;
+        font-size: 10px; color: var(--muted-2); letter-spacing: .2em; font-family: var(--font-display);
+      }
+      .adm-cell-time { grid-column: 1 / -1; }
+    }
+    @media (max-width: 560px) {
+      .adm-row { grid-template-columns: 1fr; }
+      .admin-hero-panel { padding: 22px 18px; }
+      .admin-list-panel { padding: 16px 12px 20px; }
+      .adm-input, .adm-select { font-size: 16px; } /* 防 iOS 聚焦放大 */
+      .gate-input { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="brand"><h1>🔧 管理后台</h1></div>
-        <nav class="nav-links">
-            <a href="./admin_board.html" target="_blank">留言板管理 ↗</a>
-            <a href="./status.html" target="_blank">查看前台 ↗</a>
-        </nav>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="aurora-layer" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a href="./index.html" class="brand">
+      <img class="brand-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <span>
+        <span class="brand-cn">月弦阁</span>
+        <small>SPACETREK RELAY</small>
+      </span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="./guide.html">功能</a>
+      <a href="./index.html#pricing">价格</a>
+      <a href="./board.html">留言</a>
+      <a href="./status.html">状态</a>
+    </nav>
+    <div class="topbar-actions">
+      <a href="./status.html" class="btn btn-ghost btn-sm">← Bot 详情</a>
+      <button class="btn btn-ghost btn-sm side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false">☰ 终端</button>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <section class="admin-hero-panel hud-panel">
+      <p class="eyebrow">ADMIN TERMINAL<span class="cn">· 节点管控终端</span></p>
+      <h1>Bot 节点管理</h1>
+      <p>深空联合节点阵列调度台 · 变更将在保存后同步至前台状态页。</p>
+      <div class="status-meta">
+        <span class="meta-pill" id="network-mode">MODE: --</span>
+        <span class="meta-pill" id="summary-total">总账号: --</span>
+        <span class="meta-pill" id="summary-abnormal">异常: --</span>
+      </div>
+      <div class="admin-hero-actions">
+        <a class="btn btn-ghost btn-sm" href="./admin_board.html">💬 留言管理终端 →</a>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost btn-sm" id="btn-logout" type="button">⏻ 退出终端</button>
+      </div>
+    </section>
+
+    <section class="admin-list-panel hud-panel">
+      <div class="adm-head adm-cols">
+        <div>🤖 名称</div>
+        <div>🏷️ 备注</div>
+        <div>🔢 QQ 号码</div>
+        <div>📡 运行状态</div>
+        <div>🌐 节点</div>
+        <div>⏱️ 封禁时长</div>
+        <div>操作</div>
+      </div>
+      <div id="list-box"><div class="loading-text">⏳ 正在接入节点阵列...</div></div>
+      <div class="admin-actions-bar">
+        <button class="btn btn-ghost" id="btn-add" type="button">+ 添加一个新 Bot 账号</button>
+        <button class="btn btn-primary btn-save" id="btn-save" type="button">💾 保存所有更改</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © 2026 秋音Akiyo&F1y/Car · 月弦阁
+    <span class="footer-en">SPACETREK COLLECTIVE · ADMIN TERMINAL</span>
+  </footer>
+
+  <!-- 鉴权门 -->
+  <div class="admin-gate" id="admin-gate">
+    <div class="gate-card hud-panel" id="gate-card">
+      <img class="gate-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <p class="eyebrow">SECURE LINK<span class="cn">· 接入验证</span></p>
+      <h2 class="gate-title">管理终端</h2>
+      <p class="gate-sub">ADMIN TERMINAL ACCESS</p>
+      <input type="password" id="gate-key" class="gate-input" placeholder="输入管理密钥" autocomplete="off" />
+      <div class="gate-error" id="gate-error"></div>
+      <button class="btn btn-primary" id="gate-submit" type="button" style="width: 100%;">🔓 建立加密链路</button>
+      <p class="gate-hint">密钥仅保存在当前会话 · 关闭标签页后自动失效</p>
+    </div>
+  </div>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">↑</button>
+
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="site-drawer" aria-hidden="true">
+    <header class="drawer-head">
+      <h3>🧭 快速导航</h3>
+      <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
     </header>
+    <div class="drawer-quick-actions">
+      <a class="btn btn-ghost" href="./index.html">🏠 返回首页</a>
+      <a class="btn btn-ghost" href="./status.html">📡 Bot 状态前台</a>
+      <a class="btn btn-ghost" href="./admin_board.html">💬 留言管理终端</a>
+      <a class="btn btn-ghost" href="./board.html">💬 社区留言板</a>
+    </div>
+  </aside>
 
-    <main>
-        <div class="hero-box" style="padding: 15px; margin-bottom: 20px;">
-            <div id="network-status">正在检测网络...</div>
-            <p style="margin-top: 5px; font-size: 0.9rem;">
-                又有bot被封？何意味
-            </p>
-        </div>
+  <script>
+    (function () {
+      'use strict';
+      const isProd = window.location.hostname.includes('akiyo.fun');
+      const API_BASE = isProd ? '/api/bot' : 'http://127.0.0.1:5001';
+      const KEY_STORAGE = 'msp_admin_key';
 
-        <div class="login-card">
-            <h3 style="color:var(--text-highlight); margin-bottom:15px;">🔐 管理员验证</h3>
-            <input type="password" id="key" class="admin-input" placeholder="输入密钥 (默认123456)" style="text-align:center; font-size:1.1rem;">
-        </div>
+      const gate = document.getElementById('admin-gate');
+      const gateCard = document.getElementById('gate-card');
+      const gateKey = document.getElementById('gate-key');
+      const gateError = document.getElementById('gate-error');
+      const gateSubmit = document.getElementById('gate-submit');
 
-        <div class="admin-list-container">
-            <div class="list-header col-layout">
-                <div>🤖 名称</div>
-                <div>🏷️ 备注</div>
-                <div>🔢 QQ 号码</div>
-                <div>📡 运行状态</div>
-                <div>🌐 节点</div>
-                <div>⏱️ 封禁时长</div>
-                <div>操作</div>
+      let adminKey = '';
+      let list = [];
+
+      /* ---------- 鉴权门 ---------- */
+      function showGate(msg) {
+        gate.classList.remove('open');
+        adminKey = '';
+        if (msg) gateError.textContent = msg;
+        setTimeout(() => gateKey.focus(), 120);
+      }
+      function hideGate() { gate.classList.add('open'); }
+
+      function shake(msg) {
+        gateError.textContent = msg;
+        gateCard.classList.remove('shake');
+        void gateCard.offsetWidth;
+        gateCard.classList.add('shake');
+      }
+
+      async function verifyKey(key) {
+        const res = await fetch(API_BASE + '/admin/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key }),
+          signal: AbortSignal.timeout(6000),
+        });
+        return res.ok;
+      }
+
+      async function tryEnter(key, silent) {
+        if (!key) { if (!silent) shake('请输入管理密钥'); return; }
+        if (!silent) { gateSubmit.textContent = '⏳ 正在验证链路...'; gateSubmit.disabled = true; }
+        try {
+          const ok = await verifyKey(key);
+          if (ok) {
+            adminKey = key;
+            sessionStorage.setItem(KEY_STORAGE, key);
+            hideGate();
+            loadAccounts();
+          } else {
+            sessionStorage.removeItem(KEY_STORAGE);
+            if (!silent) shake('密钥错误 · 链路拒绝接入');
+            else showGate('会话密钥已失效，请重新验证');
+          }
+        } catch (e) {
+          if (!silent) shake('无法连接管理节点，请稍后再试');
+          else showGate('无法连接管理节点');
+        } finally {
+          gateSubmit.textContent = '🔓 建立加密链路';
+          gateSubmit.disabled = false;
+        }
+      }
+
+      gateSubmit.addEventListener('click', () => tryEnter(gateKey.value.trim(), false));
+      gateKey.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryEnter(gateKey.value.trim(), false); });
+
+      document.getElementById('btn-logout').addEventListener('click', () => {
+        sessionStorage.removeItem(KEY_STORAGE);
+        showGate('已断开加密链路');
+      });
+
+      /* ---------- 数据加载 ---------- */
+      const networkModeEl = document.getElementById('network-mode');
+      const totalEl = document.getElementById('summary-total');
+      const abnormalEl = document.getElementById('summary-abnormal');
+
+      function loadAccounts() {
+        networkModeEl.textContent = 'MODE: SYNCING...';
+        fetch(API_BASE + '/accounts', { signal: AbortSignal.timeout(6000) })
+          .then((r) => { if (!r.ok) throw new Error('bad'); return r.json(); })
+          .then((data) => {
+            list = Array.isArray(data) ? data : [];
+            networkModeEl.textContent = isProd ? 'MODE: ONLINE' : 'MODE: LOCAL';
+            render();
+          })
+          .catch(() => {
+            networkModeEl.textContent = 'MODE: OFFLINE';
+            document.getElementById('list-box').innerHTML =
+              '<div class="error-text">⚠ 无法连接管理节点，请确认 bot_server.py 在线</div>';
+          });
+      }
+
+      /* ---------- 渲染 ---------- */
+      function escapeHtml(v) {
+        return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function normalizeRegion(v) { return String(v || '').trim().toLowerCase() === 'na' ? 'NA' : 'Astr'; }
+      function getStatusColor(s) {
+        if (s === 'ok') return 'rgba(108, 245, 200, 0.12)';
+        if (s === 'temp') return 'rgba(255, 199, 106, 0.14)';
+        if (s === 'offline') return 'rgba(147, 169, 198, 0.14)';
+        return 'rgba(255, 125, 125, 0.14)';
+      }
+      function formatTime(date) {
+        const p = (n) => String(n).padStart(2, '0');
+        return `${date.getFullYear()}-${p(date.getMonth() + 1)}-${p(date.getDate())} ${p(date.getHours())}:${p(date.getMinutes())}`;
+      }
+      function getMinutesFromNow(dateStr) {
+        if (!dateStr || !String(dateStr).includes(':')) return 0;
+        const diff = new Date(dateStr) - new Date();
+        const mins = Math.ceil(diff / 60000);
+        return mins > 0 ? mins : 0;
+      }
+
+      function render() {
+        const box = document.getElementById('list-box');
+        totalEl.textContent = `总账号: ${list.length}`;
+        abnormalEl.textContent = `异常: ${list.filter((i) => i.status !== 'ok').length}`;
+
+        if (!list.length) {
+          box.innerHTML = '<div class="loading-text">暂无账号，点击下方按钮添加</div>';
+          return;
+        }
+
+        box.innerHTML = list.map((item, i) => {
+          const isTemp = item.status === 'temp';
+          const region = normalizeRegion(item.region);
+          list[i].region = region;
+          let d = 0, h = 0, m = 0;
+          if (isTemp && item.unban_date) {
+            const mins = getMinutesFromNow(item.unban_date);
+            if (mins > 0) { d = Math.floor(mins / 1440); h = Math.floor((mins % 1440) / 60); m = mins % 60; }
+          }
+          const timeCell = isTemp ? `
+            <div class="time-group">
+              <div class="time-wrap"><input id="d-${i}" class="adm-input time-input" type="number" min="0" value="${d}" oninput="window.__adm.updateDate(${i})"><span class="time-unit">天</span></div>
+              <div class="time-wrap"><input id="h-${i}" class="adm-input time-input" type="number" min="0" max="23" value="${h}" oninput="window.__adm.updateDate(${i})"><span class="time-unit">时</span></div>
+              <div class="time-wrap"><input id="m-${i}" class="adm-input time-input" type="number" min="0" max="59" value="${m}" oninput="window.__adm.updateDate(${i})"><span class="time-unit">分</span></div>
             </div>
+            <div class="unban-display">解封: <span id="date-display-${i}">${escapeHtml(item.unban_date || '未设置')}</span></div>`
+            : '<div class="no-need">( 无需设置 )</div>';
 
-            <div id="list-box"></div>
-            <button class="btn btn-add" onclick="add()">+ 添加一个新 Bot 账号</button>
-        </div>
+          return `
+          <div class="adm-row adm-cols">
+            <div class="adm-cell" data-label="名称">
+              <input class="adm-input" value="${escapeHtml(item.name)}" placeholder="Bot名称" oninput="window.__adm.edit(${i}, 'name', this.value)">
+            </div>
+            <div class="adm-cell" data-label="备注">
+              <input class="adm-input note" value="${escapeHtml(item.note || '')}" placeholder="如: 1号机" oninput="window.__adm.edit(${i}, 'note', this.value)">
+            </div>
+            <div class="adm-cell" data-label="QQ 号码">
+              <input class="adm-input" type="number" value="${escapeHtml(item.qq ?? item.qq_number ?? '')}" placeholder="QQ号" oninput="window.__adm.edit(${i}, 'qq', this.value)">
+            </div>
+            <div class="adm-cell" data-label="运行状态">
+              <select class="adm-select" style="background:${getStatusColor(item.status)}" onchange="window.__adm.edit(${i}, 'status', this.value)">
+                <option value="ok" ${item.status === 'ok' ? 'selected' : ''}>✅ 正常运行</option>
+                <option value="temp" ${item.status === 'temp' ? 'selected' : ''}>⏳ 临时冻结</option>
+                <option value="offline" ${item.status === 'offline' ? 'selected' : ''}>⚫ 离线维护</option>
+                <option value="ban" ${item.status === 'ban' ? 'selected' : ''}>🚫 永久封禁</option>
+              </select>
+            </div>
+            <div class="adm-cell" data-label="节点">
+              <div class="region-switch" role="group" aria-label="节点选择">
+                <button type="button" class="region-btn ${region === 'NA' ? 'active region-na' : ''}" onclick="window.__adm.setRegion(${i}, 'NA')">NA</button>
+                <button type="button" class="region-btn ${region === 'Astr' ? 'active' : ''}" onclick="window.__adm.setRegion(${i}, 'Astr')">Astr</button>
+              </div>
+            </div>
+            <div class="adm-cell adm-cell-time" data-label="封禁时长">${timeCell}</div>
+            <div class="adm-cell" data-label="操作">
+              <button class="btn-del" type="button" title="删除此账号" onclick="window.__adm.del(${i})">🗑️</button>
+            </div>
+          </div>`;
+        }).join('');
+      }
 
-        <button class="btn btn-save" onclick="save()">💾 保存所有更改</button>
-    </main>
+      /* ---------- 编辑操作 ---------- */
+      window.__adm = {
+        edit(i, k, v) { list[i][k] = v; if (k === 'status') render(); },
+        setRegion(i, region) { list[i].region = normalizeRegion(region); render(); },
+        updateDate(index) {
+          const d = parseInt(document.getElementById(`d-${index}`).value) || 0;
+          const h = parseInt(document.getElementById(`h-${index}`).value) || 0;
+          const m = parseInt(document.getElementById(`m-${index}`).value) || 0;
+          if (d === 0 && h === 0 && m === 0) {
+            list[index].unban_date = '';
+            document.getElementById(`date-display-${index}`).textContent = '未设置';
+            return;
+          }
+          const date = new Date();
+          date.setMinutes(date.getMinutes() + d * 1440 + h * 60 + m);
+          const ts = formatTime(date);
+          list[index].unban_date = ts;
+          document.getElementById(`date-display-${index}`).textContent = ts;
+        },
+        del(i) { if (confirm('删除此账号？')) { list.splice(i, 1); render(); } },
+      };
 
-    <script>
-        let API_BASE = '';
-        if (window.location.hostname.includes('akiyo.fun')) {
-            API_BASE = '/api/bot';
-            document.getElementById('network-status').innerText = '当前环境: 线上服务器 (Nginx)';
-        } else {
-            API_BASE = 'http://127.0.0.1:5001';
-            document.getElementById('network-status').innerText = '当前环境: 本地调试 (Port 5001)';
+      document.getElementById('btn-add').addEventListener('click', () => {
+        list.push({ name: '新Bot', note: '1号机', qq: '', status: 'ok', region: 'Astr', unban_date: '', last_unban_date: '' });
+        render();
+      });
+
+      document.getElementById('btn-save').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-save');
+        const old = btn.textContent;
+        btn.textContent = '⏳ 同步中...'; btn.disabled = true;
+        try {
+          const res = await fetch(API_BASE + '/admin/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: adminKey, accounts: list }),
+          });
+          const data = await res.json();
+          if (res.status === 403) {
+            alert(data.message || '密钥错误');
+            sessionStorage.removeItem(KEY_STORAGE);
+            showGate('密钥已被拒绝，请重新验证');
+          } else {
+            alert(data.message || (data.success ? '更新成功' : '保存失败'));
+            if (data.success) loadAccounts();
+          }
+        } catch (e) {
+          alert('保存失败：无法连接管理节点');
+        } finally {
+          btn.textContent = old; btn.disabled = false;
         }
+      });
 
-        const GET_API = API_BASE + '/accounts';
-        const POST_API = API_BASE + '/admin/update';
-
-        let list = [];
-
-        fetch(GET_API)
-            .then(r => r.json())
-            .then(data => { list = data; render(); })
-            .catch(() => alert('连接失败，请确认后端 bot_server.py 是否启动！'));
-
-        function render() {
-            const box = document.getElementById('list-box');
-            box.innerHTML = '';
-            
-            list.forEach((item, i) => {
-                const isTemp = item.status === 'temp';
-                const showDuration = isTemp ? 'flex' : 'none';
-                const region = normalizeRegion(item.region);
-                list[i].region = region;
-                
-                // 计算剩余时间，拆分为 天/时/分
-                let d=0, h=0, m=0;
-                if(isTemp && item.unban_date) {
-                    const mins = getMinutesFromNow(item.unban_date);
-                    if(mins > 0) {
-                        d = Math.floor(mins / 1440);
-                        h = Math.floor((mins % 1440) / 60);
-                        m = mins % 60;
-                    }
-                }
-
-                box.innerHTML += `
-                <div class="admin-item col-layout">
-                    <div>
-                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">名称</label>
-                        <input class="admin-input" value="${item.name}" placeholder="Bot名称" oninput="edit(${i}, 'name', this.value)">
-                    </div>
-
-                    <div>
-                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">备注</label>
-                        <input class="admin-input" value="${item.note || ''}" placeholder="如: 1号机" oninput="edit(${i}, 'note', this.value)" style="color:#ffd700;">
-                    </div>
-                    
-                    <div>
-                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">QQ</label>
-                        <input class="admin-input" type="number" value="${item.qq}" placeholder="QQ号" oninput="edit(${i}, 'qq', this.value)">
-                    </div>
-
-                    <div>
-                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">状态</label>
-                        <select class="admin-select" onchange="edit(${i}, 'status', this.value)" style="background:${getStatusColor(item.status)}">
-                            <option value="ok" ${item.status=='ok'?'selected':''}>✅ 正常运行</option>
-                            <option value="temp" ${item.status=='temp'?'selected':''}>⏳ 临时冻结</option>
-                            <option value="offline" ${item.status=='offline'?'selected':''}>⚫ 离线维护</option>
-                            <option value="ban" ${item.status=='ban'?'selected':''}>🚫 永久封禁</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="mobile-label" style="display:none;font-size:0.8rem;color:#888;">节点</label>
-                        <div class="region-switch" role="group" aria-label="节点选择">
-                            <button type="button" class="region-btn ${region === 'NA' ? 'active' : ''}" onclick="setRegion(${i}, 'NA')">NA</button>
-                            <button type="button" class="region-btn ${region === 'Astr' ? 'active' : ''}" onclick="setRegion(${i}, 'Astr')">Astr</button>
-                        </div>
-                    </div>
-
-                    <div style="display:${showDuration}; align-items:flex-start; gap:8px; flex-direction:column;">
-                        <div class="time-group" style="width:100%;">
-                            <div class="time-input-wrapper">
-                                <input id="d-${i}" class="time-input" type="number" min="0" value="${d}" oninput="updateDate(${i})">
-                                <span class="time-unit">天</span>
-                            </div>
-                            <div class="time-input-wrapper">
-                                <input id="h-${i}" class="time-input" type="number" min="0" max="23" value="${h}" oninput="updateDate(${i})">
-                                <span class="time-unit">时</span>
-                            </div>
-                            <div class="time-input-wrapper">
-                                <input id="m-${i}" class="time-input" type="number" min="0" max="59" value="${m}" oninput="updateDate(${i})">
-                                <span class="time-unit">分</span>
-                            </div>
-                        </div>
-
-                        <div style="font-size:0.8rem; color:#888; white-space:nowrap;">
-                            解封: <span id="date-display-${i}" style="color:var(--text-highlight); font-weight:bold; font-family:monospace;">${item.unban_date || '未设置'}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display:${!isTemp?'flex':'none'}; align-items:center; height:100%; color:#666; font-size:0.8rem;">
-                        (无需设置)
-                    </div>
-
-                    <div>
-                        <button class="btn btn-del" onclick="del(${i})">🗑️</button>
-                    </div>
-                </div>`;
-            });
-            
-            if(window.innerWidth <= 768) {
-                document.querySelectorAll('.mobile-label').forEach(el => el.style.display = 'block');
-                document.querySelectorAll('.admin-item').forEach(el => {
-                    el.style.display = 'flex';
-                    el.style.flexDirection = 'column';
-                });
-            }
-        }
-
-        // --- 核心逻辑：读取三个框 -> 算出总分钟 -> 更新日期 ---
-        function updateDate(index) {
-            // 获取三个框的值，为空则默认为0
-            const d = parseInt(document.getElementById(`d-${index}`).value) || 0;
-            const h = parseInt(document.getElementById(`h-${index}`).value) || 0;
-            const m = parseInt(document.getElementById(`m-${index}`).value) || 0;
-
-            if(d === 0 && h === 0 && m === 0) {
-                list[index].unban_date = '';
-                document.getElementById(`date-display-${index}`).innerText = '未设置';
-                return;
-            }
-
-            const totalMinutes = (d * 1440) + (h * 60) + m;
-            
-            const date = new Date();
-            date.setMinutes(date.getMinutes() + totalMinutes); // 当前时间 + 总分钟
-            
-            const timeString = formatTime(date);
-            list[index].unban_date = timeString;
-            
-            // 更新文字显示
-            document.getElementById(`date-display-${index}`).innerText = timeString;
-        }
-
-        // --- 辅助：格式化时间 YYYY-MM-DD HH:mm ---
-        function formatTime(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hour = String(date.getHours()).padStart(2, '0');
-            const minute = String(date.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${day} ${hour}:${minute}`;
-        }
-
-        // --- 辅助：算出剩余分钟数 (用于初始化回显) ---
-        function getMinutesFromNow(dateStr) {
-            if (!dateStr || !dateStr.includes(':')) return 0; 
-            const target = new Date(dateStr);
-            const now = new Date();
-            const diffMs = target - now;
-            const diffMins = Math.ceil(diffMs / 60000); 
-            return diffMins > 0 ? diffMins : 0;
-        }
-
-        function getStatusColor(status) {
-            if(status === 'ok') return 'rgba(102, 187, 106, 0.2)';
-            if(status === 'temp') return 'rgba(255, 167, 38, 0.2)';
-            if(status === 'offline') return 'rgba(130, 142, 160, 0.22)';
-            return 'rgba(239, 83, 80, 0.2)';
-        }
-
-        function normalizeRegion(value) {
-            const v = String(value || '').trim().toLowerCase();
-            return v === 'na' ? 'NA' : 'Astr';
-        }
-
-        function edit(i, k, v) { list[i][k] = v; if(k==='status') render(); }
-        function setRegion(i, region) { list[i].region = normalizeRegion(region); render(); }
-        function add() { list.push({name:'新Bot', note:'1号机', qq:'', status:'ok', region:'Astr', unban_date:'', last_unban_date: ''}); render(); }
-        function del(i) { if(confirm('删除此账号？')) { list.splice(i, 1); render(); } }
-
-        function save() {
-            const k = document.getElementById('key').value;
-            if(!k) return alert('请输入密钥');
-            const btn = document.querySelector('.btn-save');
-            const oldText = btn.innerText;
-            btn.innerText = '保存中...';
-            fetch(POST_API, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ key: k, accounts: list })
-            }).then(r=>r.json()).then(d => {
-                alert(d.message); btn.innerText = oldText;
-            }).catch(()=> { alert("保存失败"); btn.innerText = oldText; });
-        }
-    </script>
+      /* ---------- 启动：静默恢复会话 ---------- */
+      const saved = sessionStorage.getItem(KEY_STORAGE);
+      if (saved) tryEnter(saved, true);
+      else showGate();
+    })();
+  </script>
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>

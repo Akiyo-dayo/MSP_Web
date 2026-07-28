@@ -154,6 +154,13 @@ def get_remote_total():
         print(f"[{datetime.now()}] 远端总数代理请求失败: {e}")
     return jsonify({'success': False, 'total': 0})
 
+@app.route('/admin/verify', methods=['POST'])
+def admin_verify():
+    data = request.json or {}
+    if str(data.get('key')) == str(ADMIN_KEY):
+        return jsonify({'success': True})
+    return jsonify({'success': False, 'message': '密钥错误'}), 403
+
 @app.route('/admin/update', methods=['POST'])
 def update_accounts():
     data = request.json

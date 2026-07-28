@@ -1,352 +1,387 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>社区后台管理</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css" />
-    <style>
-        .admin-page {
-            width: min(800px, calc(100% - 48px));
-            margin: 0 auto;
-            padding: 118px 0 72px;
-            display: grid;
-            gap: 24px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理终端 · 留言管理 | 深空联合</title>
+  <meta name="description" content="月弦阁社区留言管理终端" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/spacetrek.css" />
+  <style>
+    .admin-page { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: calc(var(--topbar-h) + 44px) 0 60px; display: grid; gap: 22px; }
+    .admin-hero-panel { padding: 28px 30px; }
+    .admin-hero-panel h1 { font-size: clamp(24px, 3.4vw, 32px); letter-spacing: .08em; margin: 12px 0 8px; }
+    .admin-hero-panel > p { color: var(--muted); font-size: 14px; }
+    .admin-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+    .admin-hero-actions .spacer { flex: 1; }
 
-        .admin-card {
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: linear-gradient(145deg, rgba(30, 32, 40, 0.7), rgba(15, 16, 20, 0.5));
-            -webkit-backdrop-filter: blur(10px) saturate(1.06);
-            backdrop-filter: blur(10px) saturate(1.06);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+    /* 鉴权门 */
+    .admin-gate {
+      position: fixed; inset: 0; z-index: 120;
+      display: grid; place-items: center; padding: 20px;
+      background: rgba(1, 4, 10, 0.82);
+      backdrop-filter: blur(14px) saturate(1.1);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1);
+      opacity: 1; transition: opacity .5s ease, visibility .5s;
+    }
+    .admin-gate.open { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-card { width: min(420px, 100%); padding: 40px 34px; text-align: center; }
+    .gate-card .eyebrow { justify-content: center; }
+    .gate-logo {
+      width: 74px; height: 74px; object-fit: contain; margin: 6px auto 4px; display: block;
+      filter: invert(1) brightness(1.05) drop-shadow(0 0 16px rgba(126, 214, 255, 0.65));
+    }
+    .gate-title { font-size: 22px; letter-spacing: .22em; text-indent: .22em; margin: 12px 0 6px; }
+    .gate-sub { font-size: 12px; color: var(--muted-2); letter-spacing: .28em; font-family: var(--font-display); margin-bottom: 22px; }
+    .gate-input {
+      width: 100%; padding: 13px 16px; text-align: center; font-size: 16px; letter-spacing: .18em;
+      background: rgba(3, 8, 16, 0.7); border: 1px solid var(--line);
+      border-radius: 8px; color: var(--text); outline: none; font-family: var(--font-body);
+      transition: all .2s;
+    }
+    .gate-input:focus { border-color: var(--ice); box-shadow: var(--glow); }
+    .gate-input::placeholder { color: var(--muted-2); letter-spacing: .08em; font-size: 13.5px; }
+    .gate-error { min-height: 20px; margin: 10px 0 14px; font-size: 12.5px; color: var(--danger); letter-spacing: .1em; }
+    .gate-card.shake { animation: gateShake .45s ease; }
+    @keyframes gateShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-9px); } 40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); } 80% { transform: translateX(4px); }
+    }
+    .gate-hint { margin-top: 16px; font-size: 11.5px; color: var(--muted-2); letter-spacing: .12em; }
 
-        .admin-title {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 700;
-            color: #edf4ff;
-        }
+    /* 留言条目 */
+    .admin-msg-panel { padding: 10px 0; }
+    .adm-msg {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      display: grid; gap: 8px;
+    }
+    .adm-msg:last-child { border-bottom: none; }
+    .adm-msg-meta {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: 12px; color: var(--muted-2); font-family: var(--font-display); letter-spacing: .06em;
+    }
+    .adm-msg-qq { color: var(--ice); font-weight: 700; }
+    .adm-msg-content { font-size: 14px; color: rgba(233, 245, 255, 0.92); white-space: pre-wrap; word-break: break-word; }
+    .adm-msg-actions { display: flex; gap: 10px; margin-top: 4px; }
 
-        .admin-input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 12px;
-            color: #f7f8fb;
-            font-family: inherit;
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s ease, background 0.2s ease;
-            box-sizing: border-box;
-            text-align: center;
-        }
+    .btn-mini { padding: 6px 14px; font-size: 12px; }
+    .btn-reply {
+      background: rgba(108, 245, 200, 0.10); color: var(--aurora);
+      border: 1px solid rgba(108, 245, 200, 0.35); border-radius: 6px; cursor: pointer; transition: all .2s;
+    }
+    .btn-reply:hover { background: rgba(108, 245, 200, 0.2); box-shadow: 0 0 12px rgba(108, 245, 200, 0.25); }
+    .btn-danger {
+      background: rgba(255, 125, 125, 0.10); color: var(--danger);
+      border: 1px solid rgba(255, 125, 125, 0.35); border-radius: 6px; cursor: pointer; transition: all .2s;
+    }
+    .btn-danger:hover { background: rgba(255, 125, 125, 0.22); box-shadow: 0 0 12px rgba(255, 125, 125, 0.25); }
 
-        .admin-input:focus {
-            border-color: #8fd1ff;
-            background: rgba(0, 0, 0, 0.5);
-        }
+    /* 行内回复编辑器 */
+    .reply-editor { display: grid; gap: 10px; margin-top: 6px; }
+    .reply-editor textarea {
+      width: 100%; min-height: 84px; resize: vertical; padding: 11px 13px;
+      background: rgba(3, 8, 16, 0.7); border: 1px solid var(--line);
+      border-radius: 8px; color: var(--text); font-size: 13.5px;
+      outline: none; font-family: var(--font-body); transition: all .2s;
+    }
+    .reply-editor textarea:focus { border-color: var(--aurora); box-shadow: 0 0 14px rgba(108, 245, 200, 0.25); }
+    .reply-editor-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
-        .msg-item {
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .msg-item:last-child {
-            border-bottom: none;
-        }
-
-        .msg-meta {
-            font-size: 13px;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .msg-qq {
-            color: #8fd1ff;
-            font-weight: 600;
-        }
-
-        .msg-content {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #edf4ff;
-            word-break: break-all;
-            white-space: pre-wrap;
-        }
-
-        .reply-box {
-            padding: 10px 14px;
-            background: rgba(89, 211, 138, 0.08);
-            border-radius: 8px;
-            border-left: 3px solid rgba(89, 211, 138, 0.6);
-            font-size: 14px;
-            color: #a7eebf;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        
-        .actions .btn {
-            padding: 6px 14px;
-            font-size: 13px;
-        }
-
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-danger:hover {
-            background: rgba(239, 68, 68, 0.25);
-            color: #fee2e2;
-            border-color: rgba(239, 68, 68, 0.5);
-        }
-
-        .btn-success {
-            background: rgba(34, 197, 94, 0.15);
-            color: #86efac;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .btn-success:hover {
-            background: rgba(34, 197, 94, 0.25);
-            color: #bbf7d0;
-            border-color: rgba(34, 197, 94, 0.5);
-        }
-        
-        .loading-text {
-            text-align: center;
-            color: var(--muted);
-            padding: 40px 0;
-        }
-        
-        /* Light Theme Overrides */
-        body.theme-light .admin-card {
-            background: rgba(255, 255, 255, 0.4);
-            border-color: rgba(0, 0, 0, 0.05);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
-            -webkit-backdrop-filter: blur(35px) saturate(1.1);
-            backdrop-filter: blur(35px) saturate(1.1);
-        }
-        
-        body.theme-light .admin-title { color: #1a2b4c; }
-        body.theme-light .msg-content { color: #1d1d1f; }
-        body.theme-light .msg-qq { color: #0066cc; }
-        body.theme-light .msg-item { border-bottom-color: rgba(0, 0, 0, 0.05); }
-        
-        body.theme-light .admin-input {
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(0, 0, 0, 0.1);
-            color: #1d1d1f;
-        }
-        
-        body.theme-light .admin-input:focus {
-            border-color: #0066cc;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        
-        body.theme-light .reply-box {
-            background: rgba(34, 197, 94, 0.08);
-            border-left-color: #22c55e;
-            color: #166534;
-        }
-        
-        body.theme-light .btn-danger {
-            background: rgba(239, 68, 68, 0.1);
-            color: #b91c1c;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-        
-        body.theme-light .btn-danger:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #991b1b;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-        
-        body.theme-light .btn-success {
-            background: rgba(34, 197, 94, 0.1);
-            color: #15803d;
-            border-color: rgba(34, 197, 94, 0.2);
-        }
-        
-        body.theme-light .btn-success:hover {
-            background: rgba(34, 197, 94, 0.2);
-            color: #166534;
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-    </style>
+    @media (max-width: 560px) {
+      .admin-hero-panel { padding: 22px 18px; }
+      .adm-msg { padding: 16px 14px; }
+      .gate-input { font-size: 16px; }
+      .reply-editor textarea { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-orb orb-1" aria-hidden="true"></div>
-    <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="aurora-layer" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-    <header class="topbar ios-nav glass topbar-minimal" data-animated="false">
-        <div class="topbar-left">
-            <a href="./index.html" class="brand nav-item" aria-label="月弦阁首页">月弦阁</a>
-        </div>
-        <div class="topbar-actions nav-item topbar-actions-minimal nav-actions">
-            <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
-            <a href="./admin.html" class="btn btn-ghost" id="back-button" aria-label="返回状态管理">返回</a>
-            <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
-        </div>
-    </header>
+  <header class="topbar">
+    <a href="./index.html" class="brand">
+      <img class="brand-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <span>
+        <span class="brand-cn">月弦阁</span>
+        <small>SPACETREK RELAY</small>
+      </span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="./guide.html">功能</a>
+      <a href="./index.html#pricing">价格</a>
+      <a href="./board.html">留言</a>
+      <a href="./status.html">状态</a>
+    </nav>
+    <div class="topbar-actions">
+      <a href="./admin.html" class="btn btn-ghost btn-sm">← 节点管理</a>
+      <button class="btn btn-ghost btn-sm side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false">☰ 终端</button>
+    </div>
+  </header>
 
-    <main class="admin-page">
-        <section class="admin-card reveal visible">
-            <h2 class="admin-title">🔧 留言板后台调度中心</h2>
-            <p style="color: var(--muted); margin-top: -8px; font-size: 14px;">审核与回复社区留言</p>
-            
-            <div>
-                <input type="password" id="admin-key" class="admin-input" placeholder="输入 Admin Key" />
-            </div>
-        </section>
-
-        <section class="admin-card reveal visible">
-            <div id="admin-messages-container">
-                <div class="loading-text">加载中...</div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-      <p>© 2026 秋音Akiyo&F1y/Car · 月弦阁</p>
-    </footer>
-
-    <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
-    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
-    <aside class="drawer" id="site-drawer" aria-hidden="true">
-      <header class="drawer-head">
-        <h3>🧭 快速导航</h3>
-        <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
-      </header>
-      <div class="drawer-quick-actions" style="margin-bottom: 24px; display: grid; gap: 12px;">
-        <a class="btn btn-ghost" href="./index.html" style="width: 100%; justify-content: center;">🏠 返回首页</a>
-        <a class="btn btn-ghost" href="./admin.html" style="width: 100%; justify-content: center;">🔧 状态管理</a>
-        <a class="btn btn-ghost" href="./board.html" style="width: 100%; justify-content: center;">💬 社区留言板</a>
+  <main class="admin-page">
+    <section class="admin-hero-panel hud-panel">
+      <p class="eyebrow">ADMIN TERMINAL<span class="cn">· 留言调度终端</span></p>
+      <h1>留言管理</h1>
+      <p>审核与回复社区留言 · 回复将实时同步至前台留言板。</p>
+      <div class="status-meta">
+        <span class="meta-pill" id="network-mode">MODE: --</span>
+        <span class="meta-pill" id="summary-total">留言: --</span>
+        <span class="meta-pill" id="summary-pending">待回复: --</span>
       </div>
-    </aside>
+      <div class="admin-hero-actions">
+        <a class="btn btn-ghost btn-sm" href="./admin.html">🤖 节点管理终端 →</a>
+        <button class="btn btn-ghost btn-sm" id="btn-refresh" type="button">↻ 刷新</button>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost btn-sm" id="btn-logout" type="button">⏻ 退出终端</button>
+      </div>
+    </section>
 
-    <script src="./app.js"></script>
-    <script>
-        const API_URL = window.location.hostname.includes('akiyo.fun')
-            ? '/api/community'
-            : 'http://127.0.0.1:5002';
-        
-        async function fetchAdminMessages() {
-            const container = document.getElementById('admin-messages-container');
-            
-            try {
-                const res = await fetch(`${API_URL}/api/messages`);
-                const msgs = await res.json();
-                
-                if (msgs.length === 0) {
-                    container.innerHTML = '<div class="loading-text">暂无数据</div>';
-                    return;
-                }
+    <section class="admin-msg-panel hud-panel">
+      <div id="msg-box"><div class="loading-text">⏳ 正在同步留言频段...</div></div>
+    </section>
+  </main>
 
-                container.innerHTML = msgs.map(msg => {
-                    const safeId = escapeHtml(msg.id);
-                    const safeQQ = escapeHtml(msg.qq);
-                    const safeTime = escapeHtml(msg.timestamp);
-                    return `
-                    <div class="msg-item">
-                        <div class="msg-meta">
-                            <span>ID: ${safeId}</span>
-                            <span style="color: rgba(255,255,255,0.2);">|</span>
-                            <span>QQ: <span class="msg-qq">${safeQQ}</span></span>
-                            <span style="color: rgba(255,255,255,0.2);">|</span>
-                            <span>${safeTime}</span>
-                        </div>
-                        
-                        <div class="msg-content">${escapeHtml(msg.content)}</div>
-                        
-                        ${msg.reply ? `
-                            <div class="reply-box">
-                                <span>↳ 已回复: ${escapeHtml(msg.reply)}</span>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="actions">
-                            <button class="btn btn-success" onclick="replyMsg('${safeId}')">${msg.reply ? '修改回复' : '回复'}</button>
-                            <button class="btn btn-danger" onclick="deleteMsg('${safeId}')">删除</button>
-                        </div>
-                    </div>
-                `}).join('');
-            } catch (err) {
-                container.innerHTML = '<div class="loading-text" style="color: #ef4444;">无法加载数据</div>';
-            }
+  <footer class="footer">
+    © 2026 秋音Akiyo&F1y/Car · 月弦阁
+    <span class="footer-en">SPACETREK COLLECTIVE · MESSAGE TERMINAL</span>
+  </footer>
+
+  <!-- 鉴权门 -->
+  <div class="admin-gate" id="admin-gate">
+    <div class="gate-card hud-panel" id="gate-card">
+      <img class="gate-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <p class="eyebrow">SECURE LINK<span class="cn">· 接入验证</span></p>
+      <h2 class="gate-title">管理终端</h2>
+      <p class="gate-sub">MESSAGE TERMINAL ACCESS</p>
+      <input type="password" id="gate-key" class="gate-input" placeholder="输入管理密钥" autocomplete="off" />
+      <div class="gate-error" id="gate-error"></div>
+      <button class="btn btn-primary" id="gate-submit" type="button" style="width: 100%;">🔓 建立加密链路</button>
+      <p class="gate-hint">密钥仅保存在当前会话 · 关闭标签页后自动失效</p>
+    </div>
+  </div>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">↑</button>
+
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="site-drawer" aria-hidden="true">
+    <header class="drawer-head">
+      <h3>🧭 快速导航</h3>
+      <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
+    </header>
+    <div class="drawer-quick-actions">
+      <a class="btn btn-ghost" href="./index.html">🏠 返回首页</a>
+      <a class="btn btn-ghost" href="./board.html">💬 社区留言板</a>
+      <a class="btn btn-ghost" href="./admin.html">🤖 节点管理终端</a>
+      <a class="btn btn-ghost" href="./status.html">📡 Bot 状态前台</a>
+    </div>
+  </aside>
+
+  <script>
+    (function () {
+      'use strict';
+      const isProd = window.location.hostname.includes('akiyo.fun');
+      const API_BASE = isProd ? '/api/community' : 'http://127.0.0.1:5002';
+      const KEY_STORAGE = 'msp_admin_key';
+
+      const gate = document.getElementById('admin-gate');
+      const gateCard = document.getElementById('gate-card');
+      const gateKey = document.getElementById('gate-key');
+      const gateError = document.getElementById('gate-error');
+      const gateSubmit = document.getElementById('gate-submit');
+      const msgBox = document.getElementById('msg-box');
+      const networkModeEl = document.getElementById('network-mode');
+      const totalEl = document.getElementById('summary-total');
+      const pendingEl = document.getElementById('summary-pending');
+
+      let adminKey = '';
+      let msgs = [];
+
+      /* ---------- 鉴权门 ---------- */
+      function showGate(msg) {
+        gate.classList.remove('open');
+        adminKey = '';
+        if (msg) gateError.textContent = msg;
+        setTimeout(() => gateKey.focus(), 120);
+      }
+      function hideGate() { gate.classList.add('open'); }
+      function shake(msg) {
+        gateError.textContent = msg;
+        gateCard.classList.remove('shake');
+        void gateCard.offsetWidth;
+        gateCard.classList.add('shake');
+      }
+
+      async function verifyKey(key) {
+        const res = await fetch(API_BASE + '/admin/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key }),
+          signal: AbortSignal.timeout(6000),
+        });
+        return res.ok;
+      }
+
+      async function tryEnter(key, silent) {
+        if (!key) { if (!silent) shake('请输入管理密钥'); return; }
+        if (!silent) { gateSubmit.textContent = '⏳ 正在验证链路...'; gateSubmit.disabled = true; }
+        try {
+          const ok = await verifyKey(key);
+          if (ok) {
+            adminKey = key;
+            sessionStorage.setItem(KEY_STORAGE, key);
+            hideGate();
+            loadMessages();
+          } else {
+            sessionStorage.removeItem(KEY_STORAGE);
+            if (!silent) shake('密钥错误 · 链路拒绝接入');
+            else showGate('会话密钥已失效，请重新验证');
+          }
+        } catch (e) {
+          if (!silent) shake('无法连接管理节点，请稍后再试');
+          else showGate('无法连接管理节点');
+        } finally {
+          gateSubmit.textContent = '🔓 建立加密链路';
+          gateSubmit.disabled = false;
+        }
+      }
+
+      gateSubmit.addEventListener('click', () => tryEnter(gateKey.value.trim(), false));
+      gateKey.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryEnter(gateKey.value.trim(), false); });
+      document.getElementById('btn-logout').addEventListener('click', () => {
+        sessionStorage.removeItem(KEY_STORAGE);
+        showGate('已断开加密链路');
+      });
+      document.getElementById('btn-refresh').addEventListener('click', loadMessages);
+
+      /* ---------- 工具 ---------- */
+      function escapeHtml(v) {
+        return String(v ?? '').replace(/[&<>'"]/g, (t) =>
+          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t]));
+      }
+
+      function handleAuthFail(data) {
+        alert(data.message || '密钥错误');
+        sessionStorage.removeItem(KEY_STORAGE);
+        showGate('密钥已被拒绝，请重新验证');
+      }
+
+      /* ---------- 加载与渲染 ---------- */
+      function loadMessages() {
+        networkModeEl.textContent = 'MODE: SYNCING...';
+        fetch(API_BASE + '/api/messages', { signal: AbortSignal.timeout(6000) })
+          .then((r) => { if (!r.ok) throw new Error('bad'); return r.json(); })
+          .then((data) => {
+            msgs = Array.isArray(data) ? data : [];
+            networkModeEl.textContent = isProd ? 'MODE: ONLINE' : 'MODE: LOCAL';
+            render();
+          })
+          .catch(() => {
+            networkModeEl.textContent = 'MODE: OFFLINE';
+            msgBox.innerHTML = '<div class="error-text">⚠ 无法连接留言节点，请确认 community_server.py 在线</div>';
+          });
+      }
+
+      function render() {
+        totalEl.textContent = `留言: ${msgs.length}`;
+        pendingEl.textContent = `待回复: ${msgs.filter((m) => !m.reply).length}`;
+
+        if (!msgs.length) {
+          msgBox.innerHTML = '<div class="loading-text">✦ 频段静默 · 暂无留言</div>';
+          return;
         }
 
-        async function replyMsg(id) {
-            const key = document.getElementById('admin-key').value;
-            if (!key) return alert('请输入 Admin Key');
-            
-            const replyContent = prompt('请输入回复内容 (留空则清空回复):');
-            if (replyContent === null) return; // 取消
+        msgBox.innerHTML = msgs.map((msg) => {
+          const safeId = escapeHtml(msg.id);
+          return `
+          <div class="adm-msg">
+            <div class="adm-msg-meta">
+              <span>ID: ${safeId}</span>
+              <span style="opacity:.4">|</span>
+              <span>QQ: <span class="adm-msg-qq">${escapeHtml(msg.qq)}</span></span>
+              <span style="opacity:.4">|</span>
+              <span>${escapeHtml(msg.timestamp)}</span>
+            </div>
+            <div class="adm-msg-content">${escapeHtml(msg.content)}</div>
+            ${msg.reply ? `
+              <div class="reply-box">
+                <span class="reply-title">↳ 已回复</span>
+                ${escapeHtml(msg.reply)}
+              </div>` : ''}
+            <div class="adm-msg-actions">
+              <button class="btn-mini btn-reply" type="button" onclick="window.__admBoard.toggleEditor('${safeId}')">${msg.reply ? '✏️ 修改回复' : '↩️ 回复'}</button>
+              <button class="btn-mini btn-danger" type="button" onclick="window.__admBoard.remove('${safeId}')">🗑️ 删除</button>
+            </div>
+            <div class="reply-editor" id="editor-${safeId}" style="display:none;">
+              <textarea id="ta-${safeId}" placeholder="输入回复内容（留空保存则清空回复）">${escapeHtml(msg.reply || '')}</textarea>
+              <div class="reply-editor-actions">
+                <button class="btn-mini btn-ghost btn" type="button" onclick="window.__admBoard.toggleEditor('${safeId}')">取消</button>
+                <button class="btn-mini btn-reply" type="button" onclick="window.__admBoard.sendReply('${safeId}')">📡 发送回复</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
 
-            try {
-                const res = await fetch(`${API_URL}/admin/messages/reply`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key, id, reply: replyContent })
-                });
-                const data = await res.json();
-                alert(data.message);
-                if (data.success) fetchAdminMessages();
-            } catch (err) {
-                alert('操作失败，请检查网络');
-            }
-        }
+      /* ---------- 操作 ---------- */
+      window.__admBoard = {
+        toggleEditor(id) {
+          const el = document.getElementById(`editor-${id}`);
+          if (!el) return;
+          const show = el.style.display === 'none';
+          el.style.display = show ? 'grid' : 'none';
+          if (show) {
+            const ta = document.getElementById(`ta-${id}`);
+            if (ta) ta.focus();
+          }
+        },
+        async sendReply(id) {
+          const ta = document.getElementById(`ta-${id}`);
+          const reply = ta ? ta.value.trim() : '';
+          try {
+            const res = await fetch(API_BASE + '/admin/messages/reply', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ key: adminKey, id, reply }),
+            });
+            const data = await res.json();
+            if (res.status === 403) return handleAuthFail(data);
+            alert(data.message);
+            if (data.success) loadMessages();
+          } catch (e) {
+            alert('操作失败，请检查网络');
+          }
+        },
+        async remove(id) {
+          if (!confirm('确认删除这条留言吗？此操作不可逆。')) return;
+          try {
+            const res = await fetch(API_BASE + '/admin/messages/delete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ key: adminKey, id }),
+            });
+            const data = await res.json();
+            if (res.status === 403) return handleAuthFail(data);
+            alert(data.message);
+            if (data.success) loadMessages();
+          } catch (e) {
+            alert('操作失败，请检查网络');
+          }
+        },
+      };
 
-        async function deleteMsg(id) {
-            const key = document.getElementById('admin-key').value;
-            if (!key) return alert('请输入 Admin Key');
-            
-            if (!confirm('确认删除这条留言吗？此操作不可逆。')) return;
-
-            try {
-                const res = await fetch(`${API_URL}/admin/messages/delete`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key, id })
-                });
-                const data = await res.json();
-                alert(data.message);
-                if (data.success) fetchAdminMessages();
-            } catch (err) {
-                alert('操作失败，请检查网络');
-            }
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag));
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', fetchAdminMessages);
-    </script>
+      /* ---------- 启动：静默恢复会话 ---------- */
+      const saved = sessionStorage.getItem(KEY_STORAGE);
+      if (saved) tryEnter(saved, true);
+      else showGate();
+    })();
+  </script>
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>

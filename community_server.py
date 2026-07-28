@@ -51,6 +51,14 @@ def add_message():
     
     return jsonify({'success': True, 'message': '留言成功'})
 
+# 管理员密钥验证（前端进门鉴权用）
+@app.route('/admin/verify', methods=['POST'])
+def admin_verify():
+    data = request.json or {}
+    if str(data.get('key')) == str(ADMIN_KEY):
+        return jsonify({'success': True})
+    return jsonify({'success': False, 'message': '密钥错误'}), 403
+
 # 管理员回复留言
 @app.route('/admin/messages/reply', methods=['POST'])
 def reply_message():
