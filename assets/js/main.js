@@ -132,7 +132,25 @@
     fetchAccounts().then(({ accounts, demo }) => {
       const net = document.getElementById('drawer-network-status');
       const summary = document.getElementById('drawer-status-summary');
+      const indicator = document.getElementById('status-indicator');
+      const statusText = document.getElementById('status-text');
       const abnormal = accounts.filter((a) => a.status !== 'ok');
+
+      /* 顶部状态指示器：同步真实结果，结束“频率检测中” */
+      if (indicator && statusText) {
+        indicator.classList.remove('status-checking', 'status-ok', 'status-bad');
+        if (demo) {
+          indicator.classList.add('status-ok');
+          statusText.textContent = '演示模式 · 频率模拟中';
+        } else if (abnormal.length === 0) {
+          indicator.classList.add('status-ok');
+          statusText.textContent = '频率稳定 · 全部节点在线';
+        } else {
+          indicator.classList.add('status-bad');
+          statusText.textContent = `频率波动 · ${abnormal.length} 个节点异常`;
+        }
+      }
+
       if (net) net.textContent = demo ? 'MODE: LOCAL PREVIEW · 演示数据' : 'MODE: ONLINE';
       if (summary) summary.textContent = demo
         ? '线上环境将显示真实异常账号'

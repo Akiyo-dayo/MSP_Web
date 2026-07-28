@@ -47,12 +47,11 @@
     });
   }
 
-  /* ---------- 九星（徽章星位，参照深空联合徽记） ---------- */
-  // 归一化坐标（相对徽记中心，半径 = 徽记半径）
+  /* ---------- 九星（从徽记原图连通域实测的精确星位） ---------- */
   const NINE_STARS = [
-    { x: 0.62, y: -0.86, s: 1.15 }, { x: 0.95, y: -0.50, s: 0.9 }, { x: 0.42, y: -0.42, s: 0.75 },
-    { x: -1.05, y: 0.55, s: 1.1 }, { x: -0.62, y: 0.92, s: 0.9 }, { x: -0.08, y: 1.08, s: 1.0 },
-    { x: 0.50, y: 1.00, s: 0.85 }, { x: 1.00, y: 0.68, s: 1.05 }, { x: 0.98, y: -0.05, s: 0.7 },
+    { x: 0.870, y: -0.166, s: 1.01 }, { x: 0.872, y: 0.239, s: 1.01 }, { x: 0.721, y: 0.390, s: 1.01 },
+    { x: 0.518, y: 0.443, s: 1.01 }, { x: 0.721, y: -0.316, s: 1.00 }, { x: 0.314, y: 0.387, s: 1.00 },
+    { x: 0.926, y: 0.036, s: 1.00 }, { x: 0.312, y: -0.315, s: 0.99 }, { x: 0.520, y: -0.370, s: 0.99 },
   ].map((p, i) => ({
     ...p,
     sx: (Math.random() < 0.5 ? -1 : 1) * (0.9 + Math.random() * 0.7),  // 起点（屏外，归一化）
@@ -201,8 +200,8 @@
       for (const st of NINE_STARS) {
         const p = ease((t - T.convergeStart - st.delay) / (T.convergeEnd - T.convergeStart));
         if (p <= 0) continue;
-        const x = g.cx + st.sx * (1 - p) * spread + st.x * p * g.half * 0.92;
-        const y = g.cy + st.sy * (1 - p) * spread + st.y * p * g.half * 0.92;
+        const x = g.cx + st.sx * (1 - p) * spread + st.x * p * g.half;
+        const y = g.cy + st.sy * (1 - p) * spread + st.y * p * g.half;
         drawFourStar(x, y, st.s * starBase * (0.7 + 0.5 * p), Math.min(1, p * 2) * fadeOut, p * 0.6);
       }
       /* 星环绘制 */
