@@ -3,62 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>月弦阁 · 购买结算</title>
+  <title>月弦阁 · 购买结算 | 深空联合补给处</title>
   <meta name="description" content="月弦阁扫码支付结算页" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/spacetrek.css" />
 </head>
 <body>
-  <div class="bg-orb orb-1" aria-hidden="true"></div>
-  <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="aurora-layer" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-  <header class="topbar ios-nav glass" data-animated="false">
-    <a href="./index.html" class="brand nav-item" style="--anim-delay: 0s;">月弦阁</a>
+  <header class="topbar">
+    <a href="./index.html" class="brand">
+      <img class="brand-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <span>
+        <span class="brand-cn">月弦阁</span>
+        <small>SPACETREK RELAY</small>
+      </span>
+    </a>
     <nav class="nav" aria-label="主导航">
-      <a href="./index.html#features" class="nav-item">功能</a>
-      <a href="./index.html#bot-intro" class="nav-item">说明</a>
-      <a href="./index.html#pricing" class="nav-item">价格</a>
-      <a href="#top" class="nav-item active">结算</a>
+      <a href="./guide.html">功能</a>
+      <a href="./index.html#pricing">价格</a>
+      <a href="#top" class="active">结算</a>
     </nav>
-    <div class="topbar-actions nav-item">
-      <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
-      <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+    <div class="topbar-actions">
+      <a href="./index.html#pricing" class="btn btn-ghost btn-sm">← 返回价格</a>
+      <button class="btn btn-ghost btn-sm side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false">☰ 终端</button>
     </div>
   </header>
 
-  <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-desktop" id="side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
-
-  <main class="pay-page reveal on-entrance" data-reveal id="top">
-    <div class="pay-card glass">
+  <main class="pay-page" id="top">
+    <div class="pay-card hud-panel">
+      <p class="eyebrow">SUPPLY DEPOT<span class="cn">· 补给处</span></p>
       <h1 class="pay-card-title">支付结算</h1>
       <div class="pay-qrcode-box">
-        <img src="./NachoMc/image/zanshang.png" alt="付款二维码" loading="lazy" decoding="async" />
+        <img src="./assets/img/zanshang.png" alt="付款二维码" loading="lazy" decoding="async" />
       </div>
-      <p class="pay-remark-hint">付款时备注：版本 用户QQ号 群QQ号</p>
+      <p class="pay-remark-hint">⚠️ 付款时备注：版本 用户QQ号 群QQ号</p>
     </div>
   </main>
 
   <footer class="footer">
-    <p>© 2026 秋音Akiyo&F1y/Car · 月弦阁</p>
+    © 2026 秋音Akiyo&F1y/Car · 月弦阁
+    <span class="footer-en">SPACETREK COLLECTIVE · SUPPLY DEPOT</span>
   </footer>
 
-  <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
   <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
   <aside class="drawer" id="site-drawer" aria-hidden="true">
     <header class="drawer-head">
-      <h3>🖥️ 快速导航</h3>
+      <h3>🧭 快速导航</h3>
       <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
     </header>
-    <div class="drawer-quick-actions" style="margin-bottom: 24px; display: grid; gap: 12px;">
-      <a class="btn btn-ghost" href="./index.html#pricing" style="width: 100%; justify-content: center;">← 返回价格</a>
-      <a class="btn btn-ghost" href="./guide.html" style="width: 100%; justify-content: center;">📖 功能指南</a>
-      <a class="btn btn-ghost" href="./board.html" style="width: 100%; justify-content: center;">💬 社区留言板</a>
-      <a class="btn btn-ghost" href="./status.html" style="width: 100%; justify-content: center;">🔍 状态明细</a>
+    <div class="drawer-quick-actions">
+      <a class="btn btn-ghost" href="./index.html#pricing">← 返回价格</a>
+      <a class="btn btn-ghost" href="./guide.html">📖 功能指南</a>
+      <a class="btn btn-ghost" href="./board.html">💬 社区留言板</a>
+      <a class="btn btn-ghost" href="./status.html">🔍 状态明细</a>
     </div>
   </aside>
 
-  <script src="./app.js"></script>
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>

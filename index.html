@@ -3,78 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>月弦阁 · 新版官网</title>
-  <meta name="description" content="月弦阁娱乐 Bot 官网，提供功能介绍、价格方案与入群方式。" />
+  <title>月弦阁 · 深空联合中继站</title>
+  <meta name="description" content="月弦阁娱乐 Bot 官网 · 鸣潮深空联合主题。提供功能介绍、价格方案与入群方式。" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/spacetrek.css" />
 </head>
 <body>
+
+  <!-- ===== 开屏启动序列 ===== -->
   <div id="splash-screen" aria-hidden="true">
-    <div class="splash-content">
-      <div class="splash-logo">🌙</div>
-      <h1 class="splash-title">月弦阁</h1>
-      <p class="splash-subtitle">正在进入</p>
+    <canvas id="splash-canvas"></canvas>
+    <div class="splash-flash"></div>
+    <div class="splash-frame"></div>
+    <div class="splash-boot"></div>
+    <div class="splash-core">
+      <div class="splash-emblem">
+        <div class="splash-ring"></div>
+        <div class="splash-ring r2"></div>
+        <img src="./assets/img/spacetrek-logo.png" alt="深空联合徽记" />
+      </div>
+      <h1 class="splash-title">深空联合</h1>
+      <p class="splash-sub-en">SPACETREK COLLECTIVE</p>
+      <p class="splash-sub-cn">月弦阁 · 频率接入完成</p>
     </div>
+    <p class="splash-hint">点 击 进 入</p>
+    <div class="splash-progress"><span class="pct">000%</span> · SYNC</div>
+    <button class="splash-skip" type="button">跳 过 ▸</button>
   </div>
 
-  <script>
-    if (sessionStorage.getItem('newSiteSplashShown')) {
-      const splash = document.getElementById('splash-screen');
-      if (splash) splash.style.display = 'none';
-    }
-  </script>
+  <!-- ===== 背景层 ===== -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="aurora-layer" aria-hidden="true"></div>
+  <div class="ice-horizon" aria-hidden="true"></div>
+  <div class="grid-floor" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
-  <div class="bg-orb orb-1" aria-hidden="true"></div>
-  <div class="bg-orb orb-2" aria-hidden="true"></div>
-
-  <header class="topbar ios-nav glass" data-animated="false">
-    <a href="#top" class="brand nav-item" style="--anim-delay: 0s;">
-      月弦阁
+  <!-- ===== 顶栏 ===== -->
+  <header class="topbar">
+    <a href="#top" class="brand">
+      <img class="brand-logo" src="./assets/img/spacetrek-logo.png" alt="" />
+      <span>
+        <span class="brand-cn">月弦阁</span>
+        <small>SPACETREK RELAY</small>
+      </span>
     </a>
     <nav class="nav" aria-label="主导航">
-      <a href="./guide.html" class="nav-item">功能</a>
-      <a href="#bot-intro" class="nav-item">说明</a>
-      <a href="#pricing" class="nav-item">价格</a>
-      <a href="#policy" class="nav-item">条例</a>
-      <a href="#contact" class="nav-item">联系</a>
+      <a href="./guide.html">功能</a>
+      <a href="#bot-intro">说明</a>
+      <a href="#pricing">价格</a>
+      <a href="#policy">条例</a>
+      <a href="#contact">联系</a>
     </nav>
-    <div class="topbar-actions nav-item">
-      <button class="btn btn-ghost" id="theme-toggle" type="button" aria-label="切换主题">🌙 深色</button>
-      <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-mobile" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost btn-sm side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false">☰ 终端</button>
     </div>
   </header>
 
-  <button class="btn btn-ghost side-drawer-trigger side-drawer-trigger-desktop" id="side-drawer-trigger" type="button" aria-controls="site-drawer" aria-expanded="false" aria-label="打开侧边栏">☰ 菜单</button>
-
   <main id="top" class="container">
-    <section class="hero reveal" data-reveal>
-      <div class="hero-copy" data-animated="false">
-        <p class="eyebrow hero-anim-item">Akiyo Studio · 2026</p>
-        <h1 class="hero-anim-item h1-anim">让群聊 AI 体验，
-          <span>更高级、更丝滑。</span>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" data-reveal>
+      <div class="hero-copy">
+        <p class="eyebrow">SPACETREK COLLECTIVE<span class="cn">· 深空联合 拉海洛中继</span></p>
+        <h1 class="hero-title">
+          让群聊 AI 体验，<br /><span class="grad">抵达更远的群星。</span>
         </h1>
-        <p class="hero-desc hero-anim-item desc-anim">
-          <span class="text-emphasis">实时对话</span>、<span class="text-emphasis">图像生成</span>、可定制人设与群管理能力，覆盖日常群聊与多场景使用。
+        <p class="hero-desc">
+          <span class="text-emphasis">实时对话</span>、<span class="text-emphasis">图像生成</span>、可定制人设与群管理能力——
+          以深空联合的频率标准，覆盖日常群聊与多场景使用。
         </p>
-        <div class="hero-highlights hero-anim-item pills-anim" aria-label="核心亮点">
-          <span class="highlight-pill pill-1">低延迟多轮对话</span>
-          <span class="highlight-pill pill-2">AI 图像生成</span>
-          <span class="highlight-pill pill-3">人设可定制</span>
-          <span class="highlight-pill pill-4">稳定运行与状态可视化</span>
+        <div class="hero-highlights" aria-label="核心亮点">
+          <span class="highlight-pill">低延迟多轮对话</span>
+          <span class="highlight-pill">AI 图像生成</span>
+          <span class="highlight-pill">人设可定制</span>
+          <span class="highlight-pill">稳定运行与状态可视化</span>
         </div>
-        <div class="hero-actions hero-anim-item btns-anim">
-          <a class="btn btn-primary magnet btn-1" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">立即入群体验</a>
-          <a class="btn btn-ghost magnet btn-2" href="#pricing">查看价格</a>
-          <a class="btn btn-ghost magnet btn-3" href="./guide.html">功能指南</a>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">✦ 立即入群体验</a>
+          <a class="btn btn-ghost" href="#pricing">查看价格</a>
+          <a class="btn btn-ghost" href="./guide.html">功能指南</a>
         </div>
       </div>
-      <div class="hero-visuals">
-        <div class="hero-moon-logo visual-anchor-anim">
-          <div class="moon-inner">🌙</div>
+
+      <div class="hero-visual">
+        <div class="hero-emblem">
+          <div class="halo"></div>
+          <div class="halo h2"></div>
+          <img src="./assets/img/spacetrek-logo.png" alt="深空联合徽记" />
         </div>
-        <div class="hero-status-widget glass magnet visual-anchor-anim" id="hero-status-widget">
+        <div class="hero-status-widget hud-panel" id="hero-status-widget">
           <div class="status-circle">
             <svg viewBox="0 0 100 100">
               <circle class="circle-bg" cx="50" cy="50" r="42" />
@@ -83,8 +102,8 @@
             <div class="circle-text" id="hero-status-ratio-circle">-- / --</div>
           </div>
           <div class="status-info">
-            <p class="hero-side-label">Bot 可用状态</p>
-            <p id="hero-status-desc" class="hero-status-desc">正在同步状态...</p>
+            <p class="hero-side-label">NODE STATUS · 节点频率</p>
+            <p id="hero-status-desc" class="hero-status-desc">正在同步频率...</p>
             <div class="hero-actions-row">
               <div class="status-pills-row" id="status-pills-row"></div>
               <button class="btn btn-ghost btn-sm" type="button" id="open-drawer-status">异常明细</button>
@@ -94,140 +113,163 @@
       </div>
     </section>
 
-    <section id="features" class="bento features-grid card-grid-reveal" data-reveal>
-      <article class="card glass magnet grid-card-1 feature-core-card">
-        <div class="feature-card-icon emoji" aria-hidden="true">💬</div>
-        <h3>实时应答</h3>
-        <p>基于高性能 LLM 模型，支持多轮会话，拥有持久化记忆，响应迅速</p>
-      </article>
-      <article class="card glass magnet grid-card-2">
-        <div class="feature-card-icon emoji" aria-hidden="true">🎭</div>
-        <h3>可定制人设</h3>
-        <p>支持自定义 Bot 的语气、身份背景与专属知识库，打造独一无二的 AI</p>
-      </article>
-      <article class="card glass magnet grid-card-3">
-        <div class="feature-card-icon emoji" aria-hidden="true">🎨</div>
-        <h3>图像生成</h3>
-        <p>集成多款绘图模型，支持文生图、图生图及二次元手办化处理</p>
-      </article>
-      <article class="card glass magnet grid-card-4">
-        <div class="feature-card-icon emoji" aria-hidden="true">🎮</div>
-        <h3>游戏工具</h3>
-        <p>提供原神/星铁/鸣潮等游戏公告推送、练度查询及自动签到工具</p>
-      </article>
-      <article class="card glass magnet grid-card-5">
-        <div class="feature-card-icon emoji" aria-hidden="true">📺</div>
-        <h3>B 站订阅</h3>
-        <p>自动监测并推送目标直播间开播提醒，不错过任何精彩动态</p>
-      </article>
-      <article class="card glass magnet grid-card-6">
-        <div class="feature-card-icon emoji" aria-hidden="true">✨</div>
-        <h3>更多功能</h3>
-        <p>包含群管工具、娱乐小游戏（海龟汤/文字冒险）等更多扩展玩法</p>
-      </article>
-    </section>
-
-    <section id="bot-intro" class="policy glass reveal" data-reveal>
-      <h2>🤖 小千 Bot 娱乐机器人说明</h2>
-      <div class="policy-grid">
-        <p>常态部署，群聊与私聊均可使用；建议先阅读<span class="text-emphasis">服务条例与使用要求</span>。</p>
-        <p>💬 AI 聊天模型：<strong class="text-gradient">Gemini 3 Flash</strong></p>
-        <p>🎨 绘图模型：<strong class="text-gradient">Gemini 3 Flash Image Preview</strong></p>
-        <p>🔍 嵌入模型：<strong class="text-gradient">text-embedding-v3</strong></p>
+    <!-- ===== 功能矩阵 ===== -->
+    <section id="features" class="features-section">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">ARCHIVE-01<span class="cn">· 功能矩阵</span></p>
+        <h2>六大核心模块</h2>
+      </div>
+      <div class="features-grid">
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-01</p>
+          <div class="feat-icon">💬</div>
+          <h3>实时应答</h3>
+          <p>基于高性能 LLM 模型，支持多轮会话，拥有持久化记忆，响应迅速</p>
+        </article>
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-02</p>
+          <div class="feat-icon">🎭</div>
+          <h3>可定制人设</h3>
+          <p>支持自定义 Bot 的语气、身份背景与专属知识库，打造独一无二的 AI</p>
+        </article>
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-03</p>
+          <div class="feat-icon">🎨</div>
+          <h3>图像生成</h3>
+          <p>集成多款绘图模型，支持文生图、图生图及二次元手办化处理</p>
+        </article>
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-04</p>
+          <div class="feat-icon">🎮</div>
+          <h3>游戏工具</h3>
+          <p>提供原神/星铁/鸣潮等游戏公告推送、练度查询及自动签到工具</p>
+        </article>
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-05</p>
+          <div class="feat-icon">📺</div>
+          <h3>B 站订阅</h3>
+          <p>自动监测并推送目标直播间开播提醒，不错过任何精彩动态</p>
+        </article>
+        <article class="feature-card hud-panel" data-reveal>
+          <p class="feat-index">MODULE-06</p>
+          <div class="feat-icon">✨</div>
+          <h3>更多功能</h3>
+          <p>包含群管工具、娱乐小游戏（海龟汤/文字冒险）等更多扩展玩法</p>
+        </article>
       </div>
     </section>
 
-    <section id="pricing" class="pricing reveal" data-reveal>
-      <div class="pricing-table-shell">
-      <div class="pricing-table-wrap pricing-card">
-
-        <div class="pricing-head-intertwined">
-          <h2 id="pricing-header" class="pricing-title-intertwined">价格方案</h2>
-          <p class="pricing-head-note">按使用场景选择，支持后续升级与定制。</p>
+    <!-- ===== Bot 说明 ===== -->
+    <section id="bot-intro" class="intro-section" data-reveal>
+      <div class="intro-panel hud-panel">
+        <p class="eyebrow">ARCHIVE-02<span class="cn">· 机体档案</span></p>
+        <h2>🤖 小千 Bot 娱乐机器人说明</h2>
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 18px;">
+          常态部署，群聊与私聊均可使用；建议先阅读<span class="text-emphasis" style="color: var(--ice);">服务条例与使用要求</span>。
+        </p>
+        <div class="model-list">
+          <div class="model-row">
+            <span class="m-label">💬 AI 聊天模型</span>
+            <span class="m-value">gemini-3.5-flash-low · DeepSeek-V4-Flash · glm-5.2</span>
+          </div>
+          <div class="model-row">
+            <span class="m-label">🎨 绘图模型</span>
+            <span class="m-value">Gemini 3 Flash Image Preview · gpt-image-2 · DeepSeek-V4-Flash</span>
+          </div>
+          <div class="model-row">
+            <span class="m-label">🔍 嵌入模型</span>
+            <span class="m-value">text-embedding-v3</span>
+          </div>
         </div>
+      </div>
+    </section>
 
+    <!-- ===== 价格 ===== -->
+    <section id="pricing" class="pricing-section">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">ARCHIVE-03<span class="cn">· 补给方案</span></p>
+        <h2>价格方案</h2>
+      </div>
+
+      <div class="pricing-table-shell hud-panel" data-reveal>
+        <p class="pricing-head-note">按使用场景选择，支持后续升级与定制。</p>
         <div class="pricing-flex-table" aria-label="价格方案对比">
           <div class="pricing-flex-head">
             <div class="pricing-flex-cell pricing-plan">版本</div>
             <div class="pricing-flex-cell">30天</div>
             <div class="pricing-flex-cell">365天</div>
           </div>
-
           <div class="pricing-flex-row pricing-tier-trial">
             <div class="pricing-flex-cell pricing-plan">体验版</div>
             <div class="pricing-flex-cell" data-label="30天">免费</div>
             <div class="pricing-flex-cell" data-label="365天">免费</div>
+            <div class="pricing-row-cta"><a class="btn btn-primary" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">💬 点击入群</a></div>
           </div>
-
           <div class="pricing-flex-row pricing-tier-normal">
             <div class="pricing-flex-cell pricing-plan">普通版</div>
             <div class="pricing-flex-cell" data-label="30天">15元</div>
             <div class="pricing-flex-cell" data-label="365天">150元</div>
-            <div class="pricing-row-cta" aria-hidden="true">
-              <a class="btn btn-primary pricing-row-buy" href="./pay.html">立即购买</a>
-            </div>
+            <div class="pricing-row-cta"><a class="btn btn-primary" href="./pay.html">立即购买</a></div>
           </div>
-
           <div class="pricing-flex-row pricing-tier-advanced">
             <div class="pricing-flex-cell pricing-plan">高级版</div>
             <div class="pricing-flex-cell" data-label="30天">20元</div>
             <div class="pricing-flex-cell" data-label="365天">200元</div>
-            <div class="pricing-row-cta" aria-hidden="true">
-              <a class="btn btn-primary pricing-row-buy" href="./pay.html">立即购买</a>
-            </div>
+            <div class="pricing-row-cta"><a class="btn btn-primary" href="./pay.html">立即购买</a></div>
           </div>
-
           <div class="pricing-flex-row pricing-tier-custom">
             <div class="pricing-flex-cell pricing-plan">定制版</div>
-            <div class="pricing-flex-cell pricing-custom-note" data-label="定制费">100元定制费</div>
-            <div class="pricing-flex-cell pricing-custom-note" data-label="月付">次月起 20元/月</div>
+            <div class="pricing-flex-cell pricing-custom-note" data-label="定制费">120元定制费</div>
+            <div class="pricing-flex-cell pricing-custom-note" data-label="月付">次月起 25元/月</div>
+            <div class="pricing-row-cta"><a class="btn btn-primary" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">💬 点击入群</a></div>
           </div>
         </div>
-
-        <p class="pricing-tip-modern">⚠️ <span class="text-emphasis">体验版</span>请先阅读下方「<span class="text-gradient">体验版群聊要求</span>」。</p>
+        <p class="pricing-tip-modern">⚠️ <span style="color: var(--aurora);">体验版</span>请先阅读下方「体验版群聊要求」。</p>
         <div class="pricing-cta-bottom">
-          <a class="btn btn-primary pricing-buy-btn" href="./pay.html">立即购买</a>
+          <a class="btn btn-primary" href="./pay.html">立即购买</a>
         </div>
         <p class="pricing-cta-note">仅适用于普通版 / 高级版付费开通</p>
       </div>
-      </div>
-      <div class="pricing-grid">
-        <article class="price-card glass magnet">
-          <h3>🌙 体验版</h3>
+
+      <div class="pricing-grid" data-reveal>
+        <article class="price-card hud-panel">
+          <h3>✦ 体验版</h3>
           <ul>
             <li>支持免费代挂公用账号</li>
             <li>常态开放所有游戏面板查询</li>
             <li>覆盖鸣潮、米游、二重、方舟、战双、终末地、三角洲</li>
           </ul>
         </article>
-        <article class="price-card glass featured magnet">
+        <article class="price-card hud-panel featured">
           <div class="featured-badge">推荐</div>
-          <h3>👑 高级版 / 定制版</h3>
+          <h3>✦ 高级版 / 定制版</h3>
           <ul>
             <li>高级版含 AI 对话 + 图像生成功能</li>
             <li>高级版订阅超过 3 个月可提供自有账号专用(Astr版)</li>
             <li>定制版支持专属功能与专属账号(NA版)</li>
+            <li>定制版新增第三个群起，每群按 15元/月 向上叠加</li>
           </ul>
         </article>
-        <article class="price-card glass magnet">
-          <h3>🌟 普通版</h3>
+        <article class="price-card hud-panel">
+          <h3>✦ 普通版</h3>
           <ul>
             <li>包含除 AI 生成外的所有功能</li>
             <li>适合稳定日常群聊使用</li>
           </ul>
         </article>
-        <article class="price-card glass magnet api-info-card">
-          <h3>🔗 API 付费相关信息</h3>
+        <article class="price-card hud-panel">
+          <h3>✦ API 付费相关信息</h3>
           <ul>
-            <li><a href="https://newapi.qianye.host/pricing" target="_blank" rel="noopener">模型广场 https://newapi.qianye.host/pricing</a></li>
-            <li>加群联系 7 折充值</li>
+            <li><a href="https://newapi.akiyo.fun/pricing" target="_blank" rel="noopener">模型广场 https://newapi.akiyo.fun/pricing</a></li>
+            <li>充值比例 1:1</li>
+            <li>含免费模型</li>
           </ul>
         </article>
       </div>
-      <article class="trial-rules glass">
+
+      <article class="trial-rules hud-panel" data-reveal>
         <h3>📜 体验版群聊要求</h3>
-        <p><strong>🔗 添加方式：</strong></p>
-        <p>为保持联络，请加用户群</p>
+        <p><strong>🔗 添加方式：</strong>为保持联络，请加用户群</p>
         <p>由于QQ单日群聊发送存在上限约4000条（具体上限未知），要求群聊：</p>
         <ul>
           <li><strong>必须有人使用鸣潮功能！</strong>避免多鸣潮机器人共群。</li>
@@ -238,163 +280,165 @@
       </article>
     </section>
 
-    <section id="policy" class="policy glass reveal" data-reveal>
-      <h2>⚖️ 服务条例</h2>
-      <div class="policy-grid">
-        <p>购买后需联系管理员授权。</p>
-        <p>禁止违法违规、色情血腥、赌博等用途。</p>
-        <p>违规将中止服务，且不退款。</p>
-        <p>AI 内容仅供参考，请自行判断准确性。</p>
+    <!-- ===== 条例 ===== -->
+    <section id="policy" class="policy-section" data-reveal>
+      <div class="policy-panel hud-panel">
+        <p class="eyebrow">ARCHIVE-04<span class="cn">· 联合公约</span></p>
+        <h2>⚖️ 服务条例</h2>
+        <div class="policy-grid">
+          <p>购买后需联系管理员授权。</p>
+          <p>禁止违法违规、色情血腥、赌博等用途。</p>
+          <p>违规将中止服务，且不退款。</p>
+          <p>AI 内容仅供参考，请自行判断准确性。</p>
+        </div>
       </div>
     </section>
 
-    <section id="disclaimer" class="policy glass reveal" style="padding: 32px;" data-reveal>
-      <h2>📋 免责声明</h2>
-      <div style="display: grid; gap: 16px; font-size: 13.5px; color: var(--muted); line-height: 1.6;">
-        <p>本机器人为基于第三方模型与开源插件构建的娱乐型 AI 助手，旨在为用户提供便捷的对话与辅助功能。使用本机器人前，请务必阅读并理解以下免责声明条款：</p>
-        
-        <p><strong style="color: var(--text);">⚠️ 重要声明：</strong></p>
-        <ul style="padding-left: 20px; display: grid; gap: 8px;">
+    <!-- ===== 免责声明 ===== -->
+    <section id="disclaimer" class="policy-section" data-reveal>
+      <div class="policy-panel hud-panel">
+        <p class="eyebrow">ARCHIVE-05<span class="cn">· 责任声明</span></p>
+        <h2>📋 免责声明</h2>
+        <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 14px;">
+          本机器人为基于第三方模型与开源插件构建的娱乐型 AI 助手，旨在为用户提供便捷的对话与辅助功能。使用本机器人前，请务必阅读并理解以下免责声明条款：
+        </p>
+        <ul class="disclaimer-list">
           <li>本机器人为个人开发项目，仅用于技术演示与娱乐用途，不代表任何官方立场！</li>
           <li>本机器人收集的验证码仅用于库街区的登录验证，登录时请注意验证码短信内容，以防登录地址被劫持！</li>
           <li>与机器人对话时，应了解机器人需要读取和收集对话上下文以进行回应！</li>
           <li>机器人回复内容均由大模型智能体生成，不代表作者立场。根据搜索结果，智能体可能发送互联网链接，请自行判断链接的安全性！</li>
           <li>本机器人参考的开源插件均已列出，其余功能为私有实现。</li>
-          <li><strong style="color: var(--text);">AI 生成内容仅供参考：</strong>本机器人生成的文本、图片或其他内容基于模型推断，可能存在不准确、片面或过时的信息。用户应对内容的真实性自行判断并承担相应后果。</li>
-          <li><strong style="color: var(--text);">资源与著作权说明：</strong>本机器人页面中展示或引用的游戏人物形象、插图、素材、人设、商标等视觉与文字资源，若来自第三方（例如游戏公司、官方素材库或其他创作者），其著作权和相关权利归原始权利人所有。本页面仅为展示、说明或集成用途，未对这些第三方资源取得独占性权利或进行商业授权。如需商业使用相关素材，请与原权利人联系并获取正式授权。</li>
-          <li><strong style="color: var(--text);">法律与合规责任：</strong>严禁利用本机器人制作、传播或协助违法违规内容（包括但不限于诈骗、煽动暴力、涉政敏感、色情、赌博等）。若因用户违反法律法规导致的任何法律责任、经济损失或其他后果，责任由用户自行承担；我们有权在必要时暂停或终止该用户的服务并不予退款。</li>
-          <li><strong style="color: var(--text);">第三方服务与链接：</strong>本机器人可能集成或引用第三方模型、插件及外部链接。对于第三方提供内容的准确性、可用性或安全性，我们不作保证；因此产生的任何问题或损失应由第三方或使用方承担。</li>
-          <li><strong style="color: var(--text);">隐私与数据处理：</strong>为提供与改善服务，我们可能在合理范围内收集和存储对话记录、使用日志及非敏感性元数据。请勿在对话或上传内容中提供敏感个人信息（例如身份证号、银行卡号、账号密码等）。如需删除相关数据或了解更多隐私事宜，请通过页面联系方式与管理员联系。</li>
-          <li><strong style="color: var(--text);">服务变更与免责：</strong>我们保留在法律允许范围内调整、暂停或终止全部或部分服务的权利。对于因不可抗力、网络故障、第三方服务中断或维护等原因导致的服务中断、数据丢失或其他损失，我们在法律允许的范围内免责。</li>
-          <li><strong style="color: var(--text);">争议与联系：</strong>如对免责声明内容或服务使用有疑问，请通过页面提供的联系方式与我们沟通。我们将尽力解释并处理相关问题。</li>
+          <li><strong>AI 生成内容仅供参考：</strong>本机器人生成的文本、图片或其他内容基于模型推断，可能存在不准确、片面或过时的信息。用户应对内容的真实性自行判断并承担相应后果。</li>
+          <li><strong>资源与著作权说明：</strong>本机器人页面中展示或引用的游戏人物形象、插图、素材、人设、商标等视觉与文字资源，若来自第三方（例如游戏公司、官方素材库或其他创作者），其著作权和相关权利归原始权利人所有。本页面仅为展示、说明或集成用途，未对这些第三方资源取得独占性权利或进行商业授权。如需商业使用相关素材，请与原权利人联系并获取正式授权。</li>
+          <li><strong>法律与合规责任：</strong>严禁利用本机器人制作、传播或协助违法违规内容（包括但不限于诈骗、煽动暴力、涉政敏感、色情、赌博等）。若因用户违反法律法规导致的任何法律责任、经济损失或其他后果，责任由用户自行承担；我们有权在必要时暂停或终止该用户的服务并不予退款。</li>
+          <li><strong>第三方服务与链接：</strong>本机器人可能集成或引用第三方模型、插件及外部链接。对于第三方提供内容的准确性、可用性或安全性，我们不作保证；因此产生的任何问题或损失应由第三方或使用方承担。</li>
+          <li><strong>隐私与数据处理：</strong>为提供与改善服务，我们可能在合理范围内收集和存储对话记录、使用日志及非敏感性元数据。请勿在对话或上传内容中提供敏感个人信息（例如身份证号、银行卡号、账号密码等）。如需删除相关数据或了解更多隐私事宜，请通过页面联系方式与管理员联系。</li>
+          <li><strong>服务变更与免责：</strong>我们保留在法律允许范围内调整、暂停或终止全部或部分服务的权利。对于因不可抗力、网络故障、第三方服务中断或维护等原因导致的服务中断、数据丢失或其他损失，我们在法律允许的范围内免责。</li>
+          <li><strong>争议与联系：</strong>如对免责声明内容或服务使用有疑问，请通过页面提供的联系方式与我们沟通。我们将尽力解释并处理相关问题。</li>
         </ul>
-        
-        <p><strong style="color: var(--text);">关于素材使用的温馨提示：</strong><br>若您认为本页面或项目展示的某些素材存在版权问题或需要下架、署名修正等，请通过页面联系方式告知我们，我们会在核实后及时处理或移除相关内容。</p>
-        
-        <p style="margin-top: 8px; font-weight: 600; color: var(--text);">使用本机器人即视为您已阅读并接受上述免责声明条款。</p>
+        <p style="margin-top: 14px; font-size: 13px; color: var(--muted);">
+          <strong style="color: var(--text);">关于素材使用的温馨提示：</strong>若您认为本页面或项目展示的某些素材存在版权问题或需要下架、署名修正等，请通过页面联系方式告知我们，我们会在核实后及时处理或移除相关内容。
+        </p>
+        <p style="margin-top: 10px; font-weight: 600; font-size: 13.5px;">使用本机器人即视为您已阅读并接受上述免责声明条款。</p>
       </div>
     </section>
 
-    <section id="contact" class="contact reveal" data-reveal>
-      <div class="contact-copy">
-        <h2>📞 联系与入群</h2>
-        <p>加入用户群，获取最新通知、功能更新与技术支持。</p>
-        <a class="btn btn-primary magnet" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">💬 加入用户群</a>
-      </div>
-      <div class="contact-qr glass">
-        <img src="./imgs/GroupQRCode.png" alt="月弦阁用户群二维码" loading="lazy" decoding="async" />
+    <!-- ===== 联系 ===== -->
+    <section id="contact" class="contact-section" data-reveal>
+      <div class="contact-panel hud-panel">
+        <div>
+          <p class="eyebrow">ARCHIVE-06<span class="cn">· 频率接入</span></p>
+          <h2>📞 联系与入群</h2>
+          <p>加入用户群，获取最新通知、功能更新与技术支持。你的频率，也在群星之中。</p>
+          <a class="btn btn-primary" href="https://qm.qq.com/q/MypCVC7ScQ" target="_blank" rel="noopener">💬 加入用户群</a>
+        </div>
+        <div class="contact-qr">
+          <img src="./assets/img/imgs/GroupQRCode.png" alt="月弦阁用户群二维码" loading="lazy" decoding="async" />
+          <p class="qr-cap">SCAN TO JOIN</p>
+        </div>
       </div>
     </section>
   </main>
 
-  <div class="drawer-blur-mask" id="drawer-blur-mask" hidden></div>
+  <!-- ===== 侧边终端抽屉 ===== -->
   <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
   <aside class="drawer" id="site-drawer" aria-hidden="true">
     <header class="drawer-head">
-      <h3>🖥️ Bot 状态</h3>
+      <h3>🖥️ 节点终端</h3>
       <button class="drawer-close" id="close-drawer" type="button" aria-label="关闭边栏">✕</button>
     </header>
     <div class="drawer-quick-actions">
       <div id="status-indicator" class="status-indicator status-checking" aria-label="系统状态">
-        <span id="status-text">检测中...</span>
+        <span id="status-text">频率检测中...</span>
         <div id="stats-tooltip" class="stats-tooltip">
           <div class="stats-header">📊 访问统计</div>
           <div class="stats-content">
-            <div class="stats-item">
-              <span class="stats-label">累计访问</span>
-              <span id="total-visits" class="stats-value">--</span>
-            </div>
-            <div class="stats-item">
-              <span class="stats-label">今日访客</span>
-              <span id="today-visits" class="stats-value">--</span>
-            </div>
-            <div class="stats-item">
-              <span class="stats-label">独立用户</span>
-              <span id="total-users" class="stats-value">--</span>
-            </div>
+            <div class="stats-item"><span class="stats-label">累计访问</span><span id="total-visits" class="stats-value">--</span></div>
+            <div class="stats-item"><span class="stats-label">今日访客</span><span id="today-visits" class="stats-value">--</span></div>
+            <div class="stats-item"><span class="stats-label">独立用户</span><span id="total-users" class="stats-value">--</span></div>
           </div>
         </div>
       </div>
-      <div class="drawer-action-buttons">
-        <a class="btn btn-ghost" href="./guide.html">📖 功能指南</a>
-        <a class="btn btn-ghost" href="./board.html">💬 社区留言</a>
-      </div>
+      <a class="btn btn-ghost" href="./guide.html">📖 功能指南</a>
+      <a class="btn btn-ghost" href="./board.html">💬 社区留言</a>
     </div>
     <p class="drawer-desc">⚠️ 仅显示当前不可用账号（临时冻结 / 永久封禁）</p>
     <p class="drawer-network-text" id="drawer-network-status">正在连接...</p>
     <div class="drawer-status-summary" id="drawer-status-summary">正在统计...</div>
     <div id="drawer-status-list" class="drawer-status-list">
-      <div class="drawer-loading">⏳ 正在加载数据...</div>
+      <div class="drawer-loading">⏳ 正在同步频率...</div>
     </div>
-    <a class="btn btn-ghost drawer-more-btn" href="./status.html">🔍 Bot详情</a>
-    <a class="btn btn-ghost drawer-more-btn" href="./NachoMc/index.html">🆓 免费MC服务器</a>
+    <a class="btn btn-ghost drawer-more-btn" href="./status.html">🔍 Bot 详情</a>
+    <a class="btn btn-ghost drawer-more-btn" href="https://www.akiyo.fun/NachoMc/index.html" target="_blank" rel="noopener">🆓 免费MC服务器</a>
 
     <section class="drawer-thanks">
       <h3>🙏 致谢（开源项目）</h3>
       <ul class="thanks-list-side">
-            <li><a href="https://github.com/Soulter/astrbot_plugin_bilibili" target="_blank" rel="noopener">astrbot_plugin_bilibili</a></li>
-            <li><a href="https://github.com/sukafon/astrbot_plugin_big_banana" target="_blank" rel="noopener">astrbot_plugin_big_banana</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_box" target="_blank" rel="noopener">astrbot_plugin_box</a></li>
-            <li><a href="https://github.com/nuomicici/astrbot-plugin-choulaopo" target="_blank" rel="noopener">astrbot_plugin_choulaopo</a></li>
-            <li><a href="https://github.com/anka-afk/astrbot_plugin_daily_news" target="_blank" rel="noopener">astrbot_plugin_daily_news</a></li>
-            <li><a href="https://github.com/Soulter/astrbot_plugin_essential" target="_blank" rel="noopener">astrbot_plugin_essential</a></li>
-            <li><a href="https://github.com/xxlemon-io/astrbot_plugin_fishing" target="_blank" rel="noopener">astrbot_plugin_fishing</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_gallery" target="_blank" rel="noopener">astrbot_plugin_gallery</a></li>
-            <li><a href="https://github.com/Chris95743/astrbot_plugin_gemini_search" target="_blank" rel="noopener">astrbot_plugin_gemini_search</a></li>
-            <li><a href="https://github.com/muyouzhi6/astrbot_plugin_gitee_aiimg" target="_blank" rel="noopener">astrbot_plugin_gitee_aiimg</a></li>
-            <li><a href="https://github.com/xiaoxi68/astrbot_plugin_group_notice_manager" target="_blank" rel="noopener">astrbot_plugin_group_notice_manager</a></li>
-            <li><a href="https://github.com/tinkerbellqwq/astrbot_plugin_help" target="_blank" rel="noopener">astrbot_plugin_help</a></li>
-            <li><a href="https://github.com/NINIYOYYO/astrbot_plugin_jrys" target="_blank" rel="noopener">astrbot_plugin_jrys</a></li>
-            <li><a href="https://github.com/muyouzhi6/astrbot_plugin_life_scheduler" target="_blank" rel="noopener">astrbot_plugin_life_scheduler</a></li>
-            <li><a href="https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory" target="_blank" rel="noopener">astrbot_plugin_livingmemory</a></li>
-            <li><a href="https://github.com/miaoxutao123/astrbot_plugin_LLMPerception" target="_blank" rel="noopener">astrbot_plugin_llmperception</a></li>
-            <li><a href="https://github.com/Akiyo-dayo/astrbot_plugin_mcqq" target="_blank" rel="noopener">astrbot_plugin_mcqq</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_memelite" target="_blank" rel="noopener">astrbot_plugin_memelite</a></li>
-            <li><a href="https://github.com/anka-afk/astrbot_plugin_meme_manager" target="_blank" rel="noopener">astrbot_plugin_meme_manager</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_music" target="_blank" rel="noopener">astrbot_plugin_music</a></li>
-            <li><a href="https://github.com/Rinyin/astrbot_plugin_nachoneko" target="_blank" rel="noopener">astrbot_plugin_nachoneko</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_parser" target="_blank" rel="noopener">astrbot_plugin_parser</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_pokepro" target="_blank" rel="noopener">astrbot_plugin_pokepro</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_portrayal" target="_blank" rel="noopener">astrbot_plugin_portrayal</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_qqadmin" target="_blank" rel="noopener">astrbot_plugin_qqadmin</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_reread" target="_blank" rel="noopener">astrbot_plugin_reread</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_restart" target="_blank" rel="noopener">astrbot_plugin_restart</a></li>
-            <li><a href="https://github.com/MegSopern/astrbot_plugin_rollpig" target="_blank" rel="noopener">astrbot_plugin_rollpig</a></li>
-            <li><a href="https://github.com/Hazellol/astrbot_plugin_sauceno" target="_blank" rel="noopener">astrbot_plugin_sauceno</a></li>
-            <li><a href="https://github.com/shskjw/astrbot_plugin_shoubanhua" target="_blank" rel="noopener">astrbot_plugin_shoubanhua</a></li>
-            <li><a href="https://github.com/KONpiGG/astrbot_plugin_soupai" target="_blank" rel="noopener">astrbot_plugin_soupai</a></li>
-            <li><a href="https://github.com/nagatoquin33/astrbot_plugin_stealer" target="_blank" rel="noopener">astrbot_plugin_stealer</a></li>
-            <li><a href="https://github.com/oyxning/astrbot_plugin_textadventure" target="_blank" rel="noopener">astrbot_plugin_textadventure</a></li>
-            <li><a href="https://github.com/sa1guu/astrbot_plugin_touchi" target="_blank" rel="noopener">astrbot_plugin_touchi</a></li>
-            <li><a href="https://github.com/Futureppo/astrbot_plugin_violation_record" target="_blank" rel="noopener">astrbot_plugin_violation_record</a></li>
-            <li><a href="https://github.com/Zhalslar/astrbot_plugin_wakepro" target="_blank" rel="noopener">astrbot_plugin_wakepro</a></li>
-            <li><a href="https://github.com/oldPeter616/astrbot_plugin_xiuxian" target="_blank" rel="noopener">astrbot_plugin_xiuxian</a></li>
-            <li><a href="https://github.com/Futureppo/astrbot_plugin_zanwo" target="_blank" rel="noopener">astrbot_plugin_zanwo</a></li>
-            <li><a href="https://github.com/Nahida364/astrbot_plugin_auto_approve_all" target="_blank" rel="noopener">astrbot_plugin_auto_approve_all</a></li>
-            <li><a href="https://github.com/SXP-Simon/astrbot-qq-group-daily-analysis" target="_blank" rel="noopener">astrbot_qq_group_daily_analysis</a></li>
-            <li><a href="https://github.com/xiaoxi68/astrbot_zssm_explain" target="_blank" rel="noopener">astrbot_zssm_explain</a></li>
-            <li><a href="https://github.com/ttq7/meanig" target="_blank" rel="noopener">meanig</a></li>
-            <li><a href="https://github.com/kexue-z/nonebot-plugin-setu-now" target="_blank" rel="noopener">nonebot_plugin_setu_now</a></li>
-            <li><a href="https://github.com/noneplugin/nonebot-plugin-withdraw" target="_blank" rel="noopener">nonebot_plugin_withdraw</a></li>
-            <li><a href="https://github.com/skiesworld/nonebot-plugin-mcping" target="_blank" rel="noopener">nonebot_plugin_mcping</a></li>
-            <li><a href="https://github.com/hakunomiko/nonebot-plugin-add-friends" target="_blank" rel="noopener">nonebot_plugin_add_friends</a></li>
-            <li><a href="https://github.com/MountainDash/nonebot-bison" target="_blank" rel="noopener">nonebot_bison</a></li>
-            <li><a href="https://github.com/SamuNatsu/nonebot-plugin-deer-pipe" target="_blank" rel="noopener">nonebot_plugin_deer_pipe</a></li>
-            <li><a href="https://github.com/orchiddream/nonebot-plugin-nmcweather" target="_blank" rel="noopener">nonebot_plugin_nmcweather</a></li>
-            <li><a href="https://github.com/nek0us/nonebot_plugin_steam_game_status" target="_blank" rel="noopener">nonebot_plugin_steam_game_status</a></li>
-            <li><a href="https://github.com/Misty02600/nonebot-plugin-jmdownloader" target="_blank" rel="noopener">nonebot_plugin_jmdownloader</a></li>
-            <li><a href="https://github.com/zhaomaoniu/nonebot-plugin-steam-info" target="_blank" rel="noopener">nonebot_plugin_steam_info</a></li>
-            <li><a href="https://github.com/Cvandia/nonebot-plugin-fakemsg" target="_blank" rel="noopener">nonebot_plugin_fakemsg</a></li>
+        <li><a href="https://github.com/Soulter/astrbot_plugin_bilibili" target="_blank" rel="noopener">astrbot_plugin_bilibili</a></li>
+        <li><a href="https://github.com/sukafon/astrbot_plugin_big_banana" target="_blank" rel="noopener">astrbot_plugin_big_banana</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_box" target="_blank" rel="noopener">astrbot_plugin_box</a></li>
+        <li><a href="https://github.com/nuomicici/astrbot-plugin-choulaopo" target="_blank" rel="noopener">astrbot_plugin_choulaopo</a></li>
+        <li><a href="https://github.com/anka-afk/astrbot_plugin_daily_news" target="_blank" rel="noopener">astrbot_plugin_daily_news</a></li>
+        <li><a href="https://github.com/Soulter/astrbot_plugin_essential" target="_blank" rel="noopener">astrbot_plugin_essential</a></li>
+        <li><a href="https://github.com/xxlemon-io/astrbot_plugin_fishing" target="_blank" rel="noopener">astrbot_plugin_fishing</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_gallery" target="_blank" rel="noopener">astrbot_plugin_gallery</a></li>
+        <li><a href="https://github.com/Chris95743/astrbot_plugin_gemini_search" target="_blank" rel="noopener">astrbot_plugin_gemini_search</a></li>
+        <li><a href="https://github.com/muyouzhi6/astrbot_plugin_gitee_aiimg" target="_blank" rel="noopener">astrbot_plugin_gitee_aiimg</a></li>
+        <li><a href="https://github.com/xiaoxi68/astrbot_plugin_group_notice_manager" target="_blank" rel="noopener">astrbot_plugin_group_notice_manager</a></li>
+        <li><a href="https://github.com/tinkerbellqwq/astrbot_plugin_help" target="_blank" rel="noopener">astrbot_plugin_help</a></li>
+        <li><a href="https://github.com/NINIYOYYO/astrbot_plugin_jrys" target="_blank" rel="noopener">astrbot_plugin_jrys</a></li>
+        <li><a href="https://github.com/muyouzhi6/astrbot_plugin_life_scheduler" target="_blank" rel="noopener">astrbot_plugin_life_scheduler</a></li>
+        <li><a href="https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory" target="_blank" rel="noopener">astrbot_plugin_livingmemory</a></li>
+        <li><a href="https://github.com/miaoxutao123/astrbot_plugin_LLMPerception" target="_blank" rel="noopener">astrbot_plugin_llmperception</a></li>
+        <li><a href="https://github.com/Akiyo-dayo/astrbot_plugin_mcqq" target="_blank" rel="noopener">astrbot_plugin_mcqq</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_memelite" target="_blank" rel="noopener">astrbot_plugin_memelite</a></li>
+        <li><a href="https://github.com/anka-afk/astrbot_plugin_meme_manager" target="_blank" rel="noopener">astrbot_plugin_meme_manager</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_music" target="_blank" rel="noopener">astrbot_plugin_music</a></li>
+        <li><a href="https://github.com/Rinyin/astrbot_plugin_nachoneko" target="_blank" rel="noopener">astrbot_plugin_nachoneko</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_parser" target="_blank" rel="noopener">astrbot_plugin_parser</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_pokepro" target="_blank" rel="noopener">astrbot_plugin_pokepro</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_portrayal" target="_blank" rel="noopener">astrbot_plugin_portrayal</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_qqadmin" target="_blank" rel="noopener">astrbot_plugin_qqadmin</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_reread" target="_blank" rel="noopener">astrbot_plugin_reread</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_restart" target="_blank" rel="noopener">astrbot_plugin_restart</a></li>
+        <li><a href="https://github.com/MegSopern/astrbot_plugin_rollpig" target="_blank" rel="noopener">astrbot_plugin_rollpig</a></li>
+        <li><a href="https://github.com/Hazellol/astrbot_plugin_sauceno" target="_blank" rel="noopener">astrbot_plugin_sauceno</a></li>
+        <li><a href="https://github.com/shskjw/astrbot_plugin_shoubanhua" target="_blank" rel="noopener">astrbot_plugin_shoubanhua</a></li>
+        <li><a href="https://github.com/KONpiGG/astrbot_plugin_soupai" target="_blank" rel="noopener">astrbot_plugin_soupai</a></li>
+        <li><a href="https://github.com/nagatoquin33/astrbot_plugin_stealer" target="_blank" rel="noopener">astrbot_plugin_stealer</a></li>
+        <li><a href="https://github.com/oyxning/astrbot_plugin_textadventure" target="_blank" rel="noopener">astrbot_plugin_textadventure</a></li>
+        <li><a href="https://github.com/sa1guu/astrbot_plugin_touchi" target="_blank" rel="noopener">astrbot_plugin_touchi</a></li>
+        <li><a href="https://github.com/Futureppo/astrbot_plugin_violation_record" target="_blank" rel="noopener">astrbot_plugin_violation_record</a></li>
+        <li><a href="https://github.com/Zhalslar/astrbot_plugin_wakepro" target="_blank" rel="noopener">astrbot_plugin_wakepro</a></li>
+        <li><a href="https://github.com/oldPeter616/astrbot_plugin_xiuxian" target="_blank" rel="noopener">astrbot_plugin_xiuxian</a></li>
+        <li><a href="https://github.com/Futureppo/astrbot_plugin_zanwo" target="_blank" rel="noopener">astrbot_plugin_zanwo</a></li>
+        <li><a href="https://github.com/Nahida364/astrbot_plugin_auto_approve_all" target="_blank" rel="noopener">astrbot_plugin_auto_approve_all</a></li>
+        <li><a href="https://github.com/SXP-Simon/astrbot-qq-group-daily-analysis" target="_blank" rel="noopener">astrbot_qq_group_daily_analysis</a></li>
+        <li><a href="https://github.com/xiaoxi68/astrbot_zssm_explain" target="_blank" rel="noopener">astrbot_zssm_explain</a></li>
+        <li><a href="https://github.com/ttq7/meanig" target="_blank" rel="noopener">meanig</a></li>
+        <li><a href="https://github.com/kexue-z/nonebot-plugin-setu-now" target="_blank" rel="noopener">nonebot_plugin_setu_now</a></li>
+        <li><a href="https://github.com/noneplugin/nonebot-plugin-withdraw" target="_blank" rel="noopener">nonebot_plugin_withdraw</a></li>
+        <li><a href="https://github.com/skiesworld/nonebot-plugin-mcping" target="_blank" rel="noopener">nonebot_plugin_mcping</a></li>
+        <li><a href="https://github.com/hakunomiko/nonebot-plugin-add-friends" target="_blank" rel="noopener">nonebot_plugin_add_friends</a></li>
+        <li><a href="https://github.com/MountainDash/nonebot-bison" target="_blank" rel="noopener">nonebot_bison</a></li>
+        <li><a href="https://github.com/SamuNatsu/nonebot-plugin-deer-pipe" target="_blank" rel="noopener">nonebot_plugin_deer_pipe</a></li>
+        <li><a href="https://github.com/orchiddream/nonebot-plugin-nmcweather" target="_blank" rel="noopener">nonebot_plugin_nmcweather</a></li>
+        <li><a href="https://github.com/nek0us/nonebot_plugin_steam_game_status" target="_blank" rel="noopener">nonebot_plugin_steam_game_status</a></li>
+        <li><a href="https://github.com/Misty02600/nonebot-plugin-jmdownloader" target="_blank" rel="noopener">nonebot_plugin_jmdownloader</a></li>
+        <li><a href="https://github.com/zhaomaoniu/nonebot-plugin-steam-info" target="_blank" rel="noopener">nonebot_plugin_steam_info</a></li>
+        <li><a href="https://github.com/Cvandia/nonebot-plugin-fakemsg" target="_blank" rel="noopener">nonebot_plugin_fakemsg</a></li>
       </ul>
     </section>
   </aside>
 
   <footer class="footer">
-    <p>© 2026 秋音Akiyo&F1y/Car · 月弦阁</p>
+    © 2026 秋音Akiyo&F1y/Car · 月弦阁
+    <span class="footer-en">SPACETREK COLLECTIVE · LAHALO RELAY STATION</span>
   </footer>
 
   <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部">↑</button>
 
-  <script src="./app.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/splash.js"></script>
 </body>
 </html>
